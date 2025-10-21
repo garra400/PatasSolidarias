@@ -3,6 +3,7 @@ import cors from 'cors';
 import { connectDB } from './db.js';
 import authRoutes from './routes/auth.routes.js';
 import animalRoutes from './routes/animal.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ connectDB().catch(err => {
 // Rotas
 app.use('/api/auth', authRoutes);
 app.use('/api/animals', animalRoutes);
+app.use('/api/pagamentos', paymentRoutes);
 
 // Rota de teste
 app.get('/api/health', (req, res) => {
