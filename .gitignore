@@ -11,6 +11,14 @@
 npm-debug.log
 yarn-error.log
 
+# Backend - Environment Variables (IMPORTANTE!)
+backend/.env
+backend/.env.local
+backend/.env.production
+.env
+.env.local
+.env.production
+
 # IDEs and editors
 .idea/
 .project
@@ -41,3 +49,13 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
+logs/
+backend/logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3

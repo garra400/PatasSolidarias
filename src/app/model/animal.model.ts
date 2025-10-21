@@ -3,10 +3,12 @@ export interface Animal {
   nome: string;
   tipo: 'cachorro' | 'gato' | 'outro';
   descricao: string;
-  imagemPrincipal: string;
+  dataCriacao?: Date;
+  // Campos para mock data (temporário)
+  imagemPrincipal?: string;
   idade?: string;
-  dataCadastro: Date;
-  ativo: boolean;
+  dataCadastro?: Date;
+  ativo?: boolean;
 }
 
 export interface AnimalCarousel {

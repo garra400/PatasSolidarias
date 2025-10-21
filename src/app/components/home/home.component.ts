@@ -19,18 +19,30 @@ export class HomeComponent implements OnInit {
   constructor(private animalService: AnimalService) {}
 
   ngOnInit(): void {
+    console.log('🏠 HomeComponent inicializado');
     this.loadAnimals();
     this.startCarousel();
   }
 
   loadAnimals(): void {
+    console.log('🐾 Iniciando carregamento de animais...');
+    
+    // Timeout de segurança - se não carregar em 5 segundos, desativa o loading
+    const timeout = setTimeout(() => {
+      console.log('⏰ Timeout alcançado - desativando loading');
+      this.isLoading = false;
+    }, 5000);
+    
     this.animalService.getAnimalsForCarousel().subscribe({
       next: (animals) => {
+        clearTimeout(timeout);
+        console.log('✅ Animais carregados:', animals);
         this.animals = animals;
         this.isLoading = false;
       },
       error: (error: any) => {
-        console.error('Erro ao carregar animais:', error);
+        clearTimeout(timeout);
+        console.error('❌ Erro ao carregar animais:', error);
         this.isLoading = false;
       }
     });

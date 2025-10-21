@@ -1,1 +1,208 @@
-/* You can add global styles to this file, and also import other style files */
+/* Variáveis de cores do tema Patas Solidárias */
+:root {
+  --primary-blue: #2196f3;
+  --primary-blue-dark: #1976d2;
+  --primary-blue-light: #64b5f6;
+  
+  --accent-yellow: #ffc107;
+  --accent-yellow-dark: #ffa000;
+  --accent-yellow-light: #ffecb3;
+  
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --background-color: #fafafa;
+  --surface-color: #ffffff;
+  
+  --success: #4caf50;
+  --warning: #ff9800;
+  --error: #f44336;
+  --info: #2196f3;
+}
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos globais */
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--background-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar customizada com tema azul/amarelo */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-blue-light);
+  border-radius: 5px;
+  
+  &:hover {
+    background: var(--primary-blue);
+  }
+}
+
+/* Botões padrão */
+button, .btn {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  
+  &.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+    
+    &:hover {
+      background-color: var(--primary-blue-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+    }
+  }
+  
+  &.btn-secondary {
+    background-color: var(--accent-yellow);
+    color: var(--text-primary);
+    
+    &:hover {
+      background-color: var(--accent-yellow-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+    }
+  }
+  
+  &.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-blue);
+    color: var(--primary-blue);
+    
+    &:hover {
+      background-color: var(--primary-blue);
+      color: white;
+    }
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
+/* Links */
+a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: var(--primary-blue-dark);
+    text-decoration: underline;
+  }
+}
+
+/* Inputs e formulários */
+input, textarea, select {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  width: 100%;
+  transition: border-color 0.3s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+  }
+  
+  &.error {
+    border-color: var(--error);
+  }
+}
+
+/* Cards */
+.card {
+  background: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Container responsivo */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
+}
+
+/* Utilitários */
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: var(--primary-blue);
+}
+
+.text-accent {
+  color: var(--accent-yellow-dark);
+}
+
+.bg-primary {
+  background-color: var(--primary-blue);
+}
+
+.bg-accent {
+  background-color: var(--accent-yellow);
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }

@@ -276,13 +276,36 @@
         }
       }
     }
+    .sponsor-image-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
 
-    .sponsor-image {
-      flex-shrink: 0;
+      .sponsor-image {
+        img {
+          max-width: 400px;
+          width: 100%;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+      }
 
-      img {
+      .image-caption {
+        text-align: center;
+        color: #333;
+        font-size: 0.95rem;
+        line-height: 1.5;
         max-width: 400px;
-        width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+
+      .sponsor-text,
+      .sponsor-image-wrapper {
+        max-width: 100%;
       }
     }
   }
