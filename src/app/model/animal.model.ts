@@ -6,7 +6,6 @@ export interface Animal {
   dataCriacao?: Date;
   // Campos para mock data (temporário)
   imagemPrincipal?: string;
-  idade?: string;
   dataCadastro?: Date;
   ativo?: boolean;
 }

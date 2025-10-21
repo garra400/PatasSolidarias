@@ -10,7 +10,7 @@ const router = express.Router();
 // Registrar usuário
 router.post('/register', async (req, res) => {
   try {
-    const { nome, email, senha, telefone, endereco, cpf } = req.body;
+    const { nome, email, senha, telefone, cpf } = req.body;
     
     const db = getDB();
     const users = db.collection('users');
@@ -35,7 +35,6 @@ router.post('/register', async (req, res) => {
       email,
       senha: hashedPassword,
       telefone,
-      endereco,
       cpf,
       tipo: 'adotante',
       emailConfirmado: false,

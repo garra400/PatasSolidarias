@@ -50,7 +50,12 @@
         <div class="carousel-content">
           <div class="animal-image-wrapper">
             <div class="animal-image-border">
-              <img [src]="currentAnimal.animal.imagemPrincipal" [alt]="currentAnimal.animal.nome" class="animal-image">
+              <img 
+                [src]="currentAnimal.animal.imagemPrincipal" 
+                [alt]="currentAnimal.animal.nome" 
+                class="animal-image"
+                (error)="onImageError($event)"
+              >
             </div>
           </div>
           

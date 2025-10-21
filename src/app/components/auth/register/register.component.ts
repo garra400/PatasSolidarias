@@ -26,7 +26,7 @@ export class RegisterComponent {
       nome: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
-      rg: ['', [Validators.required, Validators.pattern(/^\d{2}\.\d{3}\.\d{3}-\d{1}$/)]],
+      cpf: ['', [Validators.required, Validators.pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/)]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       confirmarSenha: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
@@ -48,11 +48,11 @@ export class RegisterComponent {
     }
   }
 
-  formatRG(event: any): void {
+  formatCPF(event: any): void {
     let value = event.target.value.replace(/\D/g, '');
-    if (value.length <= 9) {
-      value = value.replace(/(\d{2})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
-      this.registerForm.patchValue({ rg: value }, { emitEvent: false });
+    if (value.length <= 11) {
+      value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+      this.registerForm.patchValue({ cpf: value }, { emitEvent: false });
     }
   }
 

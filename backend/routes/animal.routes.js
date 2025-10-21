@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const db = getDB();
-    // Retornar apenas: nome, descricao, tipo (especie), dataCriacao
+    // Retornar apenas: nome, descricao, tipo (especie), dataCriacao, imagemPrincipal
     const animals = await db.collection('animals')
       .find()
       .project({
@@ -16,7 +16,9 @@ router.get('/', async (req, res) => {
         nome: 1,
         descricao: 1,
         especie: 1,  // tipo de animal (cachorro, gato)
-        criadoEm: 1   // data de criação
+        criadoEm: 1,  // data de criação
+        imagemPrincipal: 1,  // imagem do animal
+        ativo: 1   // se está disponível para adoção
       })
       .toArray();
     
@@ -26,7 +28,9 @@ router.get('/', async (req, res) => {
       nome: animal.nome,
       descricao: animal.descricao,
       tipo: animal.especie,
-      dataCriacao: animal.criadoEm
+      dataCriacao: animal.criadoEm,
+      imagemPrincipal: animal.imagemPrincipal,
+      ativo: animal.ativo
     }));
     
     res.json(animalsFormatted);

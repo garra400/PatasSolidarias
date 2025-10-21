@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
       next: (animals) => {
         clearTimeout(timeout);
         console.log('✅ Animais carregados:', animals);
+        console.log('🖼️  Primeira imagem:', animals[0]?.animal?.imagemPrincipal);
         this.animals = animals;
         this.isLoading = false;
       },
@@ -66,5 +67,12 @@ export class HomeComponent implements OnInit {
 
   previousAnimal(): void {
     this.currentAnimalIndex = (this.currentAnimalIndex - 1 + this.animals.length) % this.animals.length;
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    console.error('❌ Erro ao carregar imagem:', img.src);
+    // Fallback para imagem placeholder do Unsplash
+    img.src = 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800&q=80';
   }
 }

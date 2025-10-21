@@ -17,8 +17,7 @@ export class AnimalService {
       nome: 'Tigrão',
       tipo: 'gato',
       descricao: 'Gato listrado muito carinhoso que adora brincar com bolinhas',
-      imagemPrincipal: 'https://placekitten.com/400/400',
-      idade: '2 anos',
+      imagemPrincipal: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800&q=80',
       dataCadastro: new Date('2023-05-15'),
       ativo: true
     },
@@ -27,8 +26,7 @@ export class AnimalService {
       nome: 'Berenice',
       tipo: 'cachorro',
       descricao: 'Cachorra alegre e brincalhona, muito dócil com crianças',
-      imagemPrincipal: 'https://place.dog/400/400',
-      idade: '3 anos',
+      imagemPrincipal: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80',
       dataCadastro: new Date('2022-08-20'),
       ativo: true
     },
@@ -37,8 +35,7 @@ export class AnimalService {
       nome: 'Gata',
       tipo: 'gato',
       descricao: 'Gatinha preta muito elegante e independente',
-      imagemPrincipal: 'https://placekitten.com/401/401',
-      idade: '1 ano',
+      imagemPrincipal: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&q=80',
       dataCadastro: new Date('2024-01-10'),
       ativo: true
     },
@@ -47,8 +44,7 @@ export class AnimalService {
       nome: 'Fiapo',
       tipo: 'cachorro',
       descricao: 'Cachorrinho pequeno e fofo que adora colo',
-      imagemPrincipal: 'https://place.dog/401/401',
-      idade: '5 anos',
+      imagemPrincipal: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=800&q=80',
       dataCadastro: new Date('2023-11-05'),
       ativo: true
     },
@@ -57,8 +53,7 @@ export class AnimalService {
       nome: 'Pretinha',
       tipo: 'cachorro',
       descricao: 'Cachorra carinhosa e leal, excelente companheira',
-      imagemPrincipal: 'https://place.dog/402/402',
-      idade: '4 anos',
+      imagemPrincipal: 'https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=800&q=80',
       dataCadastro: new Date('2023-03-22'),
       ativo: true
     },
@@ -67,8 +62,7 @@ export class AnimalService {
       nome: 'Furia',
       tipo: 'gato',
       descricao: 'Gatinha preta com olhos verdes penetrantes',
-      imagemPrincipal: 'https://placekitten.com/402/402',
-      idade: '2 anos',
+      imagemPrincipal: 'https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?w=800&q=80',
       dataCadastro: new Date('2024-02-14'),
       ativo: true
     }

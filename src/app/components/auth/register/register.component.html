@@ -53,18 +53,18 @@
         </div>
 
         <div class="form-group">
-          <label for="rg">RG *</label>
+          <label for="cpf">CPF *</label>
           <input 
             type="text" 
-            id="rg" 
-            formControlName="rg" 
-            placeholder="00.000.000-0"
-            (input)="formatRG($event)"
-            maxlength="12"
-            [class.error]="registerForm.get('rg')?.invalid && registerForm.get('rg')?.touched"
+            id="cpf" 
+            formControlName="cpf" 
+            placeholder="000.000.000-00"
+            (input)="formatCPF($event)"
+            maxlength="14"
+            [class.error]="registerForm.get('cpf')?.invalid && registerForm.get('cpf')?.touched"
           >
-          <span class="error-message" *ngIf="registerForm.get('rg')?.invalid && registerForm.get('rg')?.touched">
-            RG inválido
+          <span class="error-message" *ngIf="registerForm.get('cpf')?.invalid && registerForm.get('cpf')?.touched">
+            CPF inválido
           </span>
         </div>
       </div>
