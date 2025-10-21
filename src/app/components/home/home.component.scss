@@ -2,60 +2,6 @@
   min-height: 100vh;
 }
 
-// Header
-.header {
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 15px 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .logo {
-    height: 50px;
-  }
-
-  .nav {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-
-    .nav-link {
-      color: #333;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s;
-
-      &:hover, &.active {
-        color: #4a5fc1;
-      }
-    }
-
-    .btn-padrinho {
-      background: #2d3f8d;
-      color: white;
-      padding: 10px 25px;
-      border-radius: 25px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.3s;
-
-      &:hover {
-        background: #4a5fc1;
-      }
-    }
-  }
-}
-
 // Hero Donation Section
 .hero-donation {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -199,6 +145,11 @@
           cursor: pointer;
           font-size: 20px;
           transition: background 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          line-height: 1;
 
           &:hover {
             background: #667eea;
@@ -326,10 +277,24 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 20px;
 
-      img {
-        width: 100%;
-        max-width: 200px;
-        margin: 0 auto;
+      .sticker-item {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        img {
+          width: 100%;
+          height: auto;
+          border-radius: 8px;
+          object-fit: cover;
+        }
       }
     }
   }
@@ -368,11 +333,6 @@
 
 // Responsive
 @media (max-width: 768px) {
-  .header .nav {
-    flex-direction: column;
-    gap: 15px;
-  }
-
   .project-info .info-content,
   .animal-carousel .carousel-content,
   .sponsor-section .sponsor-content {
@@ -382,5 +342,17 @@
 
   .stickers-showcase .stickers-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero-donation {
+    .donation-card {
+      h2 {
+        font-size: 36px;
+      }
+
+      p {
+        font-size: 18px;
+      }
+    }
   }
 }

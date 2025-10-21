@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AnimalService } from '../../service/animal.service';
-import { AnimalCarousel } from '../../model/animal.model';
+
+interface Animal {
+  nome: string;
+  imagemPrincipal: string;
+  descricao: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -12,41 +16,42 @@ import { AnimalCarousel } from '../../model/animal.model';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  animals: AnimalCarousel[] = [];
+  animals: Animal[] = [
+    {
+      nome: 'Tigrão',
+      imagemPrincipal: '/assets/images/tigrao.jpg',
+      descricao: 'Um gatinho lindo e brincalhão que adora correr pelo campus. Tigrão é muito carinhoso e sempre vem pedir carinho dos estudantes!'
+    },
+    {
+      nome: 'Pretinha',
+      imagemPrincipal: '/assets/images/pretinha.jpg',
+      descricao: 'Linda gatinha preta de olhos brilhantes. Pretinha é mais tímida, mas quando pega confiança é super carinhosa e adora um cafuné.'
+    },
+    {
+      nome: 'Fúria',
+      imagemPrincipal: '/assets/images/furia.jpg',
+      descricao: 'Não se engane pelo nome! Fúria é um doce de cachorrinha que adora brincar. Ela é super protetora e cuida de todos os outros animais do campus.'
+    },
+    {
+      nome: 'Berenice',
+      imagemPrincipal: '/assets/images/berenice.jpg',
+      descricao: 'Uma cachorrinha linda e elegante. Berenice é calma e adora tirar sonecas ao sol. Ela é a mais tranquila do grupo e adora receber visitantes.'
+    },
+    {
+      nome: 'Gata',
+      imagemPrincipal: '/assets/images/gata.jpg',
+      descricao: 'Uma gatinha curiosa e aventureira. Está sempre explorando cada cantinho do campus e surpreendendo todos com suas travessuras adoráveis.'
+    }
+  ];
+  
   currentAnimalIndex = 0;
-  isLoading = true;
+  isLoading = false;
 
-  constructor(private animalService: AnimalService) {}
+  constructor() {}
 
   ngOnInit(): void {
-    console.log('🏠 HomeComponent inicializado');
-    this.loadAnimals();
+    console.log('🏠 HomeComponent inicializado com', this.animals.length, 'animais');
     this.startCarousel();
-  }
-
-  loadAnimals(): void {
-    console.log('🐾 Iniciando carregamento de animais...');
-    
-    // Timeout de segurança - se não carregar em 5 segundos, desativa o loading
-    const timeout = setTimeout(() => {
-      console.log('⏰ Timeout alcançado - desativando loading');
-      this.isLoading = false;
-    }, 5000);
-    
-    this.animalService.getAnimalsForCarousel().subscribe({
-      next: (animals) => {
-        clearTimeout(timeout);
-        console.log('✅ Animais carregados:', animals);
-        console.log('🖼️  Primeira imagem:', animals[0]?.animal?.imagemPrincipal);
-        this.animals = animals;
-        this.isLoading = false;
-      },
-      error: (error: any) => {
-        clearTimeout(timeout);
-        console.error('❌ Erro ao carregar animais:', error);
-        this.isLoading = false;
-      }
-    });
   }
 
   startCarousel(): void {
@@ -57,7 +62,7 @@ export class HomeComponent implements OnInit {
     }, 5000);
   }
 
-  get currentAnimal(): AnimalCarousel | null {
+  get currentAnimal(): Animal | null {
     return this.animals[this.currentAnimalIndex] || null;
   }
 
@@ -72,7 +77,7 @@ export class HomeComponent implements OnInit {
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
     console.error('❌ Erro ao carregar imagem:', img.src);
-    // Fallback para imagem placeholder do Unsplash
-    img.src = 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800&q=80';
+    // Fallback para logo do projeto
+    img.src = '/assets/images/logo.png';
   }
 }

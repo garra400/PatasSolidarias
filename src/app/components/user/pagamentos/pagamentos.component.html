@@ -1,0 +1,52 @@
+<div class="pagamentos-container">
+  <div class="page-header">
+    <h1>💳 Histórico de Pagamentos</h1>
+    <p>Confira todos os seus pagamentos realizados</p>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+    <p>Carregando pagamentos...</p>
+  </div>
+
+  <!-- Lista de Pagamentos -->
+  <div *ngIf="!isLoading && payments.length > 0" class="payments-list">
+    <div *ngFor="let payment of payments" class="payment-card">
+      <div class="payment-header">
+        <div class="payment-type">
+          <span class="type-badge">{{ getTipoText(payment.tipo) }}</span>
+          <h3>{{ payment.descricao }}</h3>
+        </div>
+        <div class="payment-value">
+          R$ {{ payment.valor.toFixed(2) }}
+        </div>
+      </div>
+
+      <div class="payment-details">
+        <div class="detail-item">
+          <span class="label">Data:</span>
+          <span class="value">{{ payment.data | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Status:</span>
+          <span class="value" [ngClass]="getStatusClass(payment.status)">
+            {{ getStatusText(payment.status) }}
+          </span>
+        </div>
+        <div class="detail-item">
+          <span class="label">ID:</span>
+          <span class="value payment-id">{{ payment._id }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nenhum pagamento -->
+  <div *ngIf="!isLoading && payments.length === 0" class="no-payments">
+    <span class="icon">💳</span>
+    <h3>Nenhum pagamento realizado</h3>
+    <p>Você ainda não realizou nenhum pagamento</p>
+    <a routerLink="/conta/seja-apoiador" class="btn-primary">Seja um Apoiador</a>
+  </div>
+</div>

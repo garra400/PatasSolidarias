@@ -21,7 +21,7 @@ export class AuthService {
     nome: 'João Silva',
     email: 'joao@example.com',
     telefone: '(11) 98765-4321',
-    rg: '12.345.678-9',
+    cpf: '123.456.789-00',
     role: 'user',
     isDoador: true,
     emailVerificado: true,
@@ -32,7 +32,38 @@ export class AuthService {
       dataInicio: new Date('2025-08-01'),
       dataProximoPagamento: new Date('2025-11-01'),
       status: 'ativa'
-    }
+    },
+    historicoPagamentos: [
+      {
+        userId: '1',
+        tipo: 'assinatura',
+        valor: 15.00,
+        status: 'aprovado',
+        data: new Date('2025-08-01'),
+        mercadoPagoId: 'MP-123456',
+        mesReferencia: '2025-08'
+      },
+      {
+        userId: '1',
+        tipo: 'assinatura',
+        valor: 15.00,
+        status: 'aprovado',
+        data: new Date('2025-09-01'),
+        mercadoPagoId: 'MP-123457',
+        mesReferencia: '2025-09'
+      },
+      {
+        userId: '1',
+        tipo: 'assinatura',
+        valor: 15.00,
+        status: 'aprovado',
+        data: new Date('2025-10-01'),
+        mercadoPagoId: 'MP-123458',
+        mesReferencia: '2025-10'
+      }
+    ],
+    totalMesesApoio: 3, // 3 meses de assinatura
+    brindesDisponiveis: 1 // 3 meses / 3 = 1 brinde
   };
 
   constructor(private http: HttpClient) {

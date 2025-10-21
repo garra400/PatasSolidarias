@@ -1,141 +1,82 @@
 <div class="meus-brindes-container">
   <div class="header">
     <h1>Meus Brindes</h1>
-    <p>Confira suas fotos recebidas e brindes resgatáveis</p>
+    <p>Confira seus brindes disponíveis por apoiar o projeto</p>
   </div>
 
-  <div class="tabs">
-    <button 
-      class="tab" 
-      [class.active]="activeTab === 'photos'"
-      (click)="activeTab = 'photos'"
-    >
-      Fotos Recebidas ({{ photos.length }})
-    </button>
-    <button 
-      class="tab" 
-      [class.active]="activeTab === 'rewards'"
-      (click)="activeTab = 'rewards'"
-    >
-      Brindes Resgatáveis ({{ rewards.length }})
-    </button>
-  </div>
-
-  <!-- Photos Tab -->
-  <div class="content" *ngIf="activeTab === 'photos'">
-    <div class="loading" *ngIf="isLoading">Carregando fotos...</div>
+  <!-- Estatísticas -->
+  <div class="stats-cards">
+    <div class="stat-card">
+      <i class="fas fa-calendar-check"></i>
+      <div class="stat-info">
+        <h3>{{ totalMesesApoio }}</h3>
+        <p>Meses de Apoio</p>
+      </div>
+    </div>
     
-    <div class="photos-grid" *ngIf="!isLoading && photos.length > 0">
-      <div 
-        class="photo-card" 
-        *ngFor="let userPhoto of photos"
-        (click)="openPhotoModal(userPhoto)"
-      >
-        <div class="photo-thumbnail">
-          <img [src]="userPhoto.photo.urlImagem" [alt]="userPhoto.photo.descricao">
-          <span class="new-badge" *ngIf="!userPhoto.visualizada">Novo!</span>
+    <div class="stat-card">
+      <i class="fas fa-gift"></i>
+      <div class="stat-info">
+        <h3>{{ brindesDisponiveis }}</h3>
+        <p>Brindes Disponíveis</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info sobre como funcionam os brindes -->
+  <div class="info-box">
+    <i class="fas fa-info-circle"></i>
+    <p>
+      Você ganha <strong>1 brinde</strong> a cada <strong>3 meses</strong> de apoio ao projeto 
+      (seja por PIX ou assinatura mensal).
+    </p>
+  </div>
+
+  <!-- Brindes do Mês -->
+  <div class="section">
+    <h2>🎁 Brinde do Mês Atual</h2>
+    <div class="brindes-grid">
+      <div class="brinde-card" *ngFor="let brinde of brindesDoMes">
+        <div class="brinde-image">
+          <img [src]="brinde.imagemUrl" [alt]="brinde.nome">
         </div>
-        <div class="photo-info">
-          <p class="photo-date">
-            {{ userPhoto.dataRecebimento | date: 'dd/MM/yyyy' }}
-          </p>
-          <p class="photo-description">
-            {{ userPhoto.photo.descricao || 'Foto dos nossos pets' }}
-          </p>
+        <div class="brinde-info">
+          <h3>{{ brinde.nome }}</h3>
+          <p>{{ brinde.descricao }}</p>
         </div>
       </div>
     </div>
-
-    <div class="empty-state" *ngIf="!isLoading && photos.length === 0">
-      <p>Você ainda não recebeu nenhuma foto.</p>
-      <p>As fotos são enviadas mensalmente para os apoiadores.</p>
-    </div>
   </div>
 
-  <!-- Rewards Tab -->
-  <div class="content" *ngIf="activeTab === 'rewards'">
-    <div class="rewards-grid" *ngIf="rewards.length > 0">
-      <div 
-        class="reward-card" 
-        *ngFor="let userReward of rewards"
-      >
-        <div class="reward-image">
-          <img [src]="userReward.reward?.imagemUrl" [alt]="userReward.reward?.nome">
+  <!-- Meus Brindes Disponíveis -->
+  <div class="section">
+    <h2>✨ Meus Brindes Disponíveis</h2>
+    
+    <div class="brindes-grid" *ngIf="brindesDisponiveis > 0">
+      <div class="brinde-card" *ngFor="let brinde of brindes">
+        <div class="brinde-image">
+          <img [src]="brinde.imagemUrl" [alt]="brinde.nome">
         </div>
-        <div class="reward-info">
-          <h3>{{ userReward.reward?.nome }}</h3>
-          <p>{{ userReward.reward?.descricao }}</p>
-          <p class="eligibility-date">
-            Elegível desde: {{ userReward.dataElegibilidade | date: 'dd/MM/yyyy' }}
-          </p>
-          
-          <button 
-            class="btn-schedule" 
-            *ngIf="!userReward.resgatado"
-            (click)="openRewardModal(userReward)"
-          >
-            Agendar Retirada
+        <div class="brinde-info">
+          <h3>{{ brinde.nome }}</h3>
+          <p>{{ brinde.descricao }}</p>
+          <button class="btn-resgatar" [disabled]="brinde.status === 'resgatado'">
+            {{ brinde.status === 'disponivel' ? 'Resgatar' : 'Resgatado' }}
           </button>
-
-          <div class="scheduled-info" *ngIf="userReward.resgatado">
-            <span class="status-badge">Agendado</span>
-            <p>
-              Data: {{ userReward.horarioRetiradaSelecionado?.data | date: 'dd/MM/yyyy' }}
-              <br>
-              Horário: {{ userReward.horarioRetiradaSelecionado?.horario }}
-            </p>
-          </div>
         </div>
       </div>
     </div>
 
-    <div class="empty-state" *ngIf="rewards.length === 0">
-      <p>Você ainda não tem brindes resgatáveis disponíveis.</p>
-      <p>Os brindes ficam disponíveis a cada 3 meses de apoio contínuo.</p>
-    </div>
-  </div>
-</div>
-
-<!-- Photo Modal -->
-<div class="modal" *ngIf="selectedPhoto" (click)="closePhotoModal()">
-  <div class="modal-content photo-modal" (click)="$event.stopPropagation()">
-    <button class="close-btn" (click)="closePhotoModal()">×</button>
-    <img [src]="selectedPhoto.photo.urlImagem" [alt]="selectedPhoto.photo.descricao">
-    <div class="photo-modal-info">
-      <p class="photo-legenda">{{ selectedPhoto.photo.legenda }}</p>
-      <p class="photo-date">{{ selectedPhoto.dataRecebimento | date: 'dd/MM/yyyy' }}</p>
-    </div>
-  </div>
-</div>
-
-<!-- Reward Schedule Modal -->
-<div class="modal" *ngIf="showScheduleModal" (click)="closeRewardModal()">
-  <div class="modal-content schedule-modal" (click)="$event.stopPropagation()">
-    <button class="close-btn" (click)="closeRewardModal()">×</button>
-    <h2>Agendar Retirada</h2>
-    <p class="modal-subtitle">{{ selectedReward?.reward?.nome }}</p>
-    
-    <div class="schedule-calendar">
-      <p>Selecione uma data e horário disponível:</p>
-      
-      <div class="schedule-slots" *ngIf="selectedReward && selectedReward.reward && selectedReward.reward.horariosRetirada && selectedReward.reward.horariosRetirada.length > 0">
-        <div 
-          class="slot" 
-          *ngFor="let schedule of selectedReward.reward.horariosRetirada"
-          [class.full]="schedule.vagasDisponiveis <= schedule.vagasOcupadas"
-          (click)="schedule.vagasDisponiveis > schedule.vagasOcupadas && scheduleRewardPickup(schedule.data, schedule.horarioInicio + ' - ' + schedule.horarioFim)"
-        >
-          <p class="slot-date">{{ schedule.data | date: 'dd/MM/yyyy' }}</p>
-          <p class="slot-time">{{ schedule.horarioInicio }} - {{ schedule.horarioFim }}</p>
-          <p class="slot-availability">
-            {{ schedule.vagasDisponiveis - schedule.vagasOcupadas }} vagas disponíveis
-          </p>
-        </div>
-      </div>
-      
-      <div class="empty-state" *ngIf="!selectedReward || !selectedReward.reward || !selectedReward.reward.horariosRetirada || selectedReward.reward.horariosRetirada.length === 0">
-        <p>Nenhum horário disponível no momento.</p>
-      </div>
+    <div class="empty-state" *ngIf="brindesDisponiveis === 0">
+      <i class="fas fa-box-open"></i>
+      <h3>Você ainda não tem brindes disponíveis</h3>
+      <p>Continue apoiando o projeto! A cada 3 meses de apoio, você ganha 1 brinde especial.</p>
+      <p class="progress-info">
+        Você está com <strong>{{ totalMesesApoio }}</strong> 
+        {{ totalMesesApoio === 1 ? 'mês' : 'meses' }} de apoio.
+        Faltam <strong>{{ 3 - (totalMesesApoio % 3) }}</strong> 
+        {{ (3 - (totalMesesApoio % 3)) === 1 ? 'mês' : 'meses' }} para o próximo brinde!
+      </p>
     </div>
   </div>
 </div>

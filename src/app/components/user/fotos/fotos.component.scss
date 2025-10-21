@@ -1,0 +1,360 @@
+.fotos-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 30px;
+
+  h1 {
+    font-size: 2rem;
+    color: #333;
+    margin: 0 0 10px 0;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+  }
+}
+
+// Filtros
+.filters-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+
+  h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+  }
+
+  .filters-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    align-items: end;
+
+    .form-group {
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+      }
+
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+
+        &:focus {
+          outline: none;
+          border-color: #667eea;
+        }
+      }
+    }
+
+    .btn-clear {
+      padding: 10px 20px;
+      background: #f3f4f6;
+      color: #666;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+
+      &:hover {
+        background: #e5e7eb;
+        border-color: #667eea;
+        color: #667eea;
+      }
+    }
+  }
+}
+
+// Loading
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
+// Grid de Fotos
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.photo-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+    .photo-overlay {
+      opacity: 1;
+    }
+  }
+
+  .photo-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    background: #f3f4f6;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .photo-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+
+      .view-icon {
+        font-size: 3rem;
+      }
+    }
+  }
+
+  &:hover .photo-image img {
+    transform: scale(1.05);
+  }
+
+  .photo-info {
+    padding: 15px;
+
+    h4 {
+      margin: 0 0 5px 0;
+      color: #333;
+      font-size: 1.1rem;
+    }
+
+    .photo-date {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Nenhuma foto
+.no-photos {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 12px;
+
+  .icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    color: #333;
+    margin: 0 0 10px 0;
+  }
+
+  p {
+    color: #666;
+    margin: 0 0 20px 0;
+  }
+
+  .btn-primary {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Modal de Foto
+.photo-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.3s;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal-content {
+    max-width: 900px;
+    max-height: 90vh;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    animation: slideUp 0.3s;
+    display: flex;
+    flex-direction: column;
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: rotate(90deg);
+    }
+  }
+
+  .modal-image {
+    max-height: 60vh;
+    overflow: hidden;
+    background: #000;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .modal-info {
+    padding: 30px;
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #333;
+      margin: 0 0 15px 0;
+    }
+
+    .description {
+      color: #666;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin: 0 0 20px 0;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+        font-size: 1rem;
+
+        .icon {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .filters-card .filters-form {
+    grid-template-columns: 1fr;
+
+    .btn-clear {
+      margin-top: 10px;
+    }
+  }
+
+  .photos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .photo-modal {
+    .modal-content {
+      max-width: 100%;
+      max-height: 95vh;
+    }
+
+    .modal-info {
+      padding: 20px;
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

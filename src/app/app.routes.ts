@@ -29,21 +29,53 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   
-  // User Dashboard Routes (Protected)
+  // User Account Routes (Protected with Sidebar Layout)
   {
-    path: 'dashboard',
-    canActivate: [authGuard, doadorGuard],
+    path: 'conta',
+    canActivate: [authGuard],
+    loadComponent: () => import('./components/user/user-layout/user-layout.component').then(m => m.UserLayoutComponent),
     children: [
       {
         path: '',
-        redirectTo: 'meus-brindes',
+        redirectTo: 'seja-apoiador',
         pathMatch: 'full'
       },
       {
+        path: 'seja-apoiador',
+        loadComponent: () => import('./components/payment/seja-padrinho/seja-padrinho.component').then(m => m.SejaPadrinhoComponent)
+      },
+      {
         path: 'meus-brindes',
-        loadComponent: () => import('./components/dashboard/meus-brindes/meus-brindes.component').then(m => m.MeusBrindesComponent)
+        loadComponent: () => import('./components/dashboard/meus-brindes/meus-brindes.component').then(m => m.MeusBrindesComponent),
+        canActivate: [doadorGuard]
+      },
+      {
+        path: 'fotos',
+        loadComponent: () => import('./components/user/fotos/fotos.component').then(m => m.FotosComponent),
+        canActivate: [doadorGuard]
+      },
+      {
+        path: 'pagamentos',
+        loadComponent: () => import('./components/user/pagamentos/pagamentos.component').then(m => m.PagamentosComponent),
+        canActivate: [doadorGuard]
+      },
+      {
+        path: 'assinatura',
+        loadComponent: () => import('./components/user/assinatura/assinatura.component').then(m => m.AssinaturaComponent),
+        canActivate: [doadorGuard]
+      },
+      {
+        path: 'configuracoes',
+        loadComponent: () => import('./components/user/configuracoes/configuracoes.component').then(m => m.ConfiguracoesComponent)
       }
     ]
+  },
+
+  // Old Dashboard Route - Redirect to new structure
+  {
+    path: 'dashboard',
+    redirectTo: 'conta/meus-brindes',
+    pathMatch: 'full'
   },
 
   // Admin Routes (Protected)

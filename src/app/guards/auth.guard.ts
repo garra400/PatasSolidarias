@@ -34,6 +34,7 @@ export const doadorGuard: CanActivateFn = () => {
     return true;
   }
 
-  router.navigate(['/seja-padrinho']);
+  // Redireciona para a página de seja apoiador dentro da conta
+  router.navigate(['/conta/seja-apoiador']);
   return false;
 };

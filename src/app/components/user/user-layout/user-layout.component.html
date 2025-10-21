@@ -1,0 +1,67 @@
+<div class="user-layout">
+  <!-- Sidebar Toggle Button -->
+  <button class="sidebar-toggle" (click)="toggleSidebar()" [class.open]="isSidebarOpen" title="Menu">
+    <i class="fas" [ngClass]="isSidebarOpen ? 'fa-times' : 'fa-bars'"></i>
+  </button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.open]="isSidebarOpen" [class.collapsed]="!isSidebarOpen">
+    <div class="sidebar-header">
+      <img src="/assets/images/logo.png" alt="Logo" class="logo">
+      <h3>Minha Conta</h3>
+      <p class="user-email">{{ currentUser?.email }}</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/conta/seja-apoiador" routerLinkActive="active" class="nav-item">
+        <span class="icon">💝</span>
+        <span>Seja Apoiador</span>
+      </a>
+
+      <a *ngIf="isDoador()" routerLink="/conta/meus-brindes" routerLinkActive="active" class="nav-item">
+        <span class="icon">🎁</span>
+        <span>Meus Brindes</span>
+      </a>
+
+      <a *ngIf="isDoador()" routerLink="/conta/fotos" routerLinkActive="active" class="nav-item">
+        <span class="icon">📸</span>
+        <span>Fotos dos Animais</span>
+      </a>
+
+      <a *ngIf="isDoador()" routerLink="/conta/pagamentos" routerLinkActive="active" class="nav-item">
+        <span class="icon">💳</span>
+        <span>Histórico de Pagamentos</span>
+      </a>
+
+      <a *ngIf="isDoador()" routerLink="/conta/assinatura" routerLinkActive="active" class="nav-item">
+        <span class="icon">📋</span>
+        <span>Minha Assinatura</span>
+      </a>
+
+      <a routerLink="/conta/configuracoes" routerLinkActive="active" class="nav-item">
+        <span class="icon">⚙️</span>
+        <span>Configurações</span>
+      </a>
+
+      <div class="nav-divider"></div>
+
+      <a routerLink="/" class="nav-item">
+        <span class="icon">🏠</span>
+        <span>Voltar para Home</span>
+      </a>
+
+      <button (click)="logout()" class="nav-item logout-btn">
+        <span class="icon">🚪</span>
+        <span>Sair</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<!-- Sidebar Overlay (Mobile) -->
+<div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>

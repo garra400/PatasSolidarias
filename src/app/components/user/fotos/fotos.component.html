@@ -1,0 +1,106 @@
+<div class="fotos-container">
+  <div class="page-header">
+    <h1>📸 Fotos dos Animais</h1>
+    <p>Confira as fotos exclusivas dos nossos amiguinhos</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters-card">
+    <h3>Filtrar Fotos</h3>
+    <form [formGroup]="filterForm" class="filters-form">
+      <div class="form-group">
+        <label for="animal">Nome do Animal</label>
+        <select id="animal" formControlName="animal">
+          <option value="">Todos</option>
+          <option *ngFor="let animal of animaisDisponiveis" [value]="animal">
+            {{ animal }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="especie">Espécie</label>
+        <select id="especie" formControlName="especie">
+          <option value="">Todas</option>
+          <option value="cachorro">🐕 Cachorro</option>
+          <option value="gato">🐱 Gato</option>
+          <option value="outro">🐾 Outro</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="mes">Mês</label>
+        <select id="mes" formControlName="mes">
+          <option value="">Todos</option>
+          <option *ngFor="let mes of mesesDisponiveis" [value]="mes">
+            {{ formatMes(mes) }}
+          </option>
+        </select>
+      </div>
+
+      <button type="button" (click)="clearFilters()" class="btn-clear">
+        Limpar Filtros
+      </button>
+    </form>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+    <p>Carregando fotos...</p>
+  </div>
+
+  <!-- Grid de Fotos -->
+  <div *ngIf="!isLoading && filteredPhotos.length > 0" class="photos-grid">
+    <div 
+      *ngFor="let photo of filteredPhotos" 
+      class="photo-card"
+      (click)="openPhoto(photo)"
+    >
+      <div class="photo-image">
+        <img [src]="photo.imagemUrl" [alt]="photo.animalNome">
+        <div class="photo-overlay">
+          <span class="view-icon">👁️</span>
+        </div>
+      </div>
+      <div class="photo-info">
+        <h4>{{ photo.animalNome }}</h4>
+        <p class="photo-date">{{ formatMes(photo.mes) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nenhuma foto -->
+  <div *ngIf="!isLoading && filteredPhotos.length === 0" class="no-photos">
+    <span class="icon">📷</span>
+    <h3>Nenhuma foto encontrada</h3>
+    <p>Tente ajustar os filtros</p>
+    <button (click)="clearFilters()" class="btn-primary">Limpar Filtros</button>
+  </div>
+</div>
+
+<!-- Modal de Foto -->
+<div *ngIf="selectedPhoto" class="photo-modal" (click)="closePhoto()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closePhoto()">✕</button>
+    
+    <div class="modal-image">
+      <img [src]="selectedPhoto.imagemUrl" [alt]="selectedPhoto.animalNome">
+    </div>
+    
+    <div class="modal-info">
+      <h2>{{ selectedPhoto.animalNome }}</h2>
+      <p class="description">{{ selectedPhoto.descricao }}</p>
+      <div class="modal-meta">
+        <span class="meta-item">
+          <span class="icon">{{ selectedPhoto.animalEspecie === 'cachorro' ? '🐕' : '🐱' }}</span>
+          {{ selectedPhoto.animalEspecie === 'cachorro' ? 'Cachorro' : 'Gato' }}
+        </span>
+        <span class="meta-item">
+          <span class="icon">📅</span>
+          {{ formatMes(selectedPhoto.mes) }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

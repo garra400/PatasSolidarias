@@ -1,17 +1,4 @@
 <div class="home-container">
-  <!-- Header -->
-  <header class="header">
-    <div class="container">
-      <img src="/assets/images/logo.png" alt="Patas Solidárias" class="logo">
-      <nav class="nav">
-        <a routerLink="/" class="nav-link active">Home</a>
-        <a routerLink="/conheca-patinhas" class="nav-link">Conheça nossas patinhas</a>
-        <a routerLink="/campanha" class="nav-link">Campanha</a>
-        <a routerLink="/login" class="btn-padrinho">Seja um padrinho</a>
-      </nav>
-    </div>
-  </header>
-
   <!-- Hero Section - Donation Call -->
   <section class="hero-donation">
     <div class="container">
@@ -42,50 +29,50 @@
   </section>
 
   <!-- Animal Carousel Section -->
-  <section class="animal-carousel">
+  <section id="conheca-patinhas" class="animal-carousel">
     <div class="container">
       <h2 class="section-title">Conheça Nossas Patinhas</h2>
       
-      <div class="carousel-container" *ngIf="!isLoading && currentAnimal">
-        <div class="carousel-content">
-          <div class="animal-image-wrapper">
-            <div class="animal-image-border">
-              <img 
-                [src]="currentAnimal.animal.imagemPrincipal" 
-                [alt]="currentAnimal.animal.nome" 
-                class="animal-image"
-                (error)="onImageError($event)"
-              >
-            </div>
-          </div>
-          
-          <div class="animal-info">
-            <h3>{{ currentAnimal.animal.nome }}</h3>
-            <p>{{ currentAnimal.legenda }}</p>
-            <div class="carousel-controls">
-              <button (click)="previousAnimal()" class="carousel-btn">❮</button>
-              <div class="carousel-dots">
-                <span 
-                  *ngFor="let animal of animals; let i = index" 
-                  [class.active]="i === currentAnimalIndex"
-                  (click)="currentAnimalIndex = i"
-                  class="dot"
-                ></span>
+      @if (currentAnimal) {
+        <div class="carousel-container">
+          <div class="carousel-content">
+            <div class="animal-image-wrapper">
+              <div class="animal-image-border">
+                <img 
+                  [src]="currentAnimal.imagemPrincipal" 
+                  [alt]="currentAnimal.nome" 
+                  class="animal-image"
+                  (error)="onImageError($event)"
+                >
               </div>
-              <button (click)="nextAnimal()" class="carousel-btn">❯</button>
+            </div>
+            
+            <div class="animal-info">
+              <h3>{{ currentAnimal.nome }}</h3>
+              <p>{{ currentAnimal.descricao }}</p>
+              <div class="carousel-controls">
+                <button (click)="previousAnimal()" class="carousel-btn" title="Anterior">❮</button>
+                <div class="carousel-dots">
+                  @for (animal of animals; track animal.nome; let i = $index) {
+                    <span 
+                      [class.active]="i === currentAnimalIndex"
+                      (click)="currentAnimalIndex = i"
+                      class="dot"
+                      [title]="animal.nome"
+                    ></span>
+                  }
+                </div>
+                <button (click)="nextAnimal()" class="carousel-btn" title="Próximo">❯</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="loading" *ngIf="isLoading">
-        Carregando animais...
-      </div>
+      }
     </div>
   </section>
 
   <!-- Sponsor Section -->
-  <section class="sponsor-section">
+  <section id="campanha" class="sponsor-section">
     <div class="container">
       <div class="sponsor-content">
         <div class="sponsor-text">
@@ -112,10 +99,18 @@
       <div class="stickers-showcase">
         <h3>Confira os adesivos exclusivos dos nossos pets</h3>
         <div class="stickers-grid">
-          <img src="https://via.placeholder.com/150/2196F3/FFC107?text=Adesivo+1" alt="Adesivo 1">
-          <img src="https://via.placeholder.com/150/2196F3/FFC107?text=Adesivo+2" alt="Adesivo 2">
-          <img src="https://via.placeholder.com/150/2196F3/FFC107?text=Adesivo+3" alt="Adesivo 3">
-          <img src="https://via.placeholder.com/150/2196F3/FFC107?text=Adesivo+4" alt="Adesivo 4">
+          <div class="sticker-item">
+            <img src="/assets/images/figurinha1.jpg" alt="Adesivo 1">
+          </div>
+          <div class="sticker-item">
+            <img src="/assets/images/figurinha2.jpg" alt="Adesivo 2">
+          </div>
+          <div class="sticker-item">
+            <img src="/assets/images/figurinha3.jpg" alt="Adesivo 3">
+          </div>
+          <div class="sticker-item">
+            <img src="/assets/images/figurinha4.jpg" alt="Adesivo 4">
+          </div>
         </div>
       </div>
     </div>
