@@ -97,17 +97,33 @@
   border-radius: 12px;
   padding: 30px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s ease-out;
   position: relative;
+  background: white;
+  text-align: left;
+  width: 100%;
+  
+  // Remove estilos padrão de botão
+  font-family: inherit;
+  font-size: inherit;
+  
+  // Otimização de performance
+  will-change: transform, border-color;
 
   &:hover {
     border-color: #4a5fc1;
     transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(74, 95, 193, 0.2);
+  }
+  
+  &:active {
+    transform: translateY(-2px);
   }
 
   &.selected {
     border-color: #4a5fc1;
     background: #f5f7ff;
+    box-shadow: 0 4px 12px rgba(74, 95, 193, 0.3);
   }
 
   &.recommended-card {

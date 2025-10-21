@@ -20,6 +20,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
   },
   {
+    path: 'confirmar-email',
+    loadComponent: () => import('./components/auth/confirm-email/confirm-email.component').then(m => m.ConfirmEmailComponent)
+  },
+  {
     path: 'seja-padrinho',
     loadComponent: () => import('./components/payment/seja-padrinho/seja-padrinho.component').then(m => m.SejaPadrinhoComponent),
     canActivate: [authGuard]

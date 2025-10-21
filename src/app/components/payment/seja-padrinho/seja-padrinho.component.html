@@ -35,7 +35,8 @@
       <h2>Escolha como deseja apoiar</h2>
       
       <div class="payment-options">
-        <div 
+        <button
+          type="button"
           class="payment-option-card" 
           [class.selected]="selectedOption === 'pix'"
           (click)="selectPaymentOption('pix')"
@@ -43,9 +44,10 @@
           <h3>Doação Única via PIX</h3>
           <p>Faça uma doação de qualquer valor</p>
           <p class="recommended">Rápido e fácil</p>
-        </div>
+        </button>
 
-        <div 
+        <button
+          type="button"
           class="payment-option-card recommended-card" 
           [class.selected]="selectedOption === 'subscription'"
           (click)="selectPaymentOption('subscription')"
@@ -54,7 +56,7 @@
           <h3>Apoio Mensal</h3>
           <p>Assinatura mensal a partir de R$ 15,00</p>
           <p class="recommended">Receba todos os benefícios!</p>
-        </div>
+        </button>
       </div>
 
       <!-- PIX Payment Form -->

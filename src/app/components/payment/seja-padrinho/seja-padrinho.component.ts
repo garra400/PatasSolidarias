@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,7 +11,8 @@ import { Payment } from '../../../model/payment.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './seja-padrinho.component.html',
-  styleUrl: './seja-padrinho.component.scss'
+  styleUrl: './seja-padrinho.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SejaPadrinhoComponent implements OnInit {
   paymentForm: FormGroup;
@@ -25,7 +26,8 @@ export class SejaPadrinhoComponent implements OnInit {
     private fb: FormBuilder,
     private paymentService: PaymentService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.paymentForm = this.fb.group({
       valor: ['', [Validators.required, Validators.min(1)]],
@@ -36,19 +38,26 @@ export class SejaPadrinhoComponent implements OnInit {
   ngOnInit(): void {
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
+      this.cdr.markForCheck();
     });
   }
 
   selectPaymentOption(option: 'pix' | 'subscription'): void {
+    if (this.selectedOption === option) {
+      return; // Já está selecionado, não fazer nada
+    }
+    
     this.selectedOption = option;
     this.pixPayment = null;
     this.errorMessage = '';
+    this.cdr.markForCheck(); // Forçar atualização da view
   }
 
   createPixPayment(): void {
     if (this.paymentForm.get('valor')?.valid && this.currentUser) {
       this.isLoading = true;
       this.errorMessage = '';
+      this.cdr.markForCheck();
 
       this.paymentService.createPixPayment({
         valor: this.paymentForm.get('valor')?.value,
@@ -59,6 +68,7 @@ export class SejaPadrinhoComponent implements OnInit {
         next: (payment) => {
           this.pixPayment = payment;
           this.isLoading = false;
+          this.cdr.markForCheck();
           
           // Iniciar polling para verificar status do pagamento
           this.startPaymentStatusPolling(payment._id!);
@@ -66,6 +76,7 @@ export class SejaPadrinhoComponent implements OnInit {
         error: (error: any) => {
           this.errorMessage = error.error?.message || 'Erro ao gerar pagamento PIX';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
     }
@@ -75,6 +86,7 @@ export class SejaPadrinhoComponent implements OnInit {
     if (this.paymentForm.get('valorMensal')?.valid && this.currentUser) {
       this.isLoading = true;
       this.errorMessage = '';
+      this.cdr.markForCheck();
 
       this.paymentService.createSubscription({
         valorMensal: this.paymentForm.get('valorMensal')?.value,
@@ -89,11 +101,13 @@ export class SejaPadrinhoComponent implements OnInit {
           } else {
             this.errorMessage = 'Erro ao gerar link de pagamento';
             this.isLoading = false;
+            this.cdr.markForCheck();
           }
         },
         error: (error: any) => {
           this.errorMessage = error.error?.message || 'Erro ao criar assinatura';
           this.isLoading = false;
+          this.cdr.markForCheck();
         }
       });
     }
@@ -120,6 +134,7 @@ export class SejaPadrinhoComponent implements OnInit {
           } else if (payment.status === 'rejected' || payment.status === 'cancelled') {
             clearInterval(interval);
             this.errorMessage = 'Pagamento não foi concluído. Tente novamente.';
+            this.cdr.markForCheck();
           }
         },
         error: () => {

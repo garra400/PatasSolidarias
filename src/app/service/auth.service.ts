@@ -133,18 +133,32 @@ export class AuthService {
       );
   }
 
-  verifyEmail(token: string): Observable<{ message: string }> {
+  verifyEmail(token: string): Observable<any> {
     if (environment.useMockData) {
-      return of({ message: 'Email verificado com sucesso!' }).pipe(delay(500));
+      return of({ 
+        message: 'Email verificado com sucesso!',
+        user: { id: '1', nome: 'Mock User', email: 'mock@test.com', tipo: 'adotante' },
+        token: 'mock-jwt-token'
+      }).pipe(delay(500));
     }
-    return this.http.post<{ message: string }>(`${this.apiUrl}/verify-email`, { token });
+    return this.http.post<any>(`${this.apiUrl}/confirm-email`, { token })
+      .pipe(
+        tap((response) => {
+          // Após confirmação bem-sucedida, salvar o usuário e token (login automático)
+          if (response.user && response.token && this.isBrowser) {
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+            localStorage.setItem('token', response.token);
+            console.log('✅ Email confirmado e login automático realizado');
+          }
+        })
+      );
   }
 
   requestPasswordReset(email: string): Observable<{ message: string }> {
     if (environment.useMockData) {
       return of({ message: 'Email de recuperação enviado!' }).pipe(delay(500));
     }
-    return this.http.post<{ message: string }>(`${this.apiUrl}/request-password-reset`, { email });
+    return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password`, { email });
   }
 
   resetPassword(resetData: PasswordReset): Observable<{ message: string }> {
