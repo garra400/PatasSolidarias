@@ -1,0 +1,52 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-section">
+      <img src="/assets/images/logo.png" alt="Patas Solidárias" class="logo">
+      <h1>Seja um Padrinho</h1>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          placeholder="seu@email.com"
+          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+        >
+        <span class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          Email inválido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input 
+          type="password" 
+          id="senha" 
+          formControlName="senha" 
+          placeholder="••••••••"
+          [class.error]="loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched"
+        >
+        <span class="error-message" *ngIf="loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched">
+          Senha deve ter no mínimo 6 caracteres
+        </span>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid || isLoading" class="btn-primary">
+        {{ isLoading ? 'Entrando...' : 'Entrar' }}
+      </button>
+
+      <div class="links">
+        <a routerLink="/esqueci-senha">Esqueci minha senha</a>
+        <span>|</span>
+        <a routerLink="/registro">Criar conta</a>
+      </div>
+    </form>
+  </div>
+</div>

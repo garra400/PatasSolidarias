@@ -1,0 +1,363 @@
+.home-container {
+  min-height: 100vh;
+}
+
+// Header
+.header {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    height: 50px;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .nav-link {
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+
+      &:hover, &.active {
+        color: #4a5fc1;
+      }
+    }
+
+    .btn-padrinho {
+      background: #2d3f8d;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #4a5fc1;
+      }
+    }
+  }
+}
+
+// Hero Donation Section
+.hero-donation {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 80px 20px;
+
+  .donation-card {
+    text-align: center;
+    color: white;
+
+    h2 {
+      font-size: 48px;
+      margin: 0 0 10px 0;
+    }
+
+    p {
+      font-size: 24px;
+      margin: 0 0 30px 0;
+    }
+
+    .btn-donate {
+      display: inline-block;
+      background: white;
+      color: #667eea;
+      padding: 15px 40px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 18px;
+      transition: transform 0.3s;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+// Project Info Section
+.project-info {
+  padding: 80px 20px;
+  background: #f8f9fa;
+
+  .info-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+
+    .project-logo {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .info-text {
+      flex: 1;
+
+      h2 {
+        color: #4a5fc1;
+        font-size: 36px;
+        margin: 0 0 20px 0;
+      }
+
+      p {
+        color: #555;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+    }
+  }
+}
+
+// Animal Carousel Section
+.animal-carousel {
+  padding: 80px 20px;
+
+  .section-title {
+    text-align: center;
+    color: #333;
+    font-size: 36px;
+    margin-bottom: 50px;
+  }
+
+  .carousel-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .carousel-content {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+
+    .animal-image-wrapper {
+      flex-shrink: 0;
+
+      .animal-image-border {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        border: 8px solid #4a5fc1;
+        box-shadow: 0 0 0 4px #ffd700;
+        overflow: hidden;
+
+        .animal-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .animal-info {
+      flex: 1;
+
+      h3 {
+        color: #333;
+        font-size: 32px;
+        margin: 0 0 15px 0;
+      }
+
+      p {
+        color: #666;
+        font-size: 18px;
+        line-height: 1.6;
+        margin: 0 0 30px 0;
+      }
+
+      .carousel-controls {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        .carousel-btn {
+          background: #4a5fc1;
+          color: white;
+          border: none;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 20px;
+          transition: background 0.3s;
+
+          &:hover {
+            background: #667eea;
+          }
+        }
+
+        .carousel-dots {
+          display: flex;
+          gap: 10px;
+
+          .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: background 0.3s;
+
+            &.active {
+              background: #4a5fc1;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .loading {
+    text-align: center;
+    padding: 50px;
+    color: #999;
+  }
+}
+
+// Sponsor Section
+.sponsor-section {
+  background: #f8f9fa;
+  padding: 80px 20px;
+
+  .sponsor-content {
+    max-width: 1000px;
+    margin: 0 auto 60px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+
+    .sponsor-text {
+      flex: 1;
+
+      h2 {
+        color: #333;
+        font-size: 36px;
+        margin: 0 0 20px 0;
+      }
+
+      p {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0 0 30px 0;
+      }
+
+      .btn-sponsor {
+        display: inline-block;
+        background: #000;
+        color: white;
+        padding: 15px 40px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: background 0.3s;
+
+        &:hover {
+          background: #333;
+        }
+      }
+    }
+
+    .sponsor-image {
+      flex-shrink: 0;
+
+      img {
+        max-width: 400px;
+        width: 100%;
+      }
+    }
+  }
+
+  .stickers-showcase {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+
+    h3 {
+      color: #333;
+      font-size: 24px;
+      margin: 0 0 30px 0;
+    }
+
+    .stickers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+
+      img {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+// Footer
+.footer {
+  background: #2d3f8d;
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+
+  p {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+
+    a {
+      color: white;
+      font-size: 24px;
+      text-decoration: none;
+      transition: transform 0.3s;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .header .nav {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .project-info .info-content,
+  .animal-carousel .carousel-content,
+  .sponsor-section .sponsor-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stickers-showcase .stickers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

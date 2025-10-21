@@ -1,0 +1,121 @@
+<div class="admin-container">
+  <div class="header">
+    <h1>Gerenciar Brindes do Mês</h1>
+    <button class="btn-primary" (click)="openModal()">
+      + Adicionar Brinde
+    </button>
+  </div>
+
+  <div class="loading" *ngIf="isLoading">Carregando brindes...</div>
+
+  <div class="rewards-table" *ngIf="!isLoading">
+    <table>
+      <thead>
+        <tr>
+          <th>Imagem</th>
+          <th>Nome</th>
+          <th>Descrição</th>
+          <th>Mês/Ano</th>
+          <th>Quantidade</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reward of rewards">
+          <td>
+            <img [src]="reward.imagemUrl" [alt]="reward.nome" class="reward-thumb">
+          </td>
+          <td>{{ reward.nome }}</td>
+          <td>{{ reward.descricao }}</td>
+          <td>{{ reward.mes }}/{{ reward.ano }}</td>
+          <td>{{ reward.quantidadeDisponivel }}</td>
+          <td>
+            <span class="status-badge" [class.active]="reward.ativo">
+              {{ reward.ativo ? 'Ativo' : 'Inativo' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-edit" (click)="openModal(reward)">Editar</button>
+            <button class="btn-delete" (click)="deleteReward(reward._id!)">Excluir</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty-state" *ngIf="rewards.length === 0">
+      <p>Nenhum brinde cadastrado ainda.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeModal()">×</button>
+    <h2>{{ isEditing ? 'Editar Brinde' : 'Adicionar Brinde' }}</h2>
+
+    <form [formGroup]="rewardForm" (ngSubmit)="saveReward()">
+      <div class="form-group">
+        <label for="nome">Nome do Brinde *</label>
+        <input type="text" id="nome" formControlName="nome" placeholder="Ex: Adesivo Exclusivo Janeiro">
+      </div>
+
+      <div class="form-group">
+        <label for="descricao">Descrição *</label>
+        <textarea id="descricao" formControlName="descricao" rows="3" placeholder="Descrição do brinde..."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="mes">Mês *</label>
+          <select id="mes" formControlName="mes">
+            <option value="">Selecione</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="ano">Ano *</label>
+          <input type="number" id="ano" formControlName="ano" placeholder="2024" min="2024">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="quantidadeDisponivel">Quantidade Disponível *</label>
+        <input type="number" id="quantidadeDisponivel" formControlName="quantidadeDisponivel" min="1">
+      </div>
+
+      <div class="form-group">
+        <label for="imagem">Imagem do Brinde</label>
+        <input type="file" id="imagem" accept="image/*" (change)="onFileSelect($event)">
+        <small>Selecione uma imagem apenas se quiser alterar a atual</small>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" formControlName="ativo">
+          Brinde Ativo
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="rewardForm.invalid">
+          {{ isEditing ? 'Atualizar' : 'Criar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

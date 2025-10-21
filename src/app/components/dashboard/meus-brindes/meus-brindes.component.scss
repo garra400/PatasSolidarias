@@ -1,0 +1,371 @@
+.meus-brindes-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.header {
+  margin-bottom: 30px;
+
+  h1 {
+    color: #333;
+    font-size: 32px;
+    margin: 0 0 10px 0;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #e0e0e0;
+
+  .tab {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #666;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &.active {
+      color: #4a5fc1;
+      border-bottom-color: #4a5fc1;
+    }
+
+    &:hover {
+      color: #4a5fc1;
+    }
+  }
+}
+
+.content {
+  min-height: 400px;
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  color: #999;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+
+  p {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+}
+
+// Photos Grid
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.photo-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .photo-thumbnail {
+    position: relative;
+    padding-top: 75%;
+    overflow: hidden;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .new-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #e74c3c;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+
+  .photo-info {
+    padding: 15px;
+
+    .photo-date {
+      color: #999;
+      font-size: 12px;
+      margin: 0 0 5px 0;
+    }
+
+    .photo-description {
+      color: #333;
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+}
+
+// Rewards Grid
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.reward-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .reward-image {
+    padding-top: 60%;
+    position: relative;
+    overflow: hidden;
+    background: #f5f5f5;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .reward-info {
+    padding: 20px;
+
+    h3 {
+      color: #333;
+      font-size: 20px;
+      margin: 0 0 10px 0;
+    }
+
+    p {
+      color: #666;
+      font-size: 14px;
+      margin: 0 0 10px 0;
+      line-height: 1.5;
+    }
+
+    .eligibility-date {
+      color: #999;
+      font-size: 12px;
+      margin: 15px 0;
+    }
+
+    .btn-schedule {
+      width: 100%;
+      padding: 12px;
+      background: #4a5fc1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &:hover {
+        background: #667eea;
+      }
+    }
+
+    .scheduled-info {
+      text-align: center;
+      padding: 15px;
+      background: #e8f5e9;
+      border-radius: 6px;
+
+      .status-badge {
+        display: inline-block;
+        background: #4caf50;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      p {
+        color: #2e7d32;
+        font-size: 13px;
+        margin: 5px 0 0 0;
+      }
+    }
+  }
+}
+
+// Modal
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  position: relative;
+
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    font-size: 30px;
+    cursor: pointer;
+    line-height: 1;
+    transition: background 0.3s;
+
+    &:hover {
+      background: #e0e0e0;
+    }
+  }
+}
+
+.photo-modal {
+  max-width: 800px;
+  padding: 20px;
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .photo-modal-info {
+    text-align: center;
+
+    .photo-legenda {
+      color: #333;
+      font-size: 18px;
+      margin: 0 0 10px 0;
+    }
+
+    .photo-date {
+      color: #999;
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+}
+
+.schedule-modal {
+  max-width: 600px;
+
+  h2 {
+    color: #333;
+    font-size: 24px;
+    margin: 0 0 5px 0;
+  }
+
+  .modal-subtitle {
+    color: #666;
+    margin: 0 0 30px 0;
+  }
+
+  .schedule-calendar {
+    p {
+      color: #666;
+      margin: 0 0 20px 0;
+    }
+  }
+
+  .schedule-slots {
+    display: grid;
+    gap: 15px;
+  }
+
+  .slot {
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover:not(.full) {
+      border-color: #4a5fc1;
+      background: #f5f7ff;
+    }
+
+    &.full {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .slot-date {
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 5px 0;
+    }
+
+    .slot-time {
+      color: #666;
+      margin: 0 0 5px 0;
+    }
+
+    .slot-availability {
+      color: #4a5fc1;
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .photos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .rewards-grid {
+    grid-template-columns: 1fr;
+  }
+}

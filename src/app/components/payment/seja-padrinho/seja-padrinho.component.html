@@ -1,0 +1,154 @@
+<div class="seja-padrinho-container">
+  <div class="hero-section">
+    <h1>Seja um Apoiador</h1>
+    <p>Ajude os animais do campus da UTFPR-MD</p>
+  </div>
+
+  <div class="content">
+    <div class="benefits-section">
+      <h2>Vantagens de ser um Apoiador</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">📸</div>
+          <h3>Fotos Exclusivas</h3>
+          <p>Receba fotos mensais dos nossos pets por email</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🎁</div>
+          <h3>Brindes Exclusivos</h3>
+          <p>Adesivos, broches e brindes personalizados a cada 3 meses</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🐾</div>
+          <h3>Impacto Real</h3>
+          <p>Seu apoio garante alimentação e cuidados para os animais</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">💌</div>
+          <h3>Notificações</h3>
+          <p>Receba emails quando novas fotos e brindes estiverem disponíveis</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="payment-section">
+      <h2>Escolha como deseja apoiar</h2>
+      
+      <div class="payment-options">
+        <div 
+          class="payment-option-card" 
+          [class.selected]="selectedOption === 'pix'"
+          (click)="selectPaymentOption('pix')"
+        >
+          <h3>Doação Única via PIX</h3>
+          <p>Faça uma doação de qualquer valor</p>
+          <p class="recommended">Rápido e fácil</p>
+        </div>
+
+        <div 
+          class="payment-option-card recommended-card" 
+          [class.selected]="selectedOption === 'subscription'"
+          (click)="selectPaymentOption('subscription')"
+        >
+          <span class="badge">Recomendado</span>
+          <h3>Apoio Mensal</h3>
+          <p>Assinatura mensal a partir de R$ 15,00</p>
+          <p class="recommended">Receba todos os benefícios!</p>
+        </div>
+      </div>
+
+      <!-- PIX Payment Form -->
+      <div class="payment-form" *ngIf="selectedOption === 'pix' && !pixPayment">
+        <h3>Doação via PIX</h3>
+        <form [formGroup]="paymentForm" (ngSubmit)="createPixPayment()">
+          <div class="form-group">
+            <label for="valor">Valor da doação (R$)</label>
+            <input 
+              type="number" 
+              id="valor" 
+              formControlName="valor" 
+              placeholder="0,00"
+              min="1"
+              step="0.01"
+            >
+          </div>
+
+          <button type="submit" [disabled]="paymentForm.get('valor')?.invalid || isLoading" class="btn-primary">
+            {{ isLoading ? 'Gerando QR Code...' : 'Gerar QR Code PIX' }}
+          </button>
+        </form>
+      </div>
+
+      <!-- PIX QR Code Display -->
+      <div class="pix-display" *ngIf="pixPayment && pixPayment.pixData">
+        <h3>Escaneie o QR Code ou copie o código PIX</h3>
+        
+        <div class="qr-code-container">
+          <img [src]="'data:image/png;base64,' + pixPayment.pixData.qrCodeBase64" alt="QR Code PIX">
+        </div>
+
+        <div class="pix-code-container">
+          <p class="pix-label">Código PIX Copia e Cola:</p>
+          <div class="pix-code-box">
+            <code>{{ pixPayment.pixData.qrCodeData }}</code>
+          </div>
+          <button class="btn-copy" (click)="copyPixCode()">
+            📋 Copiar Código PIX
+          </button>
+        </div>
+
+        <div class="payment-info">
+          <p>Valor: <strong>R$ {{ pixPayment.valor.toFixed(2) }}</strong></p>
+          <p class="status-info" [ngClass]="pixPayment.status">
+            Status: {{ getStatusText(pixPayment.status) }}
+          </p>
+          <p class="info-text">
+            Após realizar o pagamento, você será registrado como doador e começará a receber as fotos mensais!
+          </p>
+          <p class="info-text small">
+            O pagamento é processado automaticamente pelo Mercado Pago.
+          </p>
+        </div>
+      </div>
+
+      <!-- Subscription Form -->
+      <div class="payment-form" *ngIf="selectedOption === 'subscription'">
+        <h3>Assinatura Mensal</h3>
+        <form [formGroup]="paymentForm" (ngSubmit)="createSubscription()">
+          <div class="form-group">
+            <label for="valorMensal">Valor mensal (R$)</label>
+            <select id="valorMensal" formControlName="valorMensal">
+              <option value="15">R$ 15,00 - Apoiador Bronze</option>
+              <option value="25">R$ 25,00 - Apoiador Prata</option>
+              <option value="50">R$ 50,00 - Apoiador Ouro</option>
+              <option value="100">R$ 100,00 - Apoiador Diamante</option>
+            </select>
+          </div>
+
+          <div class="subscription-benefits">
+            <h4>O que você receberá:</h4>
+            <ul>
+              <li>✅ Fotos exclusivas mensais dos nossos pets</li>
+              <li>✅ Brindes personalizados a cada 3 meses</li>
+              <li>✅ Adesivos únicos e broches</li>
+              <li>✅ Pasta com fotos exclusivas</li>
+              <li>✅ Notificações por email</li>
+            </ul>
+          </div>
+
+          <button type="submit" [disabled]="paymentForm.get('valorMensal')?.invalid || isLoading" class="btn-primary">
+            {{ isLoading ? 'Processando...' : 'Assinar via Mercado Pago' }}
+          </button>
+
+          <p class="subscription-note">
+            Você será redirecionado para o Mercado Pago para finalizar a assinatura de forma segura.
+          </p>
+        </form>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div>

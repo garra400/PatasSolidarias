@@ -1,0 +1,141 @@
+<div class="meus-brindes-container">
+  <div class="header">
+    <h1>Meus Brindes</h1>
+    <p>Confira suas fotos recebidas e brindes resgatáveis</p>
+  </div>
+
+  <div class="tabs">
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'photos'"
+      (click)="activeTab = 'photos'"
+    >
+      Fotos Recebidas ({{ photos.length }})
+    </button>
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'rewards'"
+      (click)="activeTab = 'rewards'"
+    >
+      Brindes Resgatáveis ({{ rewards.length }})
+    </button>
+  </div>
+
+  <!-- Photos Tab -->
+  <div class="content" *ngIf="activeTab === 'photos'">
+    <div class="loading" *ngIf="isLoading">Carregando fotos...</div>
+    
+    <div class="photos-grid" *ngIf="!isLoading && photos.length > 0">
+      <div 
+        class="photo-card" 
+        *ngFor="let userPhoto of photos"
+        (click)="openPhotoModal(userPhoto)"
+      >
+        <div class="photo-thumbnail">
+          <img [src]="userPhoto.photo.urlImagem" [alt]="userPhoto.photo.descricao">
+          <span class="new-badge" *ngIf="!userPhoto.visualizada">Novo!</span>
+        </div>
+        <div class="photo-info">
+          <p class="photo-date">
+            {{ userPhoto.dataRecebimento | date: 'dd/MM/yyyy' }}
+          </p>
+          <p class="photo-description">
+            {{ userPhoto.photo.descricao || 'Foto dos nossos pets' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && photos.length === 0">
+      <p>Você ainda não recebeu nenhuma foto.</p>
+      <p>As fotos são enviadas mensalmente para os apoiadores.</p>
+    </div>
+  </div>
+
+  <!-- Rewards Tab -->
+  <div class="content" *ngIf="activeTab === 'rewards'">
+    <div class="rewards-grid" *ngIf="rewards.length > 0">
+      <div 
+        class="reward-card" 
+        *ngFor="let userReward of rewards"
+      >
+        <div class="reward-image">
+          <img [src]="userReward.reward?.imagemUrl" [alt]="userReward.reward?.nome">
+        </div>
+        <div class="reward-info">
+          <h3>{{ userReward.reward?.nome }}</h3>
+          <p>{{ userReward.reward?.descricao }}</p>
+          <p class="eligibility-date">
+            Elegível desde: {{ userReward.dataElegibilidade | date: 'dd/MM/yyyy' }}
+          </p>
+          
+          <button 
+            class="btn-schedule" 
+            *ngIf="!userReward.resgatado"
+            (click)="openRewardModal(userReward)"
+          >
+            Agendar Retirada
+          </button>
+
+          <div class="scheduled-info" *ngIf="userReward.resgatado">
+            <span class="status-badge">Agendado</span>
+            <p>
+              Data: {{ userReward.horarioRetiradaSelecionado?.data | date: 'dd/MM/yyyy' }}
+              <br>
+              Horário: {{ userReward.horarioRetiradaSelecionado?.horario }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="rewards.length === 0">
+      <p>Você ainda não tem brindes resgatáveis disponíveis.</p>
+      <p>Os brindes ficam disponíveis a cada 3 meses de apoio contínuo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Photo Modal -->
+<div class="modal" *ngIf="selectedPhoto" (click)="closePhotoModal()">
+  <div class="modal-content photo-modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closePhotoModal()">×</button>
+    <img [src]="selectedPhoto.photo.urlImagem" [alt]="selectedPhoto.photo.descricao">
+    <div class="photo-modal-info">
+      <p class="photo-legenda">{{ selectedPhoto.photo.legenda }}</p>
+      <p class="photo-date">{{ selectedPhoto.dataRecebimento | date: 'dd/MM/yyyy' }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Reward Schedule Modal -->
+<div class="modal" *ngIf="showScheduleModal" (click)="closeRewardModal()">
+  <div class="modal-content schedule-modal" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeRewardModal()">×</button>
+    <h2>Agendar Retirada</h2>
+    <p class="modal-subtitle">{{ selectedReward?.reward?.nome }}</p>
+    
+    <div class="schedule-calendar">
+      <p>Selecione uma data e horário disponível:</p>
+      
+      <div class="schedule-slots" *ngIf="selectedReward && selectedReward.reward && selectedReward.reward.horariosRetirada && selectedReward.reward.horariosRetirada.length > 0">
+        <div 
+          class="slot" 
+          *ngFor="let schedule of selectedReward.reward.horariosRetirada"
+          [class.full]="schedule.vagasDisponiveis <= schedule.vagasOcupadas"
+          (click)="schedule.vagasDisponiveis > schedule.vagasOcupadas && scheduleRewardPickup(schedule.data, schedule.horarioInicio + ' - ' + schedule.horarioFim)"
+        >
+          <p class="slot-date">{{ schedule.data | date: 'dd/MM/yyyy' }}</p>
+          <p class="slot-time">{{ schedule.horarioInicio }} - {{ schedule.horarioFim }}</p>
+          <p class="slot-availability">
+            {{ schedule.vagasDisponiveis - schedule.vagasOcupadas }} vagas disponíveis
+          </p>
+        </div>
+      </div>
+      
+      <div class="empty-state" *ngIf="!selectedReward || !selectedReward.reward || !selectedReward.reward.horariosRetirada || selectedReward.reward.horariosRetirada.length === 0">
+        <p>Nenhum horário disponível no momento.</p>
+      </div>
+    </div>
+  </div>
+</div>

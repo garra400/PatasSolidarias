@@ -1,0 +1,125 @@
+<div class="home-container">
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <img src="/assets/images/logo.png" alt="Patas Solidárias" class="logo">
+      <nav class="nav">
+        <a routerLink="/" class="nav-link active">Home</a>
+        <a routerLink="/conheca-patinhas" class="nav-link">Conheça nossas patinhas</a>
+        <a routerLink="/campanha" class="nav-link">Campanha</a>
+        <a routerLink="/login" class="btn-padrinho">Seja um padrinho</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section - Donation Call -->
+  <section class="hero-donation">
+    <div class="container">
+      <div class="donation-card">
+        <h2>Faça uma doação</h2>
+        <p>Sua ajuda salva os animais do nosso campus</p>
+        <a routerLink="/login" class="btn-donate">Doar agora</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Info Section -->
+  <section class="project-info">
+    <div class="container">
+      <div class="info-content">
+        <img src="/assets/images/logo-banner.png" alt="DCE Patas Solidárias" class="project-logo">
+        <div class="info-text">
+          <h2>Patas Solidárias</h2>
+          <p>
+            O projeto Patas Solidárias surgiu com o intuito de arrecadarmos ração 
+            para os animais que vivem no nosso campus da UTFPR-MD. Com isso 
+            esperamos tocar o coração de vocês apresentando nossas patinhas e 
+            arrecadando ração ou um valor solidário que será convertido em ração.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Animal Carousel Section -->
+  <section class="animal-carousel">
+    <div class="container">
+      <h2 class="section-title">Conheça Nossas Patinhas</h2>
+      
+      <div class="carousel-container" *ngIf="!isLoading && currentAnimal">
+        <div class="carousel-content">
+          <div class="animal-image-wrapper">
+            <div class="animal-image-border">
+              <img [src]="currentAnimal.animal.imagemPrincipal" [alt]="currentAnimal.animal.nome" class="animal-image">
+            </div>
+          </div>
+          
+          <div class="animal-info">
+            <h3>{{ currentAnimal.animal.nome }}</h3>
+            <p>{{ currentAnimal.legenda }}</p>
+            <div class="carousel-controls">
+              <button (click)="previousAnimal()" class="carousel-btn">❮</button>
+              <div class="carousel-dots">
+                <span 
+                  *ngFor="let animal of animals; let i = index" 
+                  [class.active]="i === currentAnimalIndex"
+                  (click)="currentAnimalIndex = i"
+                  class="dot"
+                ></span>
+              </div>
+              <button (click)="nextAnimal()" class="carousel-btn">❯</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="loading" *ngIf="isLoading">
+        Carregando animais...
+      </div>
+    </div>
+  </section>
+
+  <!-- Sponsor Section -->
+  <section class="sponsor-section">
+    <div class="container">
+      <div class="sponsor-content">
+        <div class="sponsor-text">
+          <h2>SEJA UM APOIADOR</h2>
+          <p>
+            Seja um apoiador mensal do projeto Patas Solidárias. Seja um doador 
+            mensal, com um valor solidário de R$ 15 reais e receba brindes exclusivos 
+            semestralmente como adesivos únicos, broches personalizados, uma pasta 
+            com fotos exclusivas mensalmente dos nossos pets e muito mais.
+          </p>
+          <a routerLink="/login" class="btn-sponsor">SEJA UM APOIADOR!!</a>
+        </div>
+        <div class="sponsor-image">
+          <img src="/assets/images/sponsor-banner.png" alt="Seja um Apoiador">
+        </div>
+      </div>
+      
+      <div class="stickers-showcase">
+        <h3>Confira os adesivos exclusivos dos nossos pets</h3>
+        <div class="stickers-grid">
+          <img src="/assets/images/sticker1.png" alt="Adesivo 1">
+          <img src="/assets/images/sticker2.png" alt="Adesivo 2">
+          <img src="/assets/images/sticker3.png" alt="Adesivo 3">
+          <img src="/assets/images/sticker4.png" alt="Adesivo 4">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>PATAS SOLIDÁRIAS</p>
+      <div class="social-links">
+        <a href="#" target="_blank">📘</a>
+        <a href="#" target="_blank">📷</a>
+        <a href="#" target="_blank">▶️</a>
+        <a href="#" target="_blank">📧</a>
+      </div>
+    </div>
+  </footer>
+</div>
