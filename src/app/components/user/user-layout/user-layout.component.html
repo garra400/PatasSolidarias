@@ -13,11 +13,19 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a routerLink="/conta/seja-apoiador" routerLinkActive="active" class="nav-item">
+      <!-- Mostrar "Seja Apoiador" apenas se NÃO for assinante -->
+      <a *ngIf="!hasAssinatura()" routerLink="/conta/seja-apoiador" routerLinkActive="active" class="nav-item">
         <span class="icon">💝</span>
         <span>Seja Apoiador</span>
       </a>
 
+      <!-- Mostrar "Doar Novamente" se já for doador (PIX ou Assinatura) -->
+      <a *ngIf="isDoador()" routerLink="/conta/doar-novamente" routerLinkActive="active" class="nav-item">
+        <span class="icon">💰</span>
+        <span>Doar Novamente</span>
+      </a>
+
+      <!-- Opções exclusivas para doadores -->
       <a *ngIf="isDoador()" routerLink="/conta/meus-brindes" routerLinkActive="active" class="nav-item">
         <span class="icon">🎁</span>
         <span>Meus Brindes</span>
@@ -33,7 +41,8 @@
         <span>Histórico de Pagamentos</span>
       </a>
 
-      <a *ngIf="isDoador()" routerLink="/conta/assinatura" routerLinkActive="active" class="nav-item">
+      <!-- Mostrar "Minha Assinatura" apenas se tiver assinatura ativa -->
+      <a *ngIf="hasAssinatura()" routerLink="/conta/assinatura" routerLinkActive="active" class="nav-item">
         <span class="icon">📋</span>
         <span>Minha Assinatura</span>
       </a>

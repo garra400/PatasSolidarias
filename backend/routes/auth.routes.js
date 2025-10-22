@@ -113,10 +113,19 @@ router.post('/login', async (req, res) => {
     
     res.json({
       user: {
-        id: user._id,
+        _id: user._id.toString(),
         nome: user.nome,
         email: user.email,
-        tipo: user.tipo
+        telefone: user.telefone || '',
+        cpf: user.cpf || '',
+        role: user.role || user.tipo || 'user',
+        isDoador: user.isDoador || false,
+        emailVerificado: user.emailConfirmado || false,
+        dataCriacao: user.criadoEm || new Date(),
+        assinaturaAtiva: user.assinaturaAtiva,
+        historicoPagamentos: user.historicoPagamentos || [],
+        totalMesesApoio: user.totalMesesApoio || 0,
+        brindesDisponiveis: user.brindesDisponiveis || 0
       },
       token
     });

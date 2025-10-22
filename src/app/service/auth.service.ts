@@ -196,7 +196,7 @@ export class AuthService {
     if (environment.useMockData) {
       return of({ message: 'Senha redefinida com sucesso!' }).pipe(delay(500));
     }
-    return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password`, resetData);
+    return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password-confirm`, resetData);
   }
 
   logout(): void {

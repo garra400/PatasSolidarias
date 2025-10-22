@@ -46,7 +46,7 @@ export interface LoginCredentials {
 }
 
 export interface PasswordReset {
-  email: string;
+  email?: string;
   token?: string;
   novaSenha?: string;
 }

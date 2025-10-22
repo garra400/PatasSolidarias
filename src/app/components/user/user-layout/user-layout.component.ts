@@ -44,4 +44,13 @@ export class UserLayoutComponent implements OnInit {
   isDoador(): boolean {
     return this.authService.isDoador();
   }
+
+  hasAssinatura(): boolean {
+    return this.currentUser?.assinaturaAtiva?.status === 'ativa';
+  }
+
+  isDoadorPix(): boolean {
+    // É doador mas NÃO tem assinatura ativa (doou apenas via PIX)
+    return this.isDoador() && !this.hasAssinatura();
+  }
 }

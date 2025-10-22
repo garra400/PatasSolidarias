@@ -20,6 +20,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
   },
   {
+    path: 'redefinir-senha',
+    loadComponent: () => import('./components/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+  },
+  {
     path: 'confirmar-email',
     loadComponent: () => import('./components/auth/confirm-email/confirm-email.component').then(m => m.ConfirmEmailComponent)
   },
@@ -43,6 +47,11 @@ export const routes: Routes = [
       {
         path: 'seja-apoiador',
         loadComponent: () => import('./components/payment/seja-padrinho/seja-padrinho.component').then(m => m.SejaPadrinhoComponent)
+      },
+      {
+        path: 'doar-novamente',
+        loadComponent: () => import('./components/user/doar-novamente/doar-novamente.component').then(m => m.DoarNovamenteComponent),
+        canActivate: [doadorGuard]
       },
       {
         path: 'meus-brindes',
