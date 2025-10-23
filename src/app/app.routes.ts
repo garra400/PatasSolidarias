@@ -41,8 +41,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'seja-apoiador',
-        pathMatch: 'full'
+        loadComponent: () => import('./components/user/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
       {
         path: 'seja-apoiador',

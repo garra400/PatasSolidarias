@@ -23,16 +23,8 @@
     </button>
     }
 
-    <!-- Logado fora da área /conta: vai para conta -->
-    @if (currentUser && !isInAccountArea) {
-    <button class="mobile-sidebar-toggle" (click)="goToAccount()" title="Ir para minha conta">
-      <span class="hamburger-icon">
-        <span class="line"></span>
-        <span class="line"></span>
-        <span class="line"></span>
-      </span>
-    </button>
-    }
+    <!-- Logado fora da área /conta: NÃO mostrar botão (usa botão global) -->
+    <!-- Removido: botão agora é gerenciado pelo app.html -->
 
     <!-- Logo -->
     <div class="logo-section">

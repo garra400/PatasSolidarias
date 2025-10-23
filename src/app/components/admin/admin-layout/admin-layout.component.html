@@ -1,0 +1,144 @@
+<div class="admin-layout">
+    <!-- Botão Toggle Sidebar -->
+    <button class="sidebar-toggle" (click)="toggleSidebar()" [class.open]="isSidebarOpen" title="Menu Admin">
+        <span class="hamburger-icon">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </span>
+    </button>
+
+    <!-- Sidebar Admin -->
+    <aside class="admin-sidebar" [class.open]="isSidebarOpen" [class.collapsed]="!isSidebarOpen"
+        [class.no-transition]="isFirstRender">
+
+        <!-- Header da Sidebar -->
+        <div class="sidebar-header">
+            <div class="admin-badge">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="admin-title">Painel Admin</h3>
+            <p class="admin-subtitle">{{ currentUser?.nome || 'Administrador' }}</p>
+        </div>
+
+        <!-- Navegação -->
+        <nav class="sidebar-nav">
+            <!-- Dashboard -->
+            <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-chart-line"></i>
+                </span>
+                <span class="label">Dashboard</span>
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <!-- Gestão de Conteúdo -->
+            <div class="nav-section">
+                <span class="section-title">Conteúdo</span>
+            </div>
+
+            @if (temPermissao('gerenciarAnimais')) {
+            <a routerLink="/admin/animais" routerLinkActive="active" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-paw"></i>
+                </span>
+                <span class="label">Animais</span>
+            </a>
+            }
+
+            @if (temPermissao('gerenciarFotos')) {
+            <a routerLink="/admin/fotos" routerLinkActive="active" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-images"></i>
+                </span>
+                <span class="label">Galeria</span>
+            </a>
+            }
+
+            @if (temPermissao('gerenciarBrindes')) {
+            <a routerLink="/admin/brindes" routerLinkActive="active" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-gift"></i>
+                </span>
+                <span class="label">Brindes</span>
+            </a>
+
+            <a routerLink="/admin/resgates" routerLinkActive="active" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-box"></i>
+                </span>
+                <span class="label">Resgates</span>
+            </a>
+            }
+
+            @if (temPermissao('gerenciarPosts')) {
+            <a routerLink="/admin/posts" routerLinkActive="active" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-newspaper"></i>
+                </span>
+                <span class="label">Newsletter</span>
+            </a>
+            }
+
+            <div class="nav-divider"></div>
+
+            <!-- Gestão de Usuários -->
+            <div class="nav-section">
+                <span class="section-title">Usuários</span>
+            </div>
+
+            @if (temPermissao('visualizarAssinantes')) {
+            <a routerLink="/admin/assinantes" routerLinkActive="active" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-users"></i>
+                </span>
+                <span class="label">Apoiadores</span>
+            </a>
+            }
+
+            @if (temPermissao('convidarAdmins')) {
+            <a routerLink="/admin/admins" routerLinkActive="active" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-user-shield"></i>
+                </span>
+                <span class="label">Administradores</span>
+            </a>
+            }
+
+            <div class="nav-divider"></div>
+
+            <!-- Ações -->
+            <a routerLink="/conta" class="nav-item client-area">
+                <span class="icon">
+                    <i class="fas fa-user"></i>
+                </span>
+                <span class="label">Área do Cliente</span>
+            </a>
+
+            <a routerLink="/" class="nav-item">
+                <span class="icon">
+                    <i class="fas fa-home"></i>
+                </span>
+                <span class="label">Ir para Home</span>
+            </a>
+
+            <button (click)="logout()" class="nav-item logout-btn">
+                <span class="icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </span>
+                <span class="label">Sair</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="admin-content" [class.no-transition]="isFirstRender">
+        <router-outlet></router-outlet>
+    </main>
+</div>
+
+<!-- Overlay Sidebar (Mobile) -->
+@if (isSidebarOpen) {
+<div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+}

@@ -1,0 +1,114 @@
+<div class="dashboard-container">
+    <div class="welcome-section">
+        <h1 class="welcome-title">
+            {{ saudacao }}, {{ currentUser?.nome || 'Usuário' }}! 👋
+        </h1>
+        <p class="welcome-subtitle">
+            Bem-vindo ao Patas Solidárias
+        </p>
+    </div>
+
+    <!-- Cards de Ação -->
+    <div class="action-cards">
+        <!-- Seja Apoiador -->
+        @if (!isDoador) {
+        <div class="action-card primary">
+            <div class="card-icon">💝</div>
+            <h3>Torne-se um Apoiador</h3>
+            <p>Ajude os animais da UTFPR com uma contribuição mensal</p>
+            <a routerLink="/conta/seja-apoiador" class="btn-card">
+                Quero Apoiar
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        }
+
+        <!-- Doar Novamente -->
+        @if (isDoador) {
+        <div class="action-card success">
+            <div class="card-icon">💰</div>
+            <h3>Fazer Nova Doação</h3>
+            <p>Contribua novamente para ajudar os pets</p>
+            <a routerLink="/conta/doar-novamente" class="btn-card">
+                Doar Agora
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        }
+
+        <!-- Galeria de Fotos -->
+        @if (isDoador) {
+        <div class="action-card info">
+            <div class="card-icon">📸</div>
+            <h3>Minha Galeria</h3>
+            <p>Veja as fotos exclusivas dos nossos pets</p>
+            <a routerLink="/conta/fotos" class="btn-card">
+                Ver Fotos
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        }
+
+        <!-- Meus Brindes -->
+        @if (isDoador) {
+        <div class="action-card warning">
+            <div class="card-icon">🎁</div>
+            <h3>Meus Brindes</h3>
+            <p>Confira e resgate seus brindes exclusivos</p>
+            <a routerLink="/conta/meus-brindes" class="btn-card">
+                Ver Brindes
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        }
+
+        <!-- Minha Assinatura -->
+        @if (hasAssinatura) {
+        <div class="action-card secondary">
+            <div class="card-icon">💳</div>
+            <h3>Minha Assinatura</h3>
+            <p>Gerencie sua assinatura e pagamentos</p>
+            <a routerLink="/conta/assinatura" class="btn-card">
+                Gerenciar
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        }
+    </div>
+
+    <!-- Status do Apoio -->
+    @if (isDoador) {
+    <div class="support-status">
+        <div class="status-card">
+            <div class="status-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="status-content">
+                <h3>Obrigado por Apoiar!</h3>
+                <p>Você está fazendo a diferença na vida dos animais da UTFPR-MD ❤️</p>
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- Links Rápidos -->
+    <div class="quick-links">
+        <h2>Acesso Rápido</h2>
+        <div class="links-grid">
+            <a routerLink="/conta/configuracoes" class="quick-link">
+                <i class="fas fa-cog"></i>
+                <span>Configurações</span>
+            </a>
+            @if (isDoador) {
+            <a routerLink="/conta/pagamentos" class="quick-link">
+                <i class="fas fa-receipt"></i>
+                <span>Histórico</span>
+            </a>
+            }
+            <a routerLink="/" class="quick-link">
+                <i class="fas fa-home"></i>
+                <span>Voltar para Home</span>
+            </a>
+        </div>
+    </div>
+</div>

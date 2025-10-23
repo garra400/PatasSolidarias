@@ -1,0 +1,390 @@
+// ==========================================
+// ADMIN LAYOUT - DESIGN ROXO DIFERENCIADO
+// ==========================================
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+    position: relative;
+}
+
+// ==========================================
+// BOTÃO TOGGLE SIDEBAR
+// ==========================================
+
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    .hamburger-icon {
+        width: 24px;
+        height: 18px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .line {
+            width: 100%;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+    }
+
+    &.open .hamburger-icon {
+        .line:nth-child(1) {
+            transform: translateY(7.5px) rotate(45deg);
+        }
+
+        .line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .line:nth-child(3) {
+            transform: translateY(-7.5px) rotate(-45deg);
+        }
+    }
+}
+
+// ==========================================
+// SIDEBAR ADMIN (ROXO)
+// ==========================================
+
+.admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Scrollbar customizada
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    }
+
+    &.collapsed {
+        transform: translateX(-280px);
+    }
+
+    &.open {
+        transform: translateX(0);
+    }
+
+    &.no-transition {
+        transition: none !important;
+    }
+}
+
+// ==========================================
+// HEADER DA SIDEBAR
+// ==========================================
+
+.sidebar-header {
+    padding: 30px 20px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-badge {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 15px;
+    background: rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.admin-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 5px 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.admin-subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    font-weight: 500;
+}
+
+// ==========================================
+// NAVEGAÇÃO
+// ==========================================
+
+.sidebar-nav {
+    padding: 20px 0;
+}
+
+.nav-section {
+    padding: 15px 20px 5px;
+
+    .section-title {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+    font-family: inherit;
+
+    .icon {
+        width: 24px;
+        margin-right: 15px;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .label {
+        flex: 1;
+        font-weight: 500;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: white;
+        transform: scaleY(0);
+        transition: transform 0.2s ease;
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+
+        .icon {
+            color: white;
+            transform: scale(1.1);
+        }
+    }
+
+    &.active {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        font-weight: 600;
+
+        &::before {
+            transform: scaleY(1);
+        }
+
+        .icon {
+            color: white;
+        }
+    }
+
+    // Estilo especial para "Área do Cliente"
+    &.client-area {
+        background: rgba(16, 185, 129, 0.2);
+        border-left: 3px solid #10b981;
+        margin: 10px 10px 5px;
+        border-radius: 8px;
+        padding-left: 17px;
+
+        &:hover {
+            background: rgba(16, 185, 129, 0.3);
+        }
+    }
+
+    // Botão de logout
+    &.logout-btn {
+        color: rgba(239, 68, 68, 0.9);
+        margin: 5px 10px;
+        border-radius: 8px;
+
+        .icon {
+            color: rgba(239, 68, 68, 0.9);
+        }
+
+        &:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+
+            .icon {
+                color: #ef4444;
+            }
+        }
+    }
+}
+
+.nav-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 15px 20px;
+}
+
+// ==========================================
+// CONTEÚDO PRINCIPAL
+// ==========================================
+
+.admin-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 90px 30px 30px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 100vh;
+
+    &.no-transition {
+        transition: none !important;
+    }
+}
+
+// ==========================================
+// OVERLAY (MOBILE)
+// ==========================================
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+    display: none;
+}
+
+// ==========================================
+// RESPONSIVE
+// ==========================================
+
+@media (max-width: 1024px) {
+    .admin-content {
+        margin-left: 0;
+        padding: 90px 20px 20px;
+    }
+
+    .admin-sidebar.collapsed {
+        transform: translateX(-280px);
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        top: 15px;
+        left: 15px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .admin-sidebar {
+        &.open~.sidebar-overlay {
+            display: block;
+        }
+    }
+
+    .sidebar-overlay {
+        display: none;
+    }
+
+    .admin-sidebar.open~.sidebar-overlay {
+        display: block;
+    }
+
+    .admin-content {
+        padding: 80px 15px 15px;
+    }
+
+    .nav-item {
+        padding: 12px 15px;
+        font-size: 14px;
+
+        .icon {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+    }
+}
+
+@media (min-width: 1025px) {
+    .sidebar-toggle {
+        display: none;
+    }
+
+    .admin-sidebar {
+        transform: translateX(0) !important;
+    }
+
+    .sidebar-overlay {
+        display: none !important;
+    }
+}
