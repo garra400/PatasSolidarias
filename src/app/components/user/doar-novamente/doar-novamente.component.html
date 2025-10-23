@@ -65,66 +65,66 @@
 
   <!-- Tela para DOADORES PIX (sem assinatura) -->
   @if (isDoadorPix) {
-    <div class="doador-pix-section">
-      <div class="header-card">
-        <div class="icon-badge pix">
-          <i class="fas fa-hand-holding-heart"></i>
-        </div>
-        <h1>Obrigado por sua doação! 💚</h1>
-        <p class="subtitle">Você já apoiou nossos animais</p>
+  <div class="doador-pix-section">
+    <div class="header-card">
+      <div class="icon-badge pix">
+        <i class="fas fa-hand-holding-heart"></i>
       </div>
+      <h1>Obrigado por sua doação! 💚</h1>
+      <p class="subtitle">Você já apoiou nossos animais</p>
+    </div>
 
-      <div class="info-grid">
-        <div class="info-card">
-          <div class="info-icon">📊</div>
-          <div class="info-content">
-            <span class="info-label">Meses de Apoio</span>
-            <span class="info-value">{{ currentUser?.totalMesesApoio || 0 }} meses</span>
-          </div>
-        </div>
-
-        <div class="info-card">
-          <div class="info-icon">🎁</div>
-          <div class="info-content">
-            <span class="info-label">Brindes Disponíveis</span>
-            <span class="info-value">{{ currentUser?.brindesDisponiveis || 0 }}</span>
-          </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">📊</div>
+        <div class="info-content">
+          <span class="info-label">Meses de Apoio</span>
+          <span class="info-value">{{ currentUser?.totalMesesApoio || 0 }} meses</span>
         </div>
       </div>
 
-      <div class="upgrade-card">
-        <div class="upgrade-header">
-          <i class="fas fa-star"></i>
-          <h2>Torne-se um Apoiador Premium!</h2>
+      <div class="info-card">
+        <div class="info-icon">🎁</div>
+        <div class="info-content">
+          <span class="info-label">Brindes Disponíveis</span>
+          <span class="info-value">{{ currentUser?.brindesDisponiveis || 0 }}</span>
         </div>
-        <p>Com a assinatura mensal, você:</p>
-        <ul class="benefits-list">
-          <li><i class="fas fa-check"></i> Garante apoio contínuo aos animais</li>
-          <li><i class="fas fa-check"></i> Acumula meses automaticamente</li>
-          <li><i class="fas fa-check"></i> Recebe brindes exclusivos a cada 3 meses</li>
-          <li><i class="fas fa-check"></i> Acesso a fotos exclusivas dos pets</li>
-          <li><i class="fas fa-check"></i> Pode cancelar quando quiser</li>
-        </ul>
-
-        <button class="btn-assinar" (click)="assinarPlano()">
-          <i class="fas fa-crown"></i>
-          Assinar Plano Mensal - R$ 30,00/mês
-        </button>
-      </div>
-
-      <div class="divider">
-        <span>ou</span>
-      </div>
-
-      <div class="extra-donation-card">
-        <h2>💰 Fazer outra doação via PIX</h2>
-        <p>Continue apoiando com doações avulsas quando quiser</p>
-
-        <button class="btn-pix" (click)="doarPix()">
-          <i class="fas fa-qrcode"></i>
-          Doar via PIX
-        </button>
       </div>
     </div>
+
+    <div class="upgrade-card">
+      <div class="upgrade-header">
+        <i class="fas fa-star"></i>
+        <h2>Torne-se um Apoiador Premium!</h2>
+      </div>
+      <p>Com a assinatura mensal, você:</p>
+      <ul class="benefits-list">
+        <li><i class="fas fa-check"></i> Garante apoio contínuo aos animais</li>
+        <li><i class="fas fa-check"></i> Acumula meses automaticamente</li>
+        <li><i class="fas fa-check"></i> Recebe brindes exclusivos a cada 3 meses</li>
+        <li><i class="fas fa-check"></i> Acesso a fotos exclusivas dos pets</li>
+        <li><i class="fas fa-check"></i> Pode cancelar quando quiser</li>
+      </ul>
+
+      <button class="btn-assinar" (click)="assinarPlano()">
+        <i class="fas fa-crown"></i>
+        Assinar Plano Mensal - R$ 30,00/mês
+      </button>
+    </div>
+
+    <div class="divider">
+      <span>ou</span>
+    </div>
+
+    <div class="extra-donation-card">
+      <h2>💰 Fazer outra doação via PIX</h2>
+      <p>Continue apoiando com doações avulsas quando quiser</p>
+
+      <button class="btn-pix" (click)="doarPix()">
+        <i class="fas fa-qrcode"></i>
+        Doar via PIX
+      </button>
+    </div>
+  </div>
   }
 </div>
