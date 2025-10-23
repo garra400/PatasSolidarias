@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const animalSchema = new mongoose.Schema({
   nome: {
@@ -13,6 +13,10 @@ const animalSchema = new mongoose.Schema({
   fotoUrl: {
     type: String,
     required: true
+  },
+  fotoPerfilId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Foto'
   },
   mesDisponivel: {
     type: String,
@@ -64,16 +68,16 @@ const animalSchema = new mongoose.Schema({
 });
 
 // Atualizar atualizadoEm antes de salvar
-animalSchema.pre('save', function(next) {
+animalSchema.pre('save', function (next) {
   this.atualizadoEm = new Date();
   next();
 });
 
 // Método para verificar se o animal está disponível para visualização no mês atual
-animalSchema.methods.isDisponivelParaMes = function(mesReferencia) {
+animalSchema.methods.isDisponivelParaMes = function (mesReferencia) {
   return this.mesDisponivel === mesReferencia && this.status === 'disponivel';
 };
 
 const Animal = mongoose.model('Animal', animalSchema);
 
-module.exports = Animal;
+export default Animal;

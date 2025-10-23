@@ -68,7 +68,7 @@ export class AnimalService {
     }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllAnimals(): Observable<Animal[]> {
     if (environment.useMockData) {
@@ -110,7 +110,7 @@ export class AnimalService {
       }));
       return of(carousel).pipe(delay(500));
     }
-    
+
     // Buscar todos os animais e mapear para carousel
     return this.http.get<Animal[]>(this.apiUrl)
       .pipe(
@@ -181,5 +181,68 @@ export class AnimalService {
       return of(animal || this.mockAnimals[0]).pipe(delay(500));
     }
     return this.http.patch<Animal>(`${this.apiUrl}/${id}/status`, { ativo });
+  }
+
+  // NOVOS MÉTODOS ADMIN
+
+  // Atualizar foto de perfil do animal
+  atualizarFotoPerfil(id: string, fotoId: string): Observable<{
+    message: string;
+    animal: Animal;
+  }> {
+    if (environment.useMockData) {
+      console.log('🐾 Mock: atualizarFotoPerfil', id, fotoId);
+      const animal = this.mockAnimals.find(a => a._id === id) || this.mockAnimals[0];
+      return of({
+        message: 'Foto de perfil atualizada',
+        animal
+      }).pipe(delay(500));
+    }
+    return this.http.put<{
+      message: string;
+      animal: Animal;
+    }>(`${this.apiUrl}/${id}/foto-perfil`, { fotoId });
+  }
+
+  // Buscar meses disponíveis
+  buscarMesesDisponiveis(): Observable<{
+    total: number;
+    meses: { mes: string; quantidade: number }[];
+  }> {
+    if (environment.useMockData) {
+      console.log('🐾 Mock: buscarMesesDisponiveis');
+      return of({
+        total: 2,
+        meses: [
+          { mes: '2025-10', quantidade: 3 },
+          { mes: '2025-09', quantidade: 2 }
+        ]
+      }).pipe(delay(500));
+    }
+    return this.http.get<{
+      total: number;
+      meses: { mes: string; quantidade: number }[];
+    }>(`${this.apiUrl}/meses/disponiveis`);
+  }
+
+  // Buscar animais por mês
+  buscarAnimaisPorMes(mesReferencia: string): Observable<{
+    mesReferencia: string;
+    total: number;
+    animais: Animal[];
+  }> {
+    if (environment.useMockData) {
+      console.log('🐾 Mock: buscarAnimaisPorMes', mesReferencia);
+      return of({
+        mesReferencia,
+        total: this.mockAnimals.length,
+        animais: this.mockAnimals
+      }).pipe(delay(500));
+    }
+    return this.http.get<{
+      mesReferencia: string;
+      total: number;
+      animais: Animal[];
+    }>(`${this.apiUrl}/by-month/${mesReferencia}`);
   }
 }

@@ -14,15 +14,25 @@ export const authGuard: CanActivateFn = () => {
   return false;
 };
 
-export const adminGuard: CanActivateFn = () => {
+export const adminGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isAuthenticated() && authService.isAdmin()) {
+  if (!authService.isAuthenticated()) {
+    router.navigate(['/login'], {
+      queryParams: { returnUrl: state.url }
+    });
+    return false;
+  }
+
+  if (authService.isAdmin()) {
     return true;
   }
 
-  router.navigate(['/']);
+  console.warn('🚫 Acesso negado: usuário não é admin');
+  router.navigate(['/'], {
+    queryParams: { error: 'admin-required' }
+  });
   return false;
 };
 

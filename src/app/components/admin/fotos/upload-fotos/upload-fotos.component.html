@@ -1,0 +1,78 @@
+<div class="upload-fotos-container">
+    <header class="page-header">
+        <h1>Upload de Fotos</h1>
+        <p class="subtitle">Envie múltiplas fotos para a galeria</p>
+    </header>
+
+    <div *ngIf="erro" class="alert alert-danger">{{ erro }}</div>
+    <div *ngIf="sucesso" class="alert alert-success">{{ sucesso }}</div>
+
+    <div class="upload-form">
+        <!-- Drag & Drop Zone -->
+        <div class="drag-drop-zone" [class.dragging]="isDragging" (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+            <div class="drag-drop-content">
+                <span class="drag-icon">📤</span>
+                <h3>Arraste fotos aqui</h3>
+                <p>ou</p>
+                <label for="fotos" class="file-label-inline">
+                    <span class="icon">📁</span>
+                    Clique para selecionar
+                </label>
+                <input type="file" multiple accept="image/*" (change)="onFilesSelected($event)" class="file-input"
+                    id="fotos">
+                <p class="help-text">Até 20 imagens (JPG, PNG, GIF, WebP)</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Selecionar Fotos</label>
+            <input type="file" multiple accept="image/*" (change)="onFilesSelected($event)" class="file-input"
+                id="fotos">
+            <label for="fotos" class="file-label">
+                <span class="icon">📁</span>
+                Escolher Fotos (máximo 20)
+            </label>
+            <p class="help-text">Selecione até 20 imagens (JPG, PNG, GIF, WebP)</p>
+        </div>
+
+        <div *ngIf="previews.length > 0" class="previews-grid">
+            <div *ngFor="let preview of previews; let i = index" class="preview-card">
+                <img [src]="preview" alt="Preview">
+                <button (click)="removerFoto(i)" class="btn-remove">✕</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Descrição (opcional)</label>
+            <textarea [(ngModel)]="descricao" class="form-control" rows="3"
+                placeholder="Descreva as fotos..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Associar aos Animais (opcional)</label>
+            <div class="animais-list">
+                <div *ngFor="let animal of animais" class="animal-checkbox"
+                    [class.selected]="isAnimalSelecionado(animal._id)">
+                    <label [for]="'animal-' + animal._id" [id]="'label-animal-' + animal._id">
+                        <input type="checkbox" [id]="'animal-' + animal._id" [checked]="isAnimalSelecionado(animal._id)"
+                            (change)="onAnimalToggle(animal._id)" [attr.title]="animal.nome"
+                            [attr.aria-label]="animal.nome">
+                        {{ animal.nome }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" routerLink="/adm/fotos/lista" class="btn btn-secondary" [disabled]="carregando">
+                Cancelar
+            </button>
+            <button (click)="uploadFotos()" class="btn btn-primary"
+                [disabled]="carregando || fotosSelecionadas.length === 0">
+                <span *ngIf="!carregando">📤 Enviar Fotos</span>
+                <span *ngIf="carregando">Enviando...</span>
+            </button>
+        </div>
+    </div>
+</div>

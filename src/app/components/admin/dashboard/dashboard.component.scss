@@ -1,0 +1,264 @@
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dashboard-header {
+    margin-bottom: 3rem;
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+        color: #666;
+    }
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+
+    &.alert-danger {
+        background-color: #fee;
+        color: #c33;
+        border: 1px solid #fcc;
+    }
+}
+
+// Estatísticas
+.estatisticas-section {
+    margin-bottom: 3rem;
+
+    h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    .stat-icon {
+        font-size: 3rem;
+        line-height: 1;
+    }
+
+    .stat-content {
+        flex: 1;
+
+        h3 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-valor {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+    }
+
+    &.stat-card-primary {
+        border-left: 4px solid #667eea;
+    }
+
+    &.stat-card-success {
+        border-left: 4px solid #48bb78;
+    }
+
+    &.stat-card-warning {
+        border-left: 4px solid #ed8936;
+    }
+
+    &.stat-card-info {
+        border-left: 4px solid #4299e1;
+    }
+}
+
+// Ações Rápidas
+.acoes-section {
+    h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+}
+
+.acoes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.acao-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .acao-icon {
+        font-size: 2.5rem;
+        line-height: 1;
+    }
+
+    .acao-content {
+        flex: 1;
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0;
+        }
+    }
+
+    .acao-arrow {
+        font-size: 1.5rem;
+        color: #999;
+        transition: transform 0.2s;
+    }
+
+    &:hover .acao-arrow {
+        transform: translateX(4px);
+    }
+
+    &.acao-card-primary {
+        border-left: 4px solid #667eea;
+    }
+
+    &.acao-card-success {
+        border-left: 4px solid #48bb78;
+    }
+
+    &.acao-card-warning {
+        border-left: 4px solid #ed8936;
+    }
+
+    &.acao-card-info {
+        border-left: 4px solid #4299e1;
+    }
+
+    &.acao-card-danger {
+        border-left: 4px solid #f56565;
+    }
+
+    &.acao-card-secondary {
+        border-left: 4px solid #718096;
+    }
+}
+
+.sem-permissoes {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+// Charts Section
+.charts-section {
+    margin-top: 3rem;
+
+    h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1rem;
+    }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+    }
+
+    .cards-grid,
+    .acoes-grid {
+        grid-template-columns: 1fr;
+    }
+}

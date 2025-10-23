@@ -1,0 +1,51 @@
+<div class="lista-fotos-container">
+    <header class="page-header">
+        <div>
+            <h1>Galeria de Fotos</h1>
+            <p class="subtitle">Gerencie todas as fotos do sistema</p>
+        </div>
+        <a routerLink="/adm/fotos/upload" class="btn btn-primary">
+            <span class="icon">📤</span> Upload de Fotos
+        </a>
+    </header>
+
+    <div *ngIf="erro" class="alert alert-danger">{{ erro }}</div>
+
+    <div *ngIf="carregando" class="loading">Carregando fotos...</div>
+
+    <div *ngIf="!carregando && fotos.length === 0" class="empty-state">
+        <div class="empty-icon">📸</div>
+        <h2>Nenhuma foto cadastrada</h2>
+        <p>Comece fazendo upload das primeiras fotos.</p>
+        <a routerLink="/adm/fotos/upload" class="btn btn-primary">Upload de Fotos</a>
+    </div>
+
+    <div *ngIf="!carregando && fotos.length > 0">
+        <div class="fotos-grid">
+            <div *ngFor="let foto of fotos" class="foto-card">
+                <div class="foto-imagem">
+                    <img [src]="foto.url" [alt]="foto.descricao">
+                </div>
+                <div class="foto-info">
+                    <p class="foto-descricao">{{ foto.descricao || 'Sem descrição' }}</p>
+                    <p class="foto-data">{{ foto.dataCadastro | date: 'dd/MM/yyyy' }}</p>
+                </div>
+                <div class="foto-actions">
+                    <button (click)="deletarFoto(foto._id)" class="btn btn-sm btn-danger">
+                        🗑️ Deletar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination" *ngIf="totalPaginas > 1">
+            <button (click)="paginaAnterior()" [disabled]="paginaAtual === 1" class="btn btn-secondary">
+                ← Anterior
+            </button>
+            <span class="pagination-info">Página {{ paginaAtual }} de {{ totalPaginas }}</span>
+            <button (click)="proximaPagina()" [disabled]="paginaAtual === totalPaginas" class="btn btn-secondary">
+                Próxima →
+            </button>
+        </div>
+    </div>
+</div>

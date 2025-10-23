@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RewardService } from '../../../service/reward.service';
+import { RewardService } from '@services/reward.service';
 import { Reward, RewardSchedule } from '../../../model/reward.model';
 
 @Component({

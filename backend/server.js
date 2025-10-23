@@ -5,6 +5,12 @@ import { fileURLToPath } from 'url';
 import { connectDB } from './db.js';
 import authRoutes from './routes/auth.routes.js';
 import animalRoutes from './routes/animal.routes.js';
+import fotoRoutes from './routes/foto.routes.js';
+import brindeRoutes from './routes/brinde.routes.js';
+import resgateRoutes from './routes/resgate.routes.js';
+import postRoutes from './routes/post.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+import assinanteRoutes from './routes/assinante.routes.js';
 import paymentRoutes from './routes/payment.routes.js';
 import userRoutes from './routes/user.routes.js';
 
@@ -36,6 +42,12 @@ connectDB()
 app.use('/api/auth', authRoutes);
 app.use('/api/animals', animalRoutes);
 app.use('/api/animais', animalRoutes); // Alias em português
+app.use('/api/fotos', fotoRoutes);
+app.use('/api/brindes', brindeRoutes);
+app.use('/api/resgates', resgateRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/assinantes', assinanteRoutes);
 app.use('/api/pagamentos', paymentRoutes);
 app.use('/api/user', userRoutes);
 

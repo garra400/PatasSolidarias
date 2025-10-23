@@ -52,6 +52,19 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   },
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
+  permissoes: {
+    gerenciarAnimais: { type: Boolean, default: false },
+    gerenciarFotos: { type: Boolean, default: false },
+    gerenciarBrindes: { type: Boolean, default: false },
+    gerenciarPosts: { type: Boolean, default: false },
+    visualizarAssinantes: { type: Boolean, default: false },
+    convidarAdmins: { type: Boolean, default: false },
+    gerenciarConfiguracoes: { type: Boolean, default: false }
+  },
   isDoador: {
     type: Boolean,
     default: false
@@ -94,24 +107,24 @@ const userSchema = new mongoose.Schema({
 });
 
 // Método para calcular total de meses e brindes
-userSchema.methods.calcularMesesApoio = function() {
+userSchema.methods.calcularMesesApoio = function () {
   const pagamentosAprovados = this.historicoPagamentos.filter(p => p.status === 'aprovado');
-  
+
   // Contar meses únicos de referência
   const mesesUnicos = new Set();
-  
+
   pagamentosAprovados.forEach(pagamento => {
     if (pagamento.mesReferencia) {
       mesesUnicos.add(pagamento.mesReferencia);
     }
   });
-  
+
   this.totalMesesApoio = mesesUnicos.size;
   this.brindesDisponiveis = Math.floor(this.totalMesesApoio / 3);
-  
+
   // Atualizar status de doador
   this.isDoador = this.totalMesesApoio > 0 || (this.assinaturaAtiva && this.assinaturaAtiva.status === 'ativa');
-  
+
   return this.totalMesesApoio;
 };
 

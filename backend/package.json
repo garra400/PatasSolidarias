@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.5.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -21,7 +22,9 @@
     "mongodb": "^6.3.0",
     "moongose": "^1.0.0",
     "multer": "^2.0.2",
-    "nodemailer": "^7.0.9"
+    "ngx-quill": "^28.0.1",
+    "nodemailer": "^7.0.9",
+    "quill": "^2.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

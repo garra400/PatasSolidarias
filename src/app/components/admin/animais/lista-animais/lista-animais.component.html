@@ -1,0 +1,54 @@
+<div class="lista-animais-container">
+    <header class="page-header">
+        <div>
+            <h1>Gerenciar Animais</h1>
+            <p class="subtitle">Lista de todos os animais cadastrados</p>
+        </div>
+        <a routerLink="/adm/animais/novo" class="btn btn-primary">
+            <span class="icon">➕</span> Novo Animal
+        </a>
+    </header>
+
+    <div *ngIf="erro" class="alert alert-danger">
+        {{ erro }}
+    </div>
+
+    <div *ngIf="carregando" class="loading">
+        Carregando animais...
+    </div>
+
+    <div *ngIf="!carregando && animais.length === 0" class="empty-state">
+        <div class="empty-icon">🐾</div>
+        <h2>Nenhum animal cadastrado</h2>
+        <p>Comece adicionando seu primeiro animal ao sistema.</p>
+        <a routerLink="/adm/animais/novo" class="btn btn-primary">Adicionar Animal</a>
+    </div>
+
+    <div *ngIf="!carregando && animais.length > 0" class="animais-grid">
+        <div *ngFor="let animal of animais" class="animal-card">
+            <div class="animal-foto">
+                <img [src]="getFotoUrl(animal)" [alt]="animal.nome">
+                <div class="animal-status" [class.ativo]="animal.ativo" [class.inativo]="!animal.ativo">
+                    {{ animal.ativo ? 'Ativo' : 'Inativo' }}
+                </div>
+            </div>
+
+            <div class="animal-info">
+                <h3>{{ animal.nome }}</h3>
+                <p class="animal-tipo">{{ getTipoLabel(animal.tipo) }}</p>
+                <p class="animal-idade">{{ animal.idade }} anos</p>
+                <p class="animal-descricao">{{ animal.descricao }}</p>
+            </div>
+
+            <div class="animal-actions">
+                <a [routerLink]="['/adm/animais/editar', animal._id]" class="btn btn-sm btn-secondary">
+                    ✏️ Editar
+                </a>
+                <button (click)="animal._id && deletarAnimal(animal._id)" class="btn btn-sm btn-danger"
+                    [disabled]="!animal._id">
+                    🗑️ Deletar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

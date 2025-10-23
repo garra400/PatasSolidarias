@@ -1,0 +1,67 @@
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1>Painel Administrativo</h1>
+        <p class="subtitle">Bem-vindo ao sistema de gerenciamento Patas Solidárias</p>
+    </header>
+
+    <div *ngIf="erro" class="alert alert-danger">
+        {{ erro }}
+    </div>
+
+    <!-- Estatísticas -->
+    <section class="estatisticas-section">
+        <h2>Estatísticas Gerais</h2>
+        <div class="cards-grid" *ngIf="!carregando">
+            <div *ngFor="let stat of estatisticas" class="stat-card" [class]="'stat-card-' + stat.cor"
+                [routerLink]="stat.link" [class.clickable]="stat.link">
+                <div class="stat-icon">{{ stat.icone }}</div>
+                <div class="stat-content">
+                    <h3>{{ stat.titulo }}</h3>
+                    <p class="stat-valor">{{ stat.valor }}</p>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="carregando" class="loading">
+            Carregando estatísticas...
+        </div>
+    </section>
+
+    <!-- Ações Rápidas -->
+    <section class="acoes-section">
+        <h2>Ações Rápidas</h2>
+        <div class="acoes-grid">
+            <a *ngFor="let acao of acoesRapidas" [routerLink]="acao.link" class="acao-card"
+                [class]="'acao-card-' + acao.cor">
+                <div class="acao-icon">{{ acao.icone }}</div>
+                <div class="acao-content">
+                    <h3>{{ acao.titulo }}</h3>
+                    <p>{{ acao.descricao }}</p>
+                </div>
+                <div class="acao-arrow">→</div>
+            </a>
+        </div>
+        <div *ngIf="acoesRapidas.length === 0" class="sem-permissoes">
+            <p>Você não possui permissões administrativas ativas.</p>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts-section" *ngIf="!carregando">
+        <h2>Análises Visuais</h2>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Crescimento de Apoiadores</h3>
+                <app-chart [type]="'bar'" [data]="[45, 52, 61, 75, 88, 95]"
+                    [labels]="['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun']"
+                    [colors]="['#667eea', '#764ba2', '#48bb78', '#ed8936', '#4299e1', '#f56565']">
+                </app-chart>
+            </div>
+            <div class="chart-card">
+                <h3>Distribuição por Tipo</h3>
+                <app-chart [type]="'doughnut'" [data]="[65, 25, 10]"
+                    [labels]="['Apoiadores Ativos', 'Novos', 'Inativos']" [colors]="['#48bb78', '#667eea', '#ed8936']">
+                </app-chart>
+            </div>
+        </div>
+    </section>
+</div>

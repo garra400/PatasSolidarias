@@ -1,0 +1,97 @@
+<div class="form-animal-container">
+    <header class="page-header">
+        <h1>{{ isEdicao ? 'Editar Animal' : 'Novo Animal' }}</h1>
+        <p class="subtitle">{{ isEdicao ? 'Atualize as informações do animal' : 'Adicione um novo animal ao sistema' }}
+        </p>
+    </header>
+
+    <div *ngIf="erro" class="alert alert-danger">
+        {{ erro }}
+    </div>
+
+    <div *ngIf="sucesso" class="alert alert-success">
+        {{ sucesso }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="animal-form">
+        <div class="form-grid">
+            <!-- Foto -->
+            <div class="form-group form-group-full">
+                <label class="form-label">Foto de Perfil</label>
+                <div class="foto-upload">
+                    <div class="foto-preview" *ngIf="previewUrl">
+                        <img [src]="previewUrl" alt="Preview">
+                    </div>
+                    <div class="foto-placeholder" *ngIf="!previewUrl">
+                        <span class="icon">📸</span>
+                        <p>Nenhuma foto selecionada</p>
+                    </div>
+                    <input type="file" id="foto" accept="image/*" (change)="onFileSelected($event)" class="file-input">
+                    <label for="foto" class="btn btn-secondary">
+                        Escolher Foto
+                    </label>
+                </div>
+            </div>
+
+            <!-- Nome -->
+            <div class="form-group">
+                <label for="nome" class="form-label">Nome *</label>
+                <input type="text" id="nome" formControlName="nome" class="form-control" placeholder="Ex: Rex">
+                <div *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched" class="error-message">
+                    Nome é obrigatório (mínimo 2 caracteres)
+                </div>
+            </div>
+
+            <!-- Tipo -->
+            <div class="form-group">
+                <label for="tipo" class="form-label">Tipo *</label>
+                <select id="tipo" formControlName="tipo" class="form-control">
+                    <option value="cachorro">🐕 Cachorro</option>
+                    <option value="gato">🐈 Gato</option>
+                    <option value="outro">🐾 Outro</option>
+                </select>
+            </div>
+
+            <!-- Idade -->
+            <div class="form-group">
+                <label for="idade" class="form-label">Idade (anos) *</label>
+                <input type="number" id="idade" formControlName="idade" class="form-control" min="0" placeholder="0">
+                <div *ngIf="form.get('idade')?.invalid && form.get('idade')?.touched" class="error-message">
+                    Idade deve ser um número positivo
+                </div>
+            </div>
+
+            <!-- Ativo -->
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="ativo" formControlName="ativo" class="checkbox-input">
+                    <label for="ativo" class="checkbox-label">
+                        Animal ativo no sistema
+                    </label>
+                </div>
+            </div>
+
+            <!-- Descrição -->
+            <div class="form-group form-group-full">
+                <label for="descricao" class="form-label">Descrição *</label>
+                <textarea id="descricao" formControlName="descricao" class="form-control textarea" rows="5"
+                    placeholder="Conte a história deste animal..."></textarea>
+                <div *ngIf="form.get('descricao')?.invalid && form.get('descricao')?.touched" class="error-message">
+                    Descrição é obrigatória (mínimo 10 caracteres)
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="form-actions">
+            <button type="button" (click)="cancelar()" class="btn btn-secondary" [disabled]="carregando">
+                Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="carregando || form.invalid">
+                <span *ngIf="!carregando">{{ isEdicao ? 'Atualizar' : 'Criar' }} Animal</span>
+                <span *ngIf="carregando">Salvando...</span>
+            </button>
+        </div>
+    </form>
+</div>
