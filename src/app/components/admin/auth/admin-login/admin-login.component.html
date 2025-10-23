@@ -1,0 +1,90 @@
+<div class="admin-login-container">
+    <div class="admin-login-box">
+        <!-- Logo e Título -->
+        <div class="admin-header">
+            <div class="logo">
+                <h1>🐾 Patas Solidárias</h1>
+                <span class="admin-badge">ÁREA ADMINISTRATIVA</span>
+            </div>
+        </div>
+
+        <!-- Formulário de Login -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="admin-form">
+            <h2>Login de Administrador</h2>
+
+            <div class="form-group">
+                <label for="email">
+                    <i class="icon">📧</i>
+                    E-mail
+                </label>
+                <input type="email" id="email" formControlName="email" placeholder="admin@patassolidarias.com"
+                    [class.invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                <div class="error-message">
+                    @if (loginForm.get('email')?.errors?.['required']) {
+                    <span>E-mail é obrigatório</span>
+                    }
+                    @if (loginForm.get('email')?.errors?.['email']) {
+                    <span>E-mail inválido</span>
+                    }
+                </div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label for="senha">
+                    <i class="icon">🔒</i>
+                    Senha
+                </label>
+                <input type="password" id="senha" formControlName="senha" placeholder="••••••••"
+                    [class.invalid]="loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched">
+                @if (loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched) {
+                <div class="error-message">
+                    @if (loginForm.get('senha')?.errors?.['required']) {
+                    <span>Senha é obrigatória</span>
+                    }
+                    @if (loginForm.get('senha')?.errors?.['minlength']) {
+                    <span>Mínimo 6 caracteres</span>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Mensagem de Erro -->
+            @if (erro) {
+            <div class="alert alert-danger">
+                <i class="icon">⚠️</i>
+                {{ erro }}
+            </div>
+            }
+
+            <!-- Botões -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" [disabled]="carregando || loginForm.invalid">
+                    @if (!carregando) {
+                    <span>🔓 Entrar no Painel</span>
+                    }
+                    @if (carregando) {
+                    <span>⏳ Entrando...</span>
+                    }
+                </button>
+            </div>
+
+            <!-- Link para voltar -->
+            <div class="back-link">
+                <button type="button" (click)="voltarParaSite()" class="btn-link">
+                    ← Voltar para o site
+                </button>
+            </div>
+        </form>
+
+        <!-- Informação de Segurança -->
+        <div class="security-info">
+            <i class="icon">🔐</i>
+            <p>Acesso restrito a administradores autorizados</p>
+        </div>
+    </div>
+
+    <!-- Background decorativo -->
+    <div class="background-pattern"></div>
+</div>

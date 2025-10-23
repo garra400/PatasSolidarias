@@ -126,6 +126,16 @@
 
             <div class="dropdown-divider"></div>
 
+            <!-- Área Admin - apenas para admins -->
+            @if (isAdmin) {
+            <a class="dropdown-item admin-item" (click)="navigateTo('/admin')">
+              <i class="fas fa-shield-alt"></i>
+              <span>Painel Administrativo</span>
+            </a>
+
+            <div class="dropdown-divider"></div>
+            }
+
             <a class="dropdown-item" (click)="navigateTo('/conta/configuracoes')">
               <i class="fas fa-cog"></i>
               <span>Configurações</span>

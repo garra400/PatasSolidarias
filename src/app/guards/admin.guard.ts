@@ -13,16 +13,16 @@ export const adminGuard: CanActivateFn = (route, state) => {
                 return true;
             } else {
                 console.warn('🚫 Acesso negado: usuário não é admin');
-                router.navigate(['/login'], {
-                    queryParams: { returnUrl: state.url, error: 'admin-required' }
+                router.navigate(['/admin/login'], {
+                    queryParams: { returnUrl: state.url }
                 });
                 return false;
             }
         }),
         catchError(error => {
             console.error('❌ Erro ao verificar admin:', error);
-            router.navigate(['/login'], {
-                queryParams: { returnUrl: state.url, error: 'auth-failed' }
+            router.navigate(['/admin/login'], {
+                queryParams: { returnUrl: state.url }
             });
             return of(false);
         })

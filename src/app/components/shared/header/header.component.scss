@@ -316,6 +316,20 @@ button.mobile-sidebar-toggle {
     background: #f5f3ff;
   }
 
+  &.admin-item {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-left: 3px solid #667eea;
+    font-weight: 600;
+
+    i {
+      color: #667eea;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    }
+  }
+
   &.logout {
     color: #dc2626;
 

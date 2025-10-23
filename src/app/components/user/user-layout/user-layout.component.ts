@@ -73,6 +73,10 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
     return this.isDoador() && !this.hasAssinatura();
   }
 
+  isAdmin(): boolean {
+    return this.currentUser?.role === 'admin';
+  }
+
   openAvatarUpload(): void {
     this.avatarInput.nativeElement.click();
   }

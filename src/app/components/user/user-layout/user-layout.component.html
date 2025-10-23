@@ -63,6 +63,12 @@
         <span>Configurações</span>
       </a>
 
+      <!-- Botão Admin - apenas para admins -->
+      <a *ngIf="isAdmin()" routerLink="/admin" class="nav-item admin-link">
+        <span class="icon">🛡️</span>
+        <span>Painel Administrativo</span>
+      </a>
+
       <div class="nav-divider"></div>
 
       <a routerLink="/" class="nav-item">

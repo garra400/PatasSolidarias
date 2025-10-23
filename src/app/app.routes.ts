@@ -32,7 +32,7 @@ export const routes: Routes = [
     loadComponent: () => import('./components/payment/seja-padrinho/seja-padrinho.component').then(m => m.SejaPadrinhoComponent),
     canActivate: [authGuard]
   },
-  
+
   // User Account Routes (Protected with Sidebar Layout)
   {
     path: 'conta',
@@ -90,18 +90,26 @@ export const routes: Routes = [
   // Admin Routes (Protected)
   {
     path: 'admin',
-    canActivate: [authGuard, adminGuard],
     children: [
+      // Admin Login (Public - sem guard)
+      {
+        path: 'login',
+        loadComponent: () => import('./components/admin/auth/admin-login/admin-login.component').then(m => m.AdminLoginComponent)
+      },
+      // Admin Dashboard e outras rotas (Protected)
       {
         path: '',
-        redirectTo: 'brindes',
-        pathMatch: 'full'
-      },
-      {
-        path: 'brindes',
-        loadComponent: () => import('./components/admin/gerenciar-brindes/gerenciar-brindes.component').then(m => m.GerenciarBrindesComponent)
+        canActivate: [authGuard, adminGuard],
+        loadChildren: () => import('./routes/admin.routes').then(m => m.adminRoutes)
       }
     ]
+  },
+
+  // Old Admin Routes Redirect
+  {
+    path: 'adm',
+    redirectTo: 'admin',
+    pathMatch: 'prefix'
   },
 
   // Wildcard Route

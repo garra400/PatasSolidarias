@@ -18,6 +18,7 @@ import { filter } from 'rxjs/operators';
 export class HeaderComponent implements OnInit {
   currentUser: User | null = null;
   isDoador: boolean = false;
+  isAdmin: boolean = false;
   isMenuOpen: boolean = false;
   hasHistoricoPagamentos: boolean = false;
   hasAssinaturaAtiva: boolean = false;
@@ -36,6 +37,7 @@ export class HeaderComponent implements OnInit {
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
       this.isDoador = user?.isDoador || false;
+      this.isAdmin = user?.role === 'admin' || false;
 
       // Verificar se tem histórico de pagamentos (foi ou é apoiador)
       this.hasHistoricoPagamentos = (user?.historicoPagamentos && user.historicoPagamentos.length > 0) || false;
