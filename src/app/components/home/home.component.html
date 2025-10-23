@@ -18,9 +18,9 @@
         <div class="info-text">
           <h2>Patas Solidárias</h2>
           <p>
-            O projeto Patas Solidárias surgiu com o intuito de arrecadarmos ração 
-            para os animais que vivem no nosso campus da UTFPR-MD. Com isso 
-            esperamos tocar o coração de vocês apresentando nossas patinhas e 
+            O projeto Patas Solidárias surgiu com o intuito de arrecadarmos ração
+            para os animais que vivem no nosso campus da UTFPR-MD. Com isso
+            esperamos tocar o coração de vocês apresentando nossas patinhas e
             arrecadando ração ou um valor solidário que será convertido em ração.
           </p>
         </div>
@@ -32,41 +32,33 @@
   <section id="conheca-patinhas" class="animal-carousel">
     <div class="container">
       <h2 class="section-title">Conheça Nossas Patinhas</h2>
-      
+
       @if (currentAnimal) {
-        <div class="carousel-container">
-          <div class="carousel-content">
-            <div class="animal-image-wrapper">
-              <div class="animal-image-border">
-                <img 
-                  [src]="currentAnimal.imagemPrincipal" 
-                  [alt]="currentAnimal.nome" 
-                  class="animal-image"
-                  (error)="onImageError($event)"
-                >
-              </div>
+      <div class="carousel-container">
+        <div class="carousel-content">
+          <div class="animal-image-wrapper">
+            <div class="animal-image-border">
+              <img [src]="currentAnimal.imagemPrincipal" [alt]="currentAnimal.nome" [title]="currentAnimal.nome"
+                role="img" class="animal-image" (error)="onImageError($event)">
             </div>
-            
-            <div class="animal-info">
-              <h3>{{ currentAnimal.nome }}</h3>
-              <p>{{ currentAnimal.descricao }}</p>
-              <div class="carousel-controls">
-                <button (click)="previousAnimal()" class="carousel-btn" title="Anterior">❮</button>
-                <div class="carousel-dots">
-                  @for (animal of animals; track animal.nome; let i = $index) {
-                    <span 
-                      [class.active]="i === currentAnimalIndex"
-                      (click)="currentAnimalIndex = i"
-                      class="dot"
-                      [title]="animal.nome"
-                    ></span>
-                  }
-                </div>
-                <button (click)="nextAnimal()" class="carousel-btn" title="Próximo">❯</button>
+          </div>
+
+          <div class="animal-info">
+            <h3>{{ currentAnimal.nome }}</h3>
+            <p>{{ currentAnimal.descricao }}</p>
+            <div class="carousel-controls">
+              <button (click)="previousAnimal()" class="carousel-btn" title="Anterior">❮</button>
+              <div class="carousel-dots">
+                @for (animal of animals; track animal.nome; let i = $index) {
+                <span [class.active]="i === currentAnimalIndex" (click)="currentAnimalIndex = i" class="dot"
+                  [title]="animal.nome"></span>
+                }
               </div>
+              <button (click)="nextAnimal()" class="carousel-btn" title="Próximo">❯</button>
             </div>
           </div>
         </div>
+      </div>
       }
     </div>
   </section>
@@ -79,7 +71,7 @@
           <h2>Campanha</h2>
           <b>Todo valor arrecadado será convertido em ração para nossas patinhas da UTFPR-MD</b>
           <p>
-            Para fazer uma doação para o projeto Patas Solidárias, você pode escolher doar 
+            Para fazer uma doação para o projeto Patas Solidárias, você pode escolher doar
             um valor que caiba no seu bolso, um valor simbólico de R$ 15,00 mensais. Ou
             se associar no projeto e receber brindes e fotos exclusivas das nossas patinhas.
           </p>
@@ -95,7 +87,7 @@
           </b>
         </div>
       </div>
-      
+
       <div class="stickers-showcase">
         <h3>Confira os adesivos exclusivos dos nossos pets</h3>
         <div class="stickers-grid">

@@ -1,82 +1,251 @@
 <div class="meus-brindes-container">
-  <div class="header">
-    <h1>Meus Brindes</h1>
-    <p>Confira seus brindes disponíveis por apoiar o projeto</p>
-  </div>
-
-  <!-- Estatísticas -->
-  <div class="stats-cards">
-    <div class="stat-card">
-      <i class="fas fa-calendar-check"></i>
-      <div class="stat-info">
-        <h3>{{ totalMesesApoio }}</h3>
-        <p>Meses de Apoio</p>
+  <!-- Hero Header -->
+  <div class="hero-header">
+    <div class="hero-content">
+      <div class="icon-badge">
+        <i class="fas fa-gift"></i>
       </div>
-    </div>
-    
-    <div class="stat-card">
-      <i class="fas fa-gift"></i>
-      <div class="stat-info">
-        <h3>{{ brindesDisponiveis }}</h3>
-        <p>Brindes Disponíveis</p>
-      </div>
+      <h1>Meus Brindes</h1>
+      <p>Recompensas especiais por apoiar os nossos pets</p>
     </div>
   </div>
 
-  <!-- Info sobre como funcionam os brindes -->
-  <div class="info-box">
-    <i class="fas fa-info-circle"></i>
-    <p>
-      Você ganha <strong>1 brinde</strong> a cada <strong>3 meses</strong> de apoio ao projeto 
-      (seja por PIX ou assinatura mensal).
-    </p>
+  <!-- Progress Card -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <h2>Seu Progresso</h2>
+      <div class="stats-inline">
+        <div class="stat-badge">
+          <i class="fas fa-calendar-check"></i>
+          <span>{{ totalMesesApoio }} {{ totalMesesApoio === 1 ? 'mês' : 'meses' }}</span>
+        </div>
+        <div class="stat-badge premium">
+          <i class="fas fa-crown"></i>
+          <span>{{ brindesDisponiveis }} {{ brindesDisponiveis === 1 ? 'brinde' : 'brindes' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de progresso visual -->
+    <div class="progress-visual">
+      <div class="progress-bar-container">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" [style.width.%]="((totalMesesApoio % 3) / 3) * 100"></div>
+        </div>
+        <div class="progress-milestones">
+          <div class="milestone" [class.completed]="totalMesesApoio >= 1">
+            <div class="milestone-dot"></div>
+            <span>1º mês</span>
+          </div>
+          <div class="milestone" [class.completed]="totalMesesApoio >= 2">
+            <div class="milestone-dot"></div>
+            <span>2º mês</span>
+          </div>
+          <div class="milestone completed">
+            <div class="milestone-dot">
+              <i class="fas fa-gift"></i>
+            </div>
+            <span>3º mês</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-info">
+        <i class="fas fa-info-circle"></i>
+        <p>
+          @if (totalMesesApoio % 3 === 0 && brindesDisponiveis > 0) {
+          <span>Parabéns! Você ganhou um novo brinde! 🎉</span>
+          }
+          @if (totalMesesApoio % 3 !== 0) {
+          <span>
+            Faltam <strong>{{ 3 - (totalMesesApoio % 3) }}</strong>
+            {{ (3 - (totalMesesApoio % 3)) === 1 ? 'mês' : 'meses' }} para o próximo brinde
+          </span>
+          }
+        </p>
+      </div>
+    </div>
   </div>
 
-  <!-- Brindes do Mês -->
+  <!-- Brindes Disponíveis -->
+  @if (brindesDisponiveis > 0) {
   <div class="section">
-    <h2>🎁 Brinde do Mês Atual</h2>
+    <div class="section-header">
+      <h2>
+        <i class="fas fa-star"></i>
+        Seus Brindes Disponíveis
+      </h2>
+      <span class="badge-count">{{ brindesDisponiveis }}</span>
+    </div>
+
     <div class="brindes-grid">
-      <div class="brinde-card" *ngFor="let brinde of brindesDoMes">
-        <div class="brinde-image">
-          <img [src]="brinde.imagemUrl" [alt]="brinde.nome">
+      @for (brinde of brindes; track brinde.id) {
+      <div class="brinde-card premium">
+        <div class="brinde-ribbon">
+          <i class="fas fa-gift"></i>
+          Brinde #{{ $index + 1 }}
         </div>
-        <div class="brinde-info">
+        <div class="brinde-image">
+          <img [src]="brinde.imagemUrl" [alt]="brinde.nome" [title]="brinde.nome" role="img">
+          <div class="brinde-overlay">
+            <i class="fas fa-gift fa-3x"></i>
+          </div>
+        </div>
+        <div class="brinde-content">
           <h3>{{ brinde.nome }}</h3>
           <p>{{ brinde.descricao }}</p>
+
+          <div class="brinde-actions">
+            @if (brinde.status === 'disponivel') {
+            <button class="btn-primary">
+              <i class="fas fa-hand-holding-heart"></i>
+              Resgatar Brinde
+            </button>
+            }
+            @if (brinde.status === 'resgatado') {
+            <div class="status-resgatado">
+              <i class="fas fa-check-circle"></i>
+              Resgatado
+            </div>
+            }
+          </div>
         </div>
       </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- Brinde do Mês Atual -->
+  <div class="section">
+    <div class="section-header">
+      <h2>
+        <i class="fas fa-calendar-star"></i>
+        Brinde Especial do Mês
+      </h2>
+      <span class="badge-new">Novidade</span>
+    </div>
+
+    <div class="featured-brinde">
+      @for (brinde of brindesDoMes; track brinde.id) {
+      <div class="featured-content">
+        <div class="featured-image">
+          <img [src]="brinde.imagemUrl" [alt]="brinde.nome" [title]="brinde.nome" role="img">
+          <div class="featured-badge">
+            <i class="fas fa-sparkles"></i>
+            Exclusivo
+          </div>
+        </div>
+        <div class="featured-info">
+          <h3>{{ brinde.nome }}</h3>
+          <p class="description">{{ brinde.descricao }}</p>
+
+          <div class="features-list">
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Exclusivo para apoiadores</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Edição limitada do mês</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-check-circle"></i>
+              <span>Enviado para sua casa</span>
+            </div>
+          </div>
+
+          <div class="cta-info">
+            <p>Apoie por 3 meses e ganhe este brinde especial!</p>
+            <button class="btn-cta" routerLink="/conta/doar-novamente">
+              <i class="fas fa-heart"></i>
+              Apoiar Agora
+            </button>
+          </div>
+        </div>
+      </div>
+      }
     </div>
   </div>
 
-  <!-- Meus Brindes Disponíveis -->
+  <!-- Empty State -->
+  @if (brindesDisponiveis === 0) {
   <div class="section">
-    <h2>✨ Meus Brindes Disponíveis</h2>
-    
-    <div class="brindes-grid" *ngIf="brindesDisponiveis > 0">
-      <div class="brinde-card" *ngFor="let brinde of brindes">
-        <div class="brinde-image">
-          <img [src]="brinde.imagemUrl" [alt]="brinde.nome">
-        </div>
-        <div class="brinde-info">
-          <h3>{{ brinde.nome }}</h3>
-          <p>{{ brinde.descricao }}</p>
-          <button class="btn-resgatar" [disabled]="brinde.status === 'resgatado'">
-            {{ brinde.status === 'disponivel' ? 'Resgatar' : 'Resgatado' }}
-          </button>
-        </div>
+    <div class="empty-state-premium">
+      <div class="empty-icon">
+        <i class="fas fa-box-heart"></i>
       </div>
-    </div>
-
-    <div class="empty-state" *ngIf="brindesDisponiveis === 0">
-      <i class="fas fa-box-open"></i>
-      <h3>Você ainda não tem brindes disponíveis</h3>
-      <p>Continue apoiando o projeto! A cada 3 meses de apoio, você ganha 1 brinde especial.</p>
-      <p class="progress-info">
-        Você está com <strong>{{ totalMesesApoio }}</strong> 
-        {{ totalMesesApoio === 1 ? 'mês' : 'meses' }} de apoio.
-        Faltam <strong>{{ 3 - (totalMesesApoio % 3) }}</strong> 
-        {{ (3 - (totalMesesApoio % 3)) === 1 ? 'mês' : 'meses' }} para o próximo brinde!
+      <h3>Continue Apoiando!</h3>
+      <p class="empty-description">
+        Você está fazendo a diferença! Continue seu apoio e ganhe brindes exclusivos.
       </p>
+
+      <div class="empty-progress">
+        <div class="circle-progress">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" class="circle-bg"></circle>
+            <circle cx="50" cy="50" r="45" class="circle-progress-bar"
+              [style.stroke-dashoffset]="283 - (283 * (totalMesesApoio % 3) / 3)"></circle>
+          </svg>
+          <div class="circle-text">
+            <span class="months">{{ totalMesesApoio % 3 }}</span>
+            <span class="total">/3</span>
+          </div>
+        </div>
+        <p class="progress-label">Meses de apoio</p>
+      </div>
+
+      <button class="btn-secondary" routerLink="/conta/doar-novamente">
+        <i class="fas fa-arrow-right"></i>
+        Continuar Apoiando
+      </button>
+    </div>
+  </div>
+  }
+
+  <!-- Como Funciona -->
+  <div class="how-it-works">
+    <h3>
+      <i class="fas fa-lightbulb"></i>
+      Como Funcionam os Brindes?
+    </h3>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-icon">
+          <i class="fas fa-heart-circle-check"></i>
+        </div>
+        <h4>Apoie o Projeto</h4>
+        <p>Faça doações mensais via PIX ou assinatura</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-icon">
+          <i class="fas fa-calendar-days"></i>
+        </div>
+        <h4>Complete 3 Meses</h4>
+        <p>A cada 3 meses de apoio você ganha 1 brinde</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-icon">
+          <i class="fas fa-gift"></i>
+        </div>
+        <h4>Resgate seu Brinde</h4>
+        <p>Escolha e resgate seus brindes exclusivos</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <div class="step-icon">
+          <i class="fas fa-truck"></i>
+        </div>
+        <h4>Receba em Casa</h4>
+        <p>Enviamos seu brinde com todo carinho</p>
+      </div>
     </div>
   </div>
 </div>

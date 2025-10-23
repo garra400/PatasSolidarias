@@ -24,7 +24,7 @@
       <tbody>
         <tr *ngFor="let reward of rewards">
           <td>
-            <img [src]="reward.imagemUrl" [alt]="reward.nome" class="reward-thumb">
+            <img [src]="reward.imagemUrl" [alt]="reward.nome" [title]="reward.nome" role="img" class="reward-thumb">
           </td>
           <td>{{ reward.nome }}</td>
           <td>{{ reward.descricao }}</td>

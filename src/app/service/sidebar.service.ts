@@ -5,14 +5,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SidebarService {
-  private sidebarOpenSubject = new BehaviorSubject<boolean>(true);
+  private sidebarOpenSubject = new BehaviorSubject<boolean>(false); // Sempre começa fechada
   public sidebarOpen$: Observable<boolean> = this.sidebarOpenSubject.asObservable();
 
   constructor() {
-    // Em mobile, começa fechada
-    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-      this.sidebarOpenSubject.next(false);
-    }
+    // Sempre começa fechada, independente do dispositivo
   }
 
   toggle(): void {

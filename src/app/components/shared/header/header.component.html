@@ -1,31 +1,73 @@
 <header class="main-header" [class.sidebar-open]="isSidebarOpen && currentUser && isInAccountArea">
   <div class="header-container">
+    <!-- Botão Hamburger para Mobile -->
+    <!-- Deslogado: abre sidebar de navegação -->
+    @if (!currentUser) {
+    <button class="mobile-sidebar-toggle" (click)="openNavigationSidebar()" title="Menu de navegação">
+      <span class="hamburger-icon">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </span>
+    </button>
+    }
+
+    <!-- Logado na área /conta: abre sidebar da conta -->
+    @if (currentUser && isInAccountArea) {
+    <button class="mobile-sidebar-toggle" (click)="toggleSidebar()" title="Menu da conta">
+      <span class="hamburger-icon">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </span>
+    </button>
+    }
+
+    <!-- Logado fora da área /conta: vai para conta -->
+    @if (currentUser && !isInAccountArea) {
+    <button class="mobile-sidebar-toggle" (click)="goToAccount()" title="Ir para minha conta">
+      <span class="hamburger-icon">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </span>
+    </button>
+    }
+
     <!-- Logo -->
     <div class="logo-section">
       <img src="/assets/images/logo.png" alt="Patas Solidárias" class="logo" routerLink="/" (click)="scrollToTop()">
     </div>
 
     <!-- Navigation Links - Mostrar links diferentes quando logado -->
-    <nav class="nav-links" *ngIf="!currentUser">
+    @if (!currentUser) {
+    <nav class="nav-links">
       <a routerLink="/" (click)="scrollToTop()" class="nav-link">Home</a>
-      <a routerLink="/" fragment="conheca-patinhas" (click)="scrollToSection('conheca-patinhas')" class="nav-link">Conheça nossas patinhas</a>
+      <a routerLink="/" fragment="conheca-patinhas" (click)="scrollToSection('conheca-patinhas')"
+        class="nav-link">Conheça nossas patinhas</a>
       <a routerLink="/" fragment="campanha" (click)="scrollToSection('campanha')" class="nav-link">Campanha</a>
     </nav>
+    }
 
     <!-- Navigation Links - Quando usuário está logado -->
-    <nav class="nav-links" *ngIf="currentUser">
+    @if (currentUser) {
+    <nav class="nav-links">
       <a routerLink="/" (click)="scrollToTop()" class="nav-link">Home</a>
       <a (click)="navigateTo('/conta/fotos')" class="nav-link">Minha Galeria</a>
       <a (click)="navigateTo('/conta/meus-brindes')" class="nav-link">Meus Brindes</a>
     </nav>
+    }
 
     <!-- User Menu or Login Button -->
     <div class="user-section">
       <!-- Show login button when not logged in -->
-      <a *ngIf="!currentUser" routerLink="/login" class="btn-login">Seja um padrinho</a>
+      @if (!currentUser) {
+      <a routerLink="/login" class="btn-login">Seja um padrinho</a>
+      }
 
       <!-- Show user menu when logged in - Compacto -->
-      <div class="user-menu" *ngIf="currentUser">
+      @if (currentUser) {
+      <div class="user-menu">
         <button class="user-button" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen">
           <div class="user-avatar">
             <span class="user-initials">{{ getUserInitials() }}</span>
@@ -34,64 +76,77 @@
         </button>
 
         <!-- Dropdown Menu -->
-        <div class="dropdown-menu" *ngIf="isMenuOpen" (click)="$event.stopPropagation()">
+        @if (isMenuOpen) {
+        <div class="dropdown-menu" (click)="$event.stopPropagation()">
           <div class="dropdown-header">
             <p class="user-name">{{ currentUser.nome }}</p>
             <p class="user-email">{{ currentUser.email }}</p>
           </div>
-          
+
           <div class="dropdown-divider"></div>
-          
+
           <nav class="dropdown-nav">
             <!-- Seja Apoiador - apenas se NÃO for doador -->
-            <a class="dropdown-item" *ngIf="!isDoador" (click)="navigateTo('/conta/seja-apoiador')">
+            @if (!isDoador) {
+            <a class="dropdown-item" (click)="navigateTo('/conta/seja-apoiador')">
               <i class="fas fa-hand-holding-heart"></i>
               <span>Seja Apoiador</span>
             </a>
-            
+            }
+
             <!-- Minha Galeria - sempre visível para doadores -->
-            <a class="dropdown-item" *ngIf="isDoador" (click)="navigateTo('/conta/fotos')">
+            @if (isDoador) {
+            <a class="dropdown-item" (click)="navigateTo('/conta/fotos')">
               <i class="fas fa-images"></i>
               <span>Minha Galeria</span>
             </a>
-            
+
             <!-- Meus Brindes - sempre visível para doadores -->
-            <a class="dropdown-item" *ngIf="isDoador" (click)="navigateTo('/conta/meus-brindes')">
+            <a class="dropdown-item" (click)="navigateTo('/conta/meus-brindes')">
               <i class="fas fa-gift"></i>
               <span>Meus Brindes</span>
             </a>
-            
+            }
+
             <!-- Histórico de Pagamentos - para quem já foi ou é apoiador -->
-            <a class="dropdown-item" *ngIf="hasHistoricoPagamentos" (click)="navigateTo('/conta/pagamentos')">
+            @if (hasHistoricoPagamentos) {
+            <a class="dropdown-item" (click)="navigateTo('/conta/pagamentos')">
               <i class="fas fa-receipt"></i>
               <span>Histórico de Pagamentos</span>
             </a>
-            
+            }
+
             <!-- Minha Assinatura - apenas para assinantes ativos -->
-            <a class="dropdown-item" *ngIf="hasAssinaturaAtiva" (click)="navigateTo('/conta/assinatura')">
+            @if (hasAssinaturaAtiva) {
+            <a class="dropdown-item" (click)="navigateTo('/conta/assinatura')">
               <i class="fas fa-credit-card"></i>
               <span>Minha Assinatura</span>
             </a>
-            
+            }
+
             <div class="dropdown-divider"></div>
-            
+
             <a class="dropdown-item" (click)="navigateTo('/conta/configuracoes')">
               <i class="fas fa-cog"></i>
               <span>Configurações</span>
             </a>
-            
+
             <div class="dropdown-divider"></div>
-            
+
             <a class="dropdown-item logout" (click)="logout()">
               <i class="fas fa-sign-out-alt"></i>
               <span>Sair</span>
             </a>
           </nav>
         </div>
+        }
       </div>
+      }
     </div>
   </div>
 </header>
 
 <!-- Backdrop to close menu when clicking outside -->
-<div class="backdrop" *ngIf="isMenuOpen" (click)="closeMenu()"></div>
+@if (isMenuOpen) {
+<div class="backdrop" (click)="closeMenu()"></div>
+}

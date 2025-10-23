@@ -30,19 +30,19 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private viewportScroller: ViewportScroller
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
       this.isDoador = user?.isDoador || false;
-      
+
       // Verificar se tem histórico de pagamentos (foi ou é apoiador)
       this.hasHistoricoPagamentos = (user?.historicoPagamentos && user.historicoPagamentos.length > 0) || false;
-      
+
       // Verificar se tem assinatura ativa
       this.hasAssinaturaAtiva = user?.assinaturaAtiva?.status === 'ativa' || false;
-      
+
       this.cdr.markForCheck();
     });
 
@@ -123,5 +123,19 @@ export class HeaderComponent implements OnInit {
       return (names[0][0] + names[names.length - 1][0]).toUpperCase();
     }
     return names[0][0].toUpperCase();
+  }
+
+  toggleSidebar() {
+    this.sidebarService.toggle();
+  }
+
+  openNavigationSidebar() {
+    // Redireciona para home e abre sidebar de navegação via evento ou serviço
+    // Por enquanto, vamos apenas navegar para home
+    window.dispatchEvent(new CustomEvent('openNavigationSidebar'));
+  }
+
+  goToAccount() {
+    this.router.navigate(['/conta']);
   }
 }

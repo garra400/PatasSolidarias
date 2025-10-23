@@ -1,38 +1,98 @@
 <div class="app-wrapper">
   <app-header></app-header>
+
+  <!-- Botão Global da Sidebar -->
+  <!-- Quando LOGADO e NÃO na área /conta: vai para /conta -->
+  @if (currentUser && !isInAccountArea) {
+  <button class="global-sidebar-toggle" (click)="navigateToAccount()" title="Menu da conta">
+    <span class="hamburger-icon">
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </span>
+  </button>
+  }
+
+  <!-- Quando DESLOGADO: abre sidebar de navegação -->
+  @if (!currentUser) {
+  <button class="global-sidebar-toggle" (click)="toggleNavigationSidebar()" [class.active]="isNavigationSidebarOpen"
+    title="Menu de navegação">
+    <span class="hamburger-icon">
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </span>
+  </button>
+  }
+
+  <!-- Sidebar de Navegação (apenas para usuários deslogados) -->
+  @if (!currentUser && isNavigationSidebarOpen) {
+  <aside class="navigation-sidebar">
+    <div class="sidebar-header">
+      <h3>Menu de Navegação</h3>
+    </div>
+    <nav class="sidebar-nav">
+      <a (click)="navigateToSection('home')" class="nav-item">
+        <span class="icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a (click)="navigateToSection('conheca-patinhas')" class="nav-item">
+        <span class="icon">🐾</span>
+        <span>Conheça nossas patinhas</span>
+      </a>
+      <a (click)="navigateToSection('campanha')" class="nav-item">
+        <span class="icon">📢</span>
+        <span>Campanha</span>
+      </a>
+      <div class="nav-divider"></div>
+      <a routerLink="/login" (click)="closeNavigationSidebar()" class="nav-item">
+        <span class="icon">🚪</span>
+        <span>Entrar</span>
+      </a>
+    </nav>
+  </aside>
+  }
+
+  <!-- Overlay da Sidebar de Navegação -->
+  @if (!currentUser && isNavigationSidebarOpen) {
+  <div class="navigation-sidebar-overlay" (click)="closeNavigationSidebar()"></div>
+  }
+
   <router-outlet />
-  
-  <footer class="app-footer" *ngIf="showFooter">
+
+  @if (showFooter) {
+  <footer class="app-footer" [class.sidebar-open]="isSidebarOpen && isInAccountArea">
     <div class="footer-content">
       <div class="footer-info">
         <h3>🐾 Patas Solidárias</h3>
         <p>Cuidando dos animais da UTFPR-MD com amor e dedicação</p>
       </div>
-      
+
       <div class="footer-social">
         <h4>Siga-nos nas redes sociais</h4>
         <div class="social-links">
           <a href="#" aria-label="LinkedIn" target="_blank" rel="noopener" class="social-link linkedin">
             <img src="/assets/images/linkedin.png" alt="LinkedIn" />
           </a>
-          
+
           <a href="#" aria-label="Facebook" target="_blank" rel="noopener" class="social-link facebook">
             <img src="/assets/images/facebook.png" alt="Facebook" />
           </a>
-          
+
           <a href="#" aria-label="Instagram" target="_blank" rel="noopener" class="social-link instagram">
             <img src="/assets/images/instagram.png" alt="Instagram" />
           </a>
-          
+
           <a href="#" aria-label="YouTube" target="_blank" rel="noopener" class="social-link youtube">
             <img src="/assets/images/youtube.png" alt="YouTube" />
           </a>
         </div>
       </div>
-      
+
       <div class="footer-copyright">
         <p>&copy; {{ currentYear }} Patas Solidárias - UTFPR Medianeira. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>
+  }
 </div>

@@ -1,14 +1,25 @@
 <div class="user-layout">
   <!-- Sidebar Toggle Button -->
   <button class="sidebar-toggle" (click)="toggleSidebar()" [class.open]="isSidebarOpen" title="Menu">
-    <i class="fas" [ngClass]="isSidebarOpen ? 'fa-times' : 'fa-bars'"></i>
+    <span class="hamburger-icon">
+      <span class="line"></span>
+      <span class="line"></span>
+      <span class="line"></span>
+    </span>
   </button>
 
   <!-- Sidebar -->
-  <aside class="sidebar" [class.open]="isSidebarOpen" [class.collapsed]="!isSidebarOpen">
+  <aside class="sidebar" [class.open]="isSidebarOpen" [class.collapsed]="!isSidebarOpen"
+    [class.no-transition]="isFirstRender">
     <div class="sidebar-header">
-      <img src="/assets/images/logo.png" alt="Logo" class="logo">
-      <h3>Minha Conta</h3>
+      <div class="user-avatar-wrapper" (click)="openAvatarUpload()" title="Clique para trocar a foto">
+        <img [src]="currentUser?.fotoPerfil || '/assets/images/default-avatar.svg'" alt="Foto de perfil"
+          class="user-avatar">
+        <div class="camera-overlay">
+          <i class="bi bi-camera-fill"></i>
+        </div>
+      </div>
+      <h3>{{ currentUser?.nome || 'Minha Conta' }}</h3>
       <p class="user-email">{{ currentUser?.email }}</p>
     </div>
 
@@ -67,10 +78,16 @@
   </aside>
 
   <!-- Main Content -->
-  <main class="main-content">
+  <main class="main-content" [class.no-transition]="isFirstRender">
     <router-outlet></router-outlet>
   </main>
 </div>
 
 <!-- Sidebar Overlay (Mobile) -->
-<div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
+@if (isSidebarOpen) {
+<div class="sidebar-overlay" (click)="toggleSidebar()"></div>
+}
+
+<!-- Hidden file input for avatar upload -->
+<input type="file" #avatarInput accept="image/*" class="hidden-file-input" aria-label="Selecionar foto de perfil"
+  title="Selecionar foto de perfil" (change)="onAvatarSelected($event)">

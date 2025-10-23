@@ -52,13 +52,9 @@
 
   <!-- Grid de Fotos -->
   <div *ngIf="!isLoading && filteredPhotos.length > 0" class="photos-grid">
-    <div 
-      *ngFor="let photo of filteredPhotos" 
-      class="photo-card"
-      (click)="openPhoto(photo)"
-    >
+    <div *ngFor="let photo of filteredPhotos" class="photo-card" (click)="openPhoto(photo)">
       <div class="photo-image">
-        <img [src]="photo.imagemUrl" [alt]="photo.animalNome">
+        <img [src]="photo.imagemUrl" [alt]="photo.animalNome" [title]="photo.animalNome" role="img">
         <div class="photo-overlay">
           <span class="view-icon">👁️</span>
         </div>
@@ -83,11 +79,12 @@
 <div *ngIf="selectedPhoto" class="photo-modal" (click)="closePhoto()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <button class="close-btn" (click)="closePhoto()">✕</button>
-    
+
     <div class="modal-image">
-      <img [src]="selectedPhoto.imagemUrl" [alt]="selectedPhoto.animalNome">
+      <img [src]="selectedPhoto.imagemUrl" [alt]="selectedPhoto.animalNome" [title]="selectedPhoto.animalNome"
+        role="img">
     </div>
-    
+
     <div class="modal-info">
       <h2>{{ selectedPhoto.animalNome }}</h2>
       <p class="description">{{ selectedPhoto.descricao }}</p>
