@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
   hasAssinaturaAtiva: boolean = false;
   isSidebarOpen: boolean = false;
   isInAccountArea: boolean = false;
+  isInAdminArea: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -54,16 +55,18 @@ export class HeaderComponent implements OnInit {
       this.cdr.markForCheck();
     });
 
-    // Observar mudanças de rota para detectar se está na área de conta
+    // Observar mudanças de rota
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.isInAccountArea = event.url.startsWith('/conta');
+      this.isInAdminArea = event.url.startsWith('/admin');
       this.cdr.markForCheck();
     });
 
     // Verificar rota inicial
     this.isInAccountArea = this.router.url.startsWith('/conta');
+    this.isInAdminArea = this.router.url.startsWith('/admin');
   }
 
   scrollToTop() {

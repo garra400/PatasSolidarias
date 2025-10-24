@@ -20,32 +20,31 @@ button.mobile-sidebar-toggle {
     display: flex !important; // Força exibição em tablet/mobile
     align-items: center !important;
     justify-content: center !important;
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
+    width: 45px !important;
+    height: 45px !important;
+    min-width: 45px !important;
+    min-height: 45px !important;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     border: none !important;
-    border-radius: 8px !important;
+    border-radius: 10px !important;
     cursor: pointer !important;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    position: absolute !important;
-    left: 15px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
+    box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+    position: relative !important; // Mudado para relative
+    flex-shrink: 0 !important;
     z-index: 10 !important;
     padding: 0 !important;
     margin: 0 !important;
+    margin-right: 10px !important; // Espaço entre botão e logo
 
     span.hamburger-icon {
       display: flex !important; // Força exibição das linhas
       flex-direction: column !important;
       gap: 4px !important;
-      width: 20px !important;
-      height: 14px !important;
-      min-width: 20px !important;
-      min-height: 14px !important;
+      width: 22px !important;
+      height: 16px !important;
+      min-width: 22px !important;
+      min-height: 16px !important;
       visibility: visible !important;
       opacity: 1 !important;
       pointer-events: none !important;
@@ -53,8 +52,8 @@ button.mobile-sidebar-toggle {
       span.line {
         display: block !important; // Força exibição de cada linha
         width: 100% !important;
-        height: 2px !important;
-        min-height: 2px !important;
+        height: 2.5px !important;
+        min-height: 2.5px !important;
         background: white !important;
         background-color: white !important;
         border-radius: 2px !important;
@@ -67,11 +66,12 @@ button.mobile-sidebar-toggle {
     }
 
     &:hover {
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.6) !important;
     }
 
     &:active {
-      transform: translateY(-50%) scale(0.95) !important;
+      transform: translateY(0) !important;
     }
   }
 }
@@ -85,6 +85,14 @@ button.mobile-sidebar-toggle {
   grid-template-columns: 100px 1fr 280px;
   align-items: center;
   gap: 40px;
+
+  @media (max-width: 968px) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 20px;
+    gap: 0;
+  }
 }
 
 .logo-section {
@@ -101,7 +109,18 @@ button.mobile-sidebar-toggle {
   }
 
   @media (max-width: 968px) {
-    margin-left: 50px; // Espaço para o botão hamburger mobile/tablet
+    margin-left: 0; // Remove margem, botão agora está ao lado
+    flex-shrink: 0;
+
+    .logo {
+      height: 45px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .logo {
+      height: 40px;
+    }
   }
 }
 
@@ -155,6 +174,33 @@ button.mobile-sidebar-toggle {
       }
     }
   }
+
+  // Estilos específicos para navbar admin
+  &.admin-nav {
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #667eea;
+      font-weight: 600;
+
+      i {
+        font-size: 14px;
+      }
+
+      &::after {
+        background: linear-gradient(90deg, #667eea, #764ba2);
+      }
+
+      &:hover {
+        color: #764ba2;
+      }
+
+      &.active {
+        color: #764ba2;
+      }
+    }
+  }
 }
 
 .user-section {
@@ -162,6 +208,11 @@ button.mobile-sidebar-toggle {
   justify-self: end;
   display: flex;
   justify-content: flex-end;
+
+  @media (max-width: 968px) {
+    margin-left: auto; // Empurra para a direita
+    flex-shrink: 0;
+  }
 }
 
 .btn-login {
@@ -387,6 +438,7 @@ button.mobile-sidebar-toggle {
     width: 100%;
     top: 0;
     left: 0;
+    padding: 12px 0;
 
     &.sidebar-open {
       margin-left: 0;
@@ -397,8 +449,13 @@ button.mobile-sidebar-toggle {
     padding: 0 15px;
   }
 
+  button.mobile-sidebar-toggle {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
   .logo-section .logo {
-    height: 40px;
+    height: 38px;
   }
 
   .user-button {

@@ -55,9 +55,30 @@
     transform: translateY(0);
   }
 
-  // Esconde no mobile/tablet para usar botão do header
+  // No mobile/tablet, alinhar com o header
   @media (max-width: 968px) {
-    display: none !important;
+    top: 15px; // Alinha com o topo do header mobile
+    left: 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+
+    .hamburger-icon {
+      width: 22px;
+      height: 16px;
+      gap: 4px;
+
+      .line {
+        height: 2.5px;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    top: 12px; // Ajusta para telas menores
+    left: 15px;
+    width: 42px;
+    height: 42px;
   }
 
   &.active {
@@ -78,6 +99,153 @@
       }
     }
   }
+}
+
+// ==========================================
+// SIDEBAR GLOBAL DE CONTA
+// ==========================================
+
+.global-account-sidebar {
+  width: 280px;
+  background: white;
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1003;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+
+  &.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-header {
+    padding: 30px 20px 20px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    text-align: center;
+
+    .user-avatar-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+
+      .user-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    h3 {
+      margin: 0 0 5px;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .user-email {
+      margin: 0;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+  }
+
+  .sidebar-nav {
+    padding: 15px 0;
+    flex: 1;
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      color: #333;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-size: 0.95rem;
+      font-weight: 500;
+
+      .icon {
+        font-size: 1.3rem;
+        width: 28px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      &:hover {
+        background: #f0fdf4;
+        color: #10b981;
+        padding-left: 25px;
+      }
+
+      &.active {
+        background: #ecfdf5;
+        color: #10b981;
+        border-left: 4px solid #10b981;
+        padding-left: 21px;
+        font-weight: 600;
+      }
+
+      &.admin-link {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        color: white;
+        border-radius: 8px;
+        margin: 5px 10px;
+        padding: 12px 20px;
+
+        &:hover {
+          background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+          transform: translateX(3px);
+          padding-left: 20px;
+        }
+      }
+
+      &.logout-btn {
+        color: #ef4444;
+        font-weight: 600;
+
+        &:hover {
+          background: #fee2e2;
+          color: #dc2626;
+        }
+      }
+    }
+
+    .nav-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%);
+      margin: 10px 20px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 280px;
+  }
+}
+
+.global-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1002;
+  animation: fadeIn 0.3s ease;
 }
 
 // Sidebar de Navegação (para usuários deslogados)
@@ -242,6 +410,11 @@
       opacity: 1;
       transform: translateY(0);
     }
+  }
+
+  // Quando está na área admin
+  &.admin-area {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
   }
 
   // Quando a sidebar está aberta (apenas em desktop)

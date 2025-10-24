@@ -333,3 +333,154 @@
         }
     }
 }
+
+// Novos estilos para preview com descrição e animais individuais
+.previews-section {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+}
+
+.previews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.preview-card {
+    background: #f9fafb;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+
+    .preview-image {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-remove {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: rgba(239, 68, 68, 0.95);
+            color: white;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                background: #dc2626;
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    .preview-info {
+        padding: 1rem;
+    }
+
+    .form-group-compact {
+        margin-bottom: 0.75rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .form-label-small {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #4a5568;
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .form-control-small {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        resize: vertical;
+        font-family: inherit;
+
+        &:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+    }
+
+    .animais-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .animal-chip {
+        padding: 0.4rem 0.8rem;
+        background: #e2e8f0;
+        border: 2px solid transparent;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: #4a5568;
+        cursor: pointer;
+        transition: all 0.2s;
+        user-select: none;
+
+        &:hover {
+            background: #cbd5e0;
+        }
+
+        &.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #9ca3af;
+
+    .icon {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        margin: 0;
+        font-size: 1rem;
+    }
+}

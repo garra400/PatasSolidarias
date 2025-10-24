@@ -63,7 +63,15 @@ export class ListaAnimaisComponent implements OnInit {
     }
 
     getFotoUrl(animal: Animal): string {
-        // TODO: Buscar a URL real da foto pelo ID
-        return animal.fotoPerfilId ? `assets/images/animais/${animal.fotoPerfilId}.jpg` : 'assets/images/animal-placeholder.png';
+        // Usar a URL da foto de perfil se disponível
+        if (animal.fotoPerfil?.url) {
+            return animal.fotoPerfil.url;
+        }
+        // Fallback para imagemPrincipal (compatibilidade)
+        if (animal.imagemPrincipal) {
+            return animal.imagemPrincipal;
+        }
+        // Placeholder se não tiver foto
+        return '/images/animal-placeholder.svg';
     }
 }

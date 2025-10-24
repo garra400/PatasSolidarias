@@ -4,11 +4,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalService } from '@services/animal.service';
 import { FotoService } from '@services/foto.service';
+import { TrocarFotoPerfilModalComponent } from '../trocar-foto-perfil-modal/trocar-foto-perfil-modal.component';
+import { Animal, Foto } from '@models/animal.model';
 
 @Component({
     selector: 'app-form-animal',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [CommonModule, ReactiveFormsModule, TrocarFotoPerfilModalComponent],
     templateUrl: './form-animal.component.html',
     styleUrls: ['./form-animal.component.scss']
 })
@@ -22,6 +24,9 @@ export class FormAnimalComponent implements OnInit {
 
     fotoSelecionada: File | null = null;
     previewUrl: string | null = null;
+
+    animalAtual?: Animal;
+    mostrarModalTrocarFoto = false;
 
     private fb = inject(FormBuilder);
     private animalService = inject(AnimalService);
@@ -55,6 +60,7 @@ export class FormAnimalComponent implements OnInit {
         this.carregando = true;
         this.animalService.getAnimalById(id).subscribe({
             next: (animal: any) => {
+                this.animalAtual = animal;
                 this.form.patchValue({
                     nome: animal.nome,
                     tipo: animal.tipo,
@@ -63,7 +69,10 @@ export class FormAnimalComponent implements OnInit {
                     ativo: animal.ativo
                 });
 
-                if (animal.fotoPerfilId) {
+                // Atualizar preview com foto de perfil
+                if (animal.fotoPerfil?.url) {
+                    this.previewUrl = animal.fotoPerfil.url;
+                } else if (animal.fotoPerfilId) {
                     this.previewUrl = `assets/images/animais/${animal.fotoPerfilId}.jpg`;
                 }
 
@@ -165,5 +174,21 @@ export class FormAnimalComponent implements OnInit {
         if (confirm('Deseja cancelar? As alterações não serão salvas.')) {
             this.router.navigate(['/adm/animais/lista']);
         }
+    }
+
+    abrirModalTrocarFoto(): void {
+        this.mostrarModalTrocarFoto = true;
+    }
+
+    fecharModalTrocarFoto(): void {
+        this.mostrarModalTrocarFoto = false;
+    }
+
+    onFotoPerfilAlterada(foto: Foto): void {
+        this.previewUrl = foto.url;
+        this.sucesso = 'Foto de perfil atualizada com sucesso!';
+        setTimeout(() => {
+            this.sucesso = '';
+        }, 3000);
     }
 }

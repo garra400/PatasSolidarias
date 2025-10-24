@@ -1,0 +1,50 @@
+<div class="modal-overlay" (click)="cancelar()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Trocar Foto de Perfil</h2>
+            <p class="subtitle">{{ animalNome }}</p>
+            <button class="btn-close" (click)="cancelar()" aria-label="Fechar">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <div *ngIf="erro" class="alert alert-danger">
+                {{ erro }}
+            </div>
+
+            <div *ngIf="carregando" class="loading">
+                <div class="spinner"></div>
+                <p>Carregando fotos...</p>
+            </div>
+
+            <div *ngIf="!carregando && fotos.length === 0" class="empty-state">
+                <div class="empty-icon">📸</div>
+                <h3>Nenhuma foto disponível</h3>
+                <p>Este animal ainda não possui fotos na galeria.</p>
+                <p class="hint">Vá para a seção de fotos para adicionar imagens.</p>
+            </div>
+
+            <div *ngIf="!carregando && fotos.length > 0" class="fotos-grid">
+                <div *ngFor="let foto of fotos" class="foto-item" [class.selected]="fotoSelecionadaId === foto.id"
+                    [class.current]="fotoPerfilAtualId === foto.id" (click)="selecionarFoto(foto.id)">
+                    <img [src]="getFotoUrl(foto)" [alt]="foto.descricao || 'Foto do animal'">
+                    <div class="foto-overlay">
+                        <span class="check-icon" *ngIf="fotoSelecionadaId === foto.id">✓</span>
+                        <span class="current-badge" *ngIf="fotoPerfilAtualId === foto.id">Atual</span>
+                    </div>
+                    <p class="foto-descricao" *ngIf="foto.descricao">{{ foto.descricao }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="cancelar()" [disabled]="salvando">
+                Cancelar
+            </button>
+            <button type="button" class="btn btn-primary" (click)="salvar()"
+                [disabled]="salvando || !fotoSelecionadaId || fotos.length === 0">
+                <span *ngIf="!salvando">Salvar</span>
+                <span *ngIf="salvando">Salvando...</span>
+            </button>
+        </div>
+    </div>
+</div>

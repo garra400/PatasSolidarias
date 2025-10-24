@@ -12,18 +12,33 @@ let db;
 export async function connectDB() {
   try {
     if (db) {
+      console.log('✅ Usando conexão MongoDB existente');
       return db;
     }
 
-    client = new MongoClient(uri);
+    client = new MongoClient(uri, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+
     await client.connect();
-    
+
     console.log('✅ Conectado ao MongoDB Atlas com sucesso!');
-    
+
     db = client.db(dbName);
+    console.log(`📁 Database: ${dbName}`);
+
+    // Verificar se a conexão está funcionando
+    await db.command({ ping: 1 });
+    console.log('✅ Conexão MongoDB verificada e funcionando!');
+
     return db;
   } catch (error) {
-    console.error('❌ Erro ao conectar ao MongoDB:', error);
+    console.error('❌ Erro ao conectar ao MongoDB:', error.message);
+    console.error('💡 Verifique:');
+    console.error('   1. MONGODB_URI no .env está correto');
+    console.error('   2. Seu IP está na whitelist do MongoDB Atlas');
+    console.error('   3. Usuário e senha estão corretos');
     throw error;
   }
 }

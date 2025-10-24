@@ -5,6 +5,7 @@ export interface User {
   telefone: string;
   cpf: string;
   senha?: string;
+  fotoPerfil?: string;
   role: 'user' | 'admin';
   isDoador: boolean;
   emailVerificado: boolean;

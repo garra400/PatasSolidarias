@@ -15,53 +15,50 @@
                 <span class="drag-icon">📤</span>
                 <h3>Arraste fotos aqui</h3>
                 <p>ou</p>
+                <input type="file" multiple accept="image/*" (change)="onFilesSelected($event)" class="file-input"
+                    id="fotos">
                 <label for="fotos" class="file-label-inline">
                     <span class="icon">📁</span>
                     Clique para selecionar
                 </label>
-                <input type="file" multiple accept="image/*" (change)="onFilesSelected($event)" class="file-input"
-                    id="fotos">
                 <p class="help-text">Até 20 imagens (JPG, PNG, GIF, WebP)</p>
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="form-label">Selecionar Fotos</label>
-            <input type="file" multiple accept="image/*" (change)="onFilesSelected($event)" class="file-input"
-                id="fotos">
-            <label for="fotos" class="file-label">
-                <span class="icon">📁</span>
-                Escolher Fotos (máximo 20)
-            </label>
-            <p class="help-text">Selecione até 20 imagens (JPG, PNG, GIF, WebP)</p>
-        </div>
+        <div *ngIf="previews.length > 0" class="previews-section">
+            <h3 class="section-title">Fotos Selecionadas ({{ previews.length }})</h3>
+            <div class="previews-grid">
+                <div *ngFor="let preview of previews; let i = index" class="preview-card">
+                    <div class="preview-image">
+                        <img [src]="preview.url" alt="Preview">
+                        <button (click)="removerFoto(i)" class="btn-remove" title="Remover foto">✕</button>
+                    </div>
 
-        <div *ngIf="previews.length > 0" class="previews-grid">
-            <div *ngFor="let preview of previews; let i = index" class="preview-card">
-                <img [src]="preview" alt="Preview">
-                <button (click)="removerFoto(i)" class="btn-remove">✕</button>
-            </div>
-        </div>
+                    <div class="preview-info">
+                        <div class="form-group-compact">
+                            <label [for]="'desc-' + i" class="form-label-small">Descrição</label>
+                            <textarea [id]="'desc-' + i" [(ngModel)]="preview.descricao" class="form-control-small"
+                                rows="2" placeholder="Descreva esta foto..."></textarea>
+                        </div>
 
-        <div class="form-group">
-            <label class="form-label">Descrição (opcional)</label>
-            <textarea [(ngModel)]="descricao" class="form-control" rows="3"
-                placeholder="Descreva as fotos..."></textarea>
-        </div>
-
-        <div class="form-group">
-            <label class="form-label">Associar aos Animais (opcional)</label>
-            <div class="animais-list">
-                <div *ngFor="let animal of animais" class="animal-checkbox"
-                    [class.selected]="isAnimalSelecionado(animal._id)">
-                    <label [for]="'animal-' + animal._id" [id]="'label-animal-' + animal._id">
-                        <input type="checkbox" [id]="'animal-' + animal._id" [checked]="isAnimalSelecionado(animal._id)"
-                            (change)="onAnimalToggle(animal._id)" [attr.title]="animal.nome"
-                            [attr.aria-label]="animal.nome">
-                        {{ animal.nome }}
-                    </label>
+                        <div class="form-group-compact">
+                            <label class="form-label-small">Animais nesta foto</label>
+                            <div class="animais-chips">
+                                <div *ngFor="let animal of animais" class="animal-chip"
+                                    [class.selected]="isAnimalSelecionado(i, animal._id)"
+                                    (click)="onAnimalToggle(i, animal._id)">
+                                    {{ animal.nome }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div *ngIf="previews.length === 0" class="empty-state">
+            <p class="icon">📸</p>
+            <p>Nenhuma foto selecionada ainda</p>
         </div>
 
         <div class="form-actions">

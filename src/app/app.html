@@ -2,15 +2,109 @@
   <app-header></app-header>
 
   <!-- Botão Global da Sidebar -->
-  <!-- Quando LOGADO e NÃO na área /conta: vai para /conta -->
-  @if (currentUser && !isInAccountArea) {
-  <button class="global-sidebar-toggle" (click)="navigateToAccount()" title="Menu da conta">
+  <!-- Desktop: sempre mostra quando logado e fora do admin -->
+  <!-- Mobile: mostra apenas quando NÃO estiver na área /conta -->
+  @if (currentUser && !isInAdminArea && (!isMobileView || !isInAccountArea)) {
+  <button class="global-sidebar-toggle" (click)="toggleAccountSidebar()" [class.active]="isSidebarOpen"
+    [class.mobile-hidden]="isMobileView && isInAccountArea" title="Menu da conta">
     <span class="hamburger-icon">
       <span class="line"></span>
       <span class="line"></span>
       <span class="line"></span>
     </span>
   </button>
+
+  <!-- Sidebar Global de Conta -->
+  <aside class="global-account-sidebar" [class.open]="isSidebarOpen">
+    <div class="sidebar-header">
+      <div class="user-avatar-wrapper">
+        <img [src]="(currentUser && currentUser.fotoPerfil) || '/assets/images/default-avatar.svg'" alt="Foto de perfil"
+          class="user-avatar">
+      </div>
+      <h3>{{ (currentUser && currentUser.nome) || 'Minha Conta' }}</h3>
+      <p class="user-email">{{ currentUser && currentUser.email }}</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/conta" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item"
+        (click)="closeSidebarIfMobile()">
+        <span class="icon">🏠</span>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Mostrar "Seja Apoiador" apenas se NÃO for doador -->
+      @if (!isDoador()) {
+      <a routerLink="/conta/seja-apoiador" routerLinkActive="active" class="nav-item" (click)="closeSidebarIfMobile()">
+        <span class="icon">💝</span>
+        <span>Seja Apoiador</span>
+      </a>
+      }
+
+      <!-- Mostrar "Doar Novamente" se já for doador -->
+      @if (isDoador()) {
+      <a routerLink="/conta/doar-novamente" routerLinkActive="active" class="nav-item" (click)="closeSidebarIfMobile()">
+        <span class="icon">💰</span>
+        <span>Doar Novamente</span>
+      </a>
+      }
+
+      <!-- Opções exclusivas para doadores -->
+      @if (isDoador()) {
+      <a routerLink="/conta/meus-brindes" routerLinkActive="active" class="nav-item" (click)="closeSidebarIfMobile()">
+        <span class="icon">🎁</span>
+        <span>Meus Brindes</span>
+      </a>
+
+      <a routerLink="/conta/fotos" routerLinkActive="active" class="nav-item" (click)="closeSidebarIfMobile()">
+        <span class="icon">📸</span>
+        <span>Fotos dos Animais</span>
+      </a>
+
+      <a routerLink="/conta/pagamentos" routerLinkActive="active" class="nav-item" (click)="closeSidebarIfMobile()">
+        <span class="icon">💳</span>
+        <span>Histórico de Pagamentos</span>
+      </a>
+      }
+
+      <!-- Mostrar "Minha Assinatura" apenas se tiver assinatura ativa -->
+      @if (hasAssinatura()) {
+      <a routerLink="/conta/assinatura" routerLinkActive="active" class="nav-item" (click)="closeSidebarIfMobile()">
+        <span class="icon">📋</span>
+        <span>Minha Assinatura</span>
+      </a>
+      }
+
+      <a routerLink="/conta/configuracoes" routerLinkActive="active" class="nav-item" (click)="closeSidebarIfMobile()">
+        <span class="icon">⚙️</span>
+        <span>Configurações</span>
+      </a>
+
+      <!-- Botão Admin - apenas para admins -->
+      @if (isAdmin()) {
+      <a routerLink="/admin" class="nav-item admin-link" (click)="closeSidebarIfMobile()">
+        <span class="icon">🛡️</span>
+        <span>Painel Administrativo</span>
+      </a>
+      }
+
+      <div class="nav-divider"></div>
+
+      <a routerLink="/" class="nav-item" (click)="closeSidebarIfMobile()">
+        <span class="icon">🏠</span>
+        <span>Voltar para Home</span>
+      </a>
+
+      <button (click)="logout()" class="nav-item logout-btn">
+        <span class="icon">🚪</span>
+        <span>Sair</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Overlay da Sidebar de Conta -->
+  @if (isSidebarOpen) {
+  <div class="global-sidebar-overlay" (click)="toggleAccountSidebar()"></div>
+  }
   }
 
   <!-- Quando DESLOGADO: abre sidebar de navegação -->
@@ -61,7 +155,8 @@
   <router-outlet />
 
   @if (showFooter) {
-  <footer class="app-footer" [class.sidebar-open]="isSidebarOpen && isInAccountArea">
+  <footer class="app-footer" [class.sidebar-open]="isSidebarOpen && (isInAccountArea || isInAdminArea)"
+    [class.admin-area]="isInAdminArea">
     <div class="footer-content">
       <div class="footer-info">
         <h3>🐾 Patas Solidárias</h3>

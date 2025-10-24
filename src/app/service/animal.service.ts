@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AnimalService {
-  private apiUrl = `${environment.apiUrl}/animals`;
+  private apiUrl = `${environment.apiUrl}/animais`;
 
   // Mock data
   private mockAnimals: Animal[] = [

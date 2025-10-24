@@ -14,10 +14,8 @@ import { AnimalService } from '@services/animal.service';
 })
 export class UploadFotosComponent {
     fotosSelecionadas: File[] = [];
-    previews: string[] = [];
+    previews: { url: string; descricao: string; animaisIds: string[] }[] = [];
     animais: any[] = [];
-    animaisSelecionados: string[] = [];
-    descricao = '';
     carregando = false;
     erro = '';
     sucesso = '';
@@ -44,29 +42,23 @@ export class UploadFotosComponent {
         const input = event.target as HTMLInputElement;
         if (!input.files) return;
 
-        this.fotosSelecionadas = Array.from(input.files);
-        this.previews = [];
-
-        this.fotosSelecionadas.forEach(file => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                this.previews.push(e.target?.result as string);
-            };
-            reader.readAsDataURL(file);
-        });
+        const files = Array.from(input.files);
+        this.processFiles(files);
     }
 
-    onAnimalToggle(animalId: string): void {
-        const index = this.animaisSelecionados.indexOf(animalId);
+    onAnimalToggle(fotoIndex: number, animalId: string): void {
+        const foto = this.previews[fotoIndex];
+        const index = foto.animaisIds.indexOf(animalId);
+
         if (index > -1) {
-            this.animaisSelecionados.splice(index, 1);
+            foto.animaisIds.splice(index, 1);
         } else {
-            this.animaisSelecionados.push(animalId);
+            foto.animaisIds.push(animalId);
         }
     }
 
-    isAnimalSelecionado(animalId: string): boolean {
-        return this.animaisSelecionados.includes(animalId);
+    isAnimalSelecionado(fotoIndex: number, animalId: string): boolean {
+        return this.previews[fotoIndex]?.animaisIds.includes(animalId) || false;
     }
 
     uploadFotos(): void {
@@ -80,10 +72,10 @@ export class UploadFotosComponent {
         this.sucesso = '';
 
         const batch = {
-            fotos: this.fotosSelecionadas.map(file => ({
+            fotos: this.fotosSelecionadas.map((file, index) => ({
                 file: file,
-                descricao: this.descricao,
-                animaisIds: this.animaisSelecionados
+                descricao: this.previews[index].descricao,
+                animaisIds: this.previews[index].animaisIds
             })),
             enviarEmail: false
         };
@@ -151,9 +143,16 @@ export class UploadFotosComponent {
         imageFiles.forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
-                this.previews.push(e.target?.result as string);
+                this.previews.push({
+                    url: e.target?.result as string,
+                    descricao: '',
+                    animaisIds: []
+                });
             };
             reader.readAsDataURL(file);
         });
+
+        // Limpar erro se existir
+        this.erro = '';
     }
 }

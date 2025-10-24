@@ -41,11 +41,16 @@
             </div>
 
             <div class="animal-actions">
-                <a [routerLink]="['/adm/animais/editar', animal._id]" class="btn btn-sm btn-secondary">
+                <a [routerLink]="['/adm/animais/editar', animal._id]" class="btn btn-sm btn-secondary"
+                    title="Editar animal">
                     ✏️ Editar
                 </a>
+                <a [routerLink]="['/adm/fotos']" [queryParams]="{animalId: animal._id}" class="btn btn-sm btn-info"
+                    title="Ver galeria de fotos">
+                    🖼️ Fotos
+                </a>
                 <button (click)="animal._id && deletarAnimal(animal._id)" class="btn btn-sm btn-danger"
-                    [disabled]="!animal._id">
+                    [disabled]="!animal._id" title="Deletar animal">
                     🗑️ Deletar
                 </button>
             </div>

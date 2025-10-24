@@ -42,11 +42,26 @@
     }
 
     <!-- Navigation Links - Quando usuário está logado -->
-    @if (currentUser) {
+    @if (currentUser && !isInAdminArea) {
     <nav class="nav-links">
       <a routerLink="/" (click)="scrollToTop()" class="nav-link">Home</a>
       <a (click)="navigateTo('/conta/fotos')" class="nav-link">Minha Galeria</a>
       <a (click)="navigateTo('/conta/meus-brindes')" class="nav-link">Meus Brindes</a>
+    </nav>
+    }
+
+    <!-- Navigation Links - Admin Area -->
+    @if (currentUser && isInAdminArea) {
+    <nav class="nav-links admin-nav">
+      <a routerLink="/admin/dashboard" class="nav-link">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </a>
+      <a routerLink="/admin/animais" class="nav-link">
+        <i class="fas fa-paw"></i> Animais
+      </a>
+      <a routerLink="/admin/assinantes" class="nav-link">
+        <i class="fas fa-users"></i> Apoiadores
+      </a>
     </nav>
     }
 

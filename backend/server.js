@@ -56,7 +56,27 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Backend funcionando!' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`📍 http://localhost:${PORT}`);
-});
+// Função para iniciar o servidor
+const startServer = async () => {
+  try {
+    // 1. Conectar ao MongoDB PRIMEIRO
+    await connectDB();
+
+    // 2. Aguardar conexão estabilizar
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log('✅ Database disponível globalmente');
+
+    // 3. DEPOIS iniciar o servidor HTTP
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor rodando na porta ${PORT}`);
+      console.log(`📍 http://localhost:${PORT}`);
+      console.log(`✅ Servidor pronto para receber requisições!`);
+    });
+  } catch (error) {
+    console.error('❌ Falha ao iniciar servidor:', error);
+    process.exit(1);
+  }
+};
+
+// Iniciar o servidor
+startServer();

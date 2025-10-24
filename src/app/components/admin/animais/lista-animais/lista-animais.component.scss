@@ -65,6 +65,15 @@
         }
     }
 
+    &.btn-info {
+        background: #4299e1;
+        color: white;
+
+        &:hover {
+            background: #3182ce;
+        }
+    }
+
     &.btn-sm {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
@@ -199,10 +208,12 @@
         background: #f7fafc;
         display: flex;
         gap: 0.5rem;
+        flex-wrap: wrap;
 
         .btn {
             flex: 1;
             justify-content: center;
+            min-width: 80px;
         }
     }
 }

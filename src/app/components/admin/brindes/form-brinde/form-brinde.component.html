@@ -1,0 +1,104 @@
+<div class="form-brinde-container">
+    <header class="page-header">
+        <div>
+            <h1>{{ isEdicao ? 'Editar Brinde' : 'Novo Brinde' }}</h1>
+            <p class="subtitle">{{ isEdicao ? 'Atualize as informações do brinde' : 'Cadastre um novo brinde para
+                resgate' }}</p>
+        </div>
+    </header>
+
+    <div *ngIf="erro" class="alert alert-danger">{{ erro }}</div>
+    <div *ngIf="sucesso" class="alert alert-success">{{ sucesso }}</div>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="brinde-form">
+        <div class="form-grid">
+            <!-- Foto -->
+            <div class="form-group form-group-full">
+                <label class="form-label">Foto do Brinde *</label>
+                <div class="foto-upload">
+                    <div class="foto-preview" *ngIf="preview">
+                        <img [src]="preview" alt="Preview">
+                    </div>
+                    <div class="foto-placeholder" *ngIf="!preview">
+                        <span class="icon">🎁</span>
+                        <p>Nenhuma foto selecionada</p>
+                    </div>
+                    <input type="file" id="foto" accept="image/*" (change)="onFile($event)" class="file-input">
+                    <label for="foto" class="btn btn-secondary">
+                        📤 Escolher Foto
+                    </label>
+                    <p class="hint">Imagem do brinde que será exibida na home e no resgate</p>
+                </div>
+            </div>
+
+            <!-- Nome -->
+            <div class="form-group">
+                <label for="nome" class="form-label">Nome do Brinde *</label>
+                <input type="text" id="nome" formControlName="nome" class="form-control"
+                    placeholder="Ex: Adesivo Patinhas">
+                <div *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched" class="error-message">
+                    Nome é obrigatório
+                </div>
+            </div>
+
+            <!-- Ordem -->
+            <div class="form-group">
+                <label for="ordem" class="form-label">Ordem de Exibição</label>
+                <input type="number" id="ordem" formControlName="ordem" class="form-control" min="0" placeholder="0">
+                <p class="hint-small">Ordem de exibição (menor número aparece primeiro)</p>
+            </div>
+
+            <!-- Descrição -->
+            <div class="form-group form-group-full">
+                <label for="descricao" class="form-label">Descrição *</label>
+                <textarea id="descricao" formControlName="descricao" class="form-control textarea" rows="4"
+                    placeholder="Descreva o brinde..."></textarea>
+                <div *ngIf="form.get('descricao')?.invalid && form.get('descricao')?.touched" class="error-message">
+                    Descrição é obrigatória
+                </div>
+            </div>
+
+            <!-- Quantidade Disponível -->
+            <div class="form-group">
+                <label for="quantidadeDisponivel" class="form-label">Quantidade em Estoque</label>
+                <input type="number" id="quantidadeDisponivel" formControlName="quantidadeDisponivel"
+                    class="form-control" min="0" placeholder="Opcional">
+                <p class="hint-small">Quantidade disponível para resgate (opcional)</p>
+            </div>
+
+            <!-- Status Ativo -->
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="ativo" formControlName="ativo" class="checkbox-input">
+                    <label for="ativo" class="checkbox-label">
+                        Brinde ativo no sistema
+                    </label>
+                </div>
+            </div>
+
+            <!-- Disponível para Resgate -->
+            <div class="form-group form-group-full">
+                <div class="info-box">
+                    <div class="info-icon">ℹ️</div>
+                    <div class="info-content">
+                        <strong>Sobre disponibilidade:</strong>
+                        <p>Use o botão "Selecionar para Resgate" na lista de brindes para escolher até 4 brindes que
+                            serão exibidos na home para resgate dos apoiadores.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="form-actions">
+            <button type="button" (click)="cancelar()" class="btn btn-secondary" [disabled]="carregando">
+                Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="carregando || form.invalid">
+                <span *ngIf="!carregando">{{ isEdicao ? 'Atualizar' : 'Criar' }} Brinde</span>
+                <span *ngIf="carregando">Salvando...</span>
+            </button>
+        </div>
+    </form>
+</div>

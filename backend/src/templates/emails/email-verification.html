@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificação de Email</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .content p {
+      color: #333;
+      line-height: 1.6;
+      margin: 15px 0;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 15px 30px;
+      background-color: #10b981;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    .button:hover {
+      background-color: #059669;
+    }
+
+    .footer {
+      background-color: #f8f8f8;
+      padding: 20px;
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🐾 Patas Solidárias</h1>
+    </div>
+    <div class="content">
+      <h2>Olá, {{nome}}!</h2>
+      <p>Obrigado por se cadastrar no Patas Solidárias!</p>
+      <p>Para ativar sua conta, clique no botão abaixo:</p>
+      <center>
+        <a href="{{verificationUrl}}" class="button">Verificar Email</a>
+      </center>
+      <p>Se você não criou esta conta, por favor ignore este email.</p>
+      <p>Este link expira em 24 horas.</p>
+    </div>
+    <div class="footer">
+      <p>&copy; 2025 Patas Solidárias - UTFPR Medianeira</p>
+      <p>Cuidando dos animais da UTFPR-MD com amor e dedicação</p>
+    </div>
+  </div>
+</body>
+
+</html>

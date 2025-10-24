@@ -69,6 +69,12 @@ export const adminRoutes: Routes = [
                         loadComponent: () => import('../components/admin/fotos/upload-fotos/upload-fotos.component')
                             .then(m => m.UploadFotosComponent),
                         title: 'Upload de Fotos - Admin'
+                    },
+                    {
+                        path: 'pendentes',
+                        loadComponent: () => import('../components/admin/fotos/fotos-pendentes/fotos-pendentes.component')
+                            .then(m => m.FotosPendentesComponent),
+                        title: 'Fotos Pendentes - Admin'
                     }
                 ]
             },

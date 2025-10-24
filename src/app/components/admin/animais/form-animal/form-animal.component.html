@@ -26,10 +26,21 @@
                         <span class="icon">📸</span>
                         <p>Nenhuma foto selecionada</p>
                     </div>
-                    <input type="file" id="foto" accept="image/*" (change)="onFileSelected($event)" class="file-input">
-                    <label for="foto" class="btn btn-secondary">
-                        Escolher Foto
-                    </label>
+                    <div class="foto-actions">
+                        <input type="file" id="foto" accept="image/*" (change)="onFileSelected($event)"
+                            class="file-input">
+                        <label for="foto" class="btn btn-secondary">
+                            📤 Upload Nova Foto
+                        </label>
+                        <button type="button" *ngIf="isEdicao && animalId" class="btn btn-outline"
+                            (click)="abrirModalTrocarFoto()">
+                            🖼️ Escolher da Galeria
+                        </button>
+                    </div>
+                    <p class="hint" *ngIf="isEdicao">
+                        💡 Dica: Faça upload de múltiplas fotos na seção "Fotos" e depois escolha qual será a foto de
+                        perfil aqui!
+                    </p>
                 </div>
             </div>
 
@@ -94,4 +105,10 @@
             </button>
         </div>
     </form>
+
+    <!-- Modal Trocar Foto de Perfil -->
+    <app-trocar-foto-perfil-modal *ngIf="mostrarModalTrocarFoto && animalId && animalAtual" [animalId]="animalId"
+        [animalNome]="animalAtual.nome" [fotoPerfilAtualId]="animalAtual.fotoPerfilId"
+        (fechar)="fecharModalTrocarFoto()" (fotoAlterada)="onFotoPerfilAlterada($event)">
+    </app-trocar-foto-perfil-modal>
 </div>

@@ -13,13 +13,14 @@ export class FotoService {
     constructor(private http: HttpClient) { }
 
     // Listar fotos
-    listarFotos(params?: { animalId?: string; limit?: number; skip?: number }): Observable<{
+    listarFotos(params?: { animalId?: string; status?: string; limit?: number; skip?: number }): Observable<{
         fotos: Foto[];
         total: number;
         hasMore: boolean;
     }> {
         let httpParams = new HttpParams();
         if (params?.animalId) httpParams = httpParams.set('animalId', params.animalId);
+        if (params?.status) httpParams = httpParams.set('status', params.status);
         if (params?.limit) httpParams = httpParams.set('limit', params.limit.toString());
         if (params?.skip) httpParams = httpParams.set('skip', params.skip.toString());
 
@@ -80,5 +81,18 @@ export class FotoService {
     // Deletar foto
     deletarFoto(id: string): Observable<{ message: string }> {
         return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
+    }
+
+    // Publicar fotos (marcar como publicadas e enviar email)
+    publicarFotos(fotosIds: string[]): Observable<{
+        message: string;
+        fotosPublicadas: number;
+        emailsEnviados: number;
+    }> {
+        return this.http.post<{
+            message: string;
+            fotosPublicadas: number;
+            emailsEnviados: number;
+        }>(`${this.apiUrl}/publicar`, { fotosIds });
     }
 }

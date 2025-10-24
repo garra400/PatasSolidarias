@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, RouterOutlet, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 import { AdminService } from '../../../service/admin.service';
-import { SidebarService } from '../../../service/sidebar.service';
+import { AdminSidebarService } from '../../../service/admin-sidebar.service';
 import { Subscription, filter } from 'rxjs';
 import { AdminPermissoes } from '../../../model/admin.model';
 
@@ -23,7 +23,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     private authService = inject(AuthService);
     private adminService = inject(AdminService);
     private router = inject(Router);
-    private sidebarService = inject(SidebarService);
+    private adminSidebarService = inject(AdminSidebarService);
     private subscriptions: Subscription[] = [];
 
     ngOnInit(): void {
@@ -39,8 +39,8 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
         });
         this.subscriptions.push(permSub);
 
-        // Sincronizar sidebar
-        const sidebarSub = this.sidebarService.sidebarOpen$.subscribe(isOpen => {
+        // Sincronizar sidebar admin
+        const sidebarSub = this.adminSidebarService.sidebarOpen$.subscribe(isOpen => {
             this.isSidebarOpen = isOpen;
         });
         this.subscriptions.push(sidebarSub);
@@ -58,7 +58,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
             filter(event => event instanceof NavigationEnd)
         ).subscribe(() => {
             if (window.innerWidth < 768) {
-                this.sidebarService.close();
+                this.adminSidebarService.close();
             }
         });
         this.subscriptions.push(routeSub);
@@ -69,7 +69,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     }
 
     toggleSidebar(): void {
-        this.sidebarService.toggle();
+        this.adminSidebarService.toggle();
     }
 
     logout(): void {
@@ -82,7 +82,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     navigateTo(route: string): void {
         this.router.navigate([route]);
         if (window.innerWidth < 768) {
-            this.sidebarService.close();
+            this.adminSidebarService.close();
         }
     }
 

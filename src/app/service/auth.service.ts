@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private apiUrl = 'http://localhost:3000/api/auth';
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private platformId = inject(PLATFORM_ID);
@@ -70,7 +70,7 @@ export class AuthService {
     console.log('🔧 AuthService inicializado');
     console.log('📊 useMockData:', environment.useMockData);
     console.log('🌐 apiUrl:', this.apiUrl);
-    
+
     this.isBrowser = isPlatformBrowser(this.platformId);
     const storedUser = this.isBrowser ? localStorage.getItem('currentUser') : null;
     this.currentUserSubject = new BehaviorSubject<User | null>(
@@ -83,90 +83,79 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(credentials: LoginCredentials): Observable<{ user: User; token: string }> {
-    console.log('🚀 Login chamado com:', credentials.email);
-    console.log('🔍 Verificando useMockData:', environment.useMockData);
-    
-    // Se useMockData estiver habilitado OU se houver erro de conexão, use mock
-    if (environment.useMockData) {
-      console.log('⚠️ UseMockData está TRUE - usando mock');
-      return this.loginMock(credentials);
-    }
+  login(credentials: LoginCredentials): Observable<{ success: boolean; token: string; user: User }> {
+    console.log('🚀 Tentando login no backend:', credentials.email);
 
-    console.log('🔌 Tentando conectar ao backend:', `${this.apiUrl}/login`);
-    console.log('📤 Enviando credenciais:', { email: credentials.email, senha: '***' });
-    
-    return this.http.post<{ user: User; token: string }>(`${this.apiUrl}/login`, credentials)
-      .pipe(
-        tap(response => {
-          console.log('✅ Login bem-sucedido no backend:', response);
+    return this.http.post<{ success: boolean; token: string; user: User }>(`${this.apiUrl}/login`, {
+      email: credentials.email,
+      senha: credentials.senha
+    }).pipe(
+      tap(response => {
+        console.log('✅ Login bem-sucedido:', response);
+        if (response.success && response.token && response.user) {
           if (this.isBrowser) {
             localStorage.setItem('currentUser', JSON.stringify(response.user));
             localStorage.setItem('token', response.token);
           }
           this.currentUserSubject.next(response.user);
-        }),
-        catchError((error) => {
-          console.error('❌ Erro ao conectar com backend:', error);
-          console.log('❌ Status do erro:', error.status);
-          console.log('❌ Tipo do erro:', typeof error.status);
-          
-          // Se for erro de autenticação (401/403), NÃO use mock - propague o erro
-          if (error.status === 401 || error.status === 403) {
-            console.log('🚫 Credenciais inválidas - NÃO fazendo fallback para mock');
-            console.log('🚫 Disparando throwError');
-            return throwError(() => error);
-          }
-          
-          // Apenas use mock se for erro de conexão (0, timeout, etc)
-          console.log('🔄 Erro de conexão - usando dados mock como fallback');
+        }
+      }),
+      catchError((error) => {
+        console.error('❌ Erro no login:', error);
+        // Fallback para mock apenas se backend não estiver disponível
+        if (error.status === 0) {
+          console.log('⚠️ Backend offline - usando mock');
           return this.loginMock(credentials);
-        }),
-        take(1)
-      );
+        }
+        return throwError(() => error);
+      })
+    );
   }
 
-  private loginMock(credentials: LoginCredentials): Observable<{ user: User; token: string }> {
+  private loginMock(credentials: LoginCredentials): Observable<{ success: boolean; token: string; user: User }> {
     console.log('🔐 Mock login:', credentials.email);
     const response = {
-      user: this.mockUser,
-      token: 'mock-jwt-token-12345'
+      success: true,
+      token: 'mock-jwt-token-12345',
+      user: this.mockUser
     };
-    
+
     if (this.isBrowser) {
       localStorage.setItem('currentUser', JSON.stringify(response.user));
       localStorage.setItem('token', response.token);
     }
     this.currentUserSubject.next(response.user);
-    
+
     return of(response).pipe(delay(800));
   }
 
-  register(userData: UserRegistration): Observable<{ message: string }> {
-    if (environment.useMockData) {
-      console.log('📝 Mock register:', userData.email);
-      return of({ message: 'Usuário registrado com sucesso! Verifique seu email.' }).pipe(delay(1000));
-    }
+  register(userData: UserRegistration): Observable<{ success: boolean; message: string }> {
+    console.log('� Tentando registrar no backend:', userData.email);
 
-    console.log('🔌 Tentando registrar no backend:', `${this.apiUrl}/register`);
-    console.log('📤 Dados enviados:', userData);
-    
-    return this.http.post<{ message: string }>(`${this.apiUrl}/register`, userData)
-      .pipe(
-        tap(response => {
-          console.log('✅ Registro bem-sucedido:', response);
-        }),
-        catchError((error) => {
-          console.error('❌ Erro ao registrar no backend:', error);
-          console.log('🔄 Usando mock como fallback');
-          return of({ message: 'Usuário registrado com sucesso! Verifique seu email.' }).pipe(delay(1000));
-        })
-      );
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/register`, {
+      nome: userData.nome,
+      email: userData.email,
+      senha: userData.senha,
+      telefone: userData.telefone,
+      cpf: userData.cpf
+    }).pipe(
+      tap(response => {
+        console.log('✅ Registro bem-sucedido:', response);
+      }),
+      catchError((error) => {
+        console.error('❌ Erro ao registrar:', error);
+        if (error.status === 0) {
+          console.log('⚠️ Backend offline - usando mock');
+          return of({ success: true, message: 'Usuário registrado com sucesso! Verifique seu email.' }).pipe(delay(1000));
+        }
+        return throwError(() => error);
+      })
+    );
   }
 
   verifyEmail(token: string): Observable<any> {
     if (environment.useMockData) {
-      return of({ 
+      return of({
         message: 'Email verificado com sucesso!',
         user: { id: '1', nome: 'Mock User', email: 'mock@test.com', tipo: 'adotante' },
         token: 'mock-jwt-token'

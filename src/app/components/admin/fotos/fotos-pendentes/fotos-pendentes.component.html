@@ -1,0 +1,87 @@
+<div class="fotos-pendentes-container">
+    <header class="page-header">
+        <div>
+            <h1>Fotos Pendentes</h1>
+            <p class="subtitle">Gerencie fotos aguardando publicação</p>
+        </div>
+        <a routerLink="/adm/fotos/upload" class="btn btn-secondary">
+            <span class="icon">📤</span> Upload Fotos
+        </a>
+    </header>
+
+    <div *ngIf="erro" class="alert alert-danger">
+        {{ erro }}
+    </div>
+
+    <div *ngIf="sucesso" class="alert alert-success">
+        {{ sucesso }}
+    </div>
+
+    <div *ngIf="carregando" class="loading">
+        <div class="spinner"></div>
+        <p>Carregando fotos pendentes...</p>
+    </div>
+
+    <div *ngIf="!carregando && fotosPendentes.length === 0" class="empty-state">
+        <div class="empty-icon">📸</div>
+        <h2>Nenhuma foto pendente</h2>
+        <p>Todas as fotos foram publicadas ou não há fotos aguardando.</p>
+        <a routerLink="/adm/fotos/upload" class="btn btn-primary">Fazer Upload</a>
+    </div>
+
+    <div *ngIf="!carregando && fotosPendentes.length > 0">
+        <!-- Ações em massa -->
+        <div class="bulk-actions">
+            <div class="bulk-actions-left">
+                <label class="checkbox-label">
+                    <input type="checkbox" [checked]="todasSelecionadas" (change)="selecionarTodas()">
+                    <span>Selecionar todas ({{ fotosSelecionadas.size }} de {{ fotosPendentes.length }})</span>
+                </label>
+            </div>
+
+            <button class="btn btn-primary btn-publish" [disabled]="!algumaSelecionada || enviandoEmail"
+                (click)="dispararNotificacoes()">
+                <span *ngIf="!enviandoEmail">📧 Disparar Notificações ({{ fotosSelecionadas.size }})</span>
+                <span *ngIf="enviandoEmail">Enviando...</span>
+            </button>
+        </div>
+
+        <!-- Grid de fotos -->
+        <div class="fotos-grid">
+            <div *ngFor="let foto of fotosPendentes" class="foto-card"
+                [class.selected]="fotosSelecionadas.has(foto.id!)">
+                <div class="foto-checkbox">
+                    <input type="checkbox" [id]="'foto-' + foto.id" [checked]="fotosSelecionadas.has(foto.id!)"
+                        (change)="toggleSelecionarFoto(foto.id!)">
+                </div>
+
+                <div class="foto-image">
+                    <img [src]="getFotoUrl(foto)" [alt]="foto.descricao || 'Foto'">
+                </div>
+
+                <div class="foto-info">
+                    <p class="foto-descricao" *ngIf="foto.descricao">
+                        <strong>Descrição:</strong> {{ foto.descricao }}
+                    </p>
+                    <p class="foto-descricao" *ngIf="!foto.descricao">
+                        <em>Sem descrição</em>
+                    </p>
+
+                    <p class="foto-animais">
+                        <strong>Animais:</strong> {{ getNomesAnimais(foto) }}
+                    </p>
+
+                    <p class="foto-data">
+                        <strong>Enviada em:</strong> {{ foto.dataCadastro | date:'dd/MM/yyyy HH:mm' }}
+                    </p>
+                </div>
+
+                <div class="foto-actions">
+                    <button class="btn btn-sm btn-danger" (click)="deletarFoto(foto.id!)" title="Deletar foto">
+                        🗑️ Deletar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
