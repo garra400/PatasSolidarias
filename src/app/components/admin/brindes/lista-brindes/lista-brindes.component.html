@@ -1,0 +1,87 @@
+<div class="lista-brindes-container">
+    <div class="page-header">
+        <div>
+            <h1>Gerenciar Brindes</h1>
+            <p class="subtitle">Lista de todos os brindes cadastrados no sistema</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-selecionar" (click)="abrirSelecao()">
+                ⭐ Selecionar para Resgate
+            </button>
+            <a routerLink="/adm/brindes/novo" class="btn btn-primary">
+                ➕ Novo Brinde
+            </a>
+        </div>
+    </div>
+
+    <div *ngIf="erro" class="alert alert-danger">{{ erro }}</div>
+    <div *ngIf="sucesso" class="alert alert-success">{{ sucesso }}</div>
+
+    <div *ngIf="carregando" class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando brindes...</p>
+    </div>
+
+    <div *ngIf="!carregando && brindes.length === 0" class="empty-state">
+        <div class="empty-icon">🎁</div>
+        <h2>Nenhum brinde cadastrado</h2>
+        <p>Comece adicionando seu primeiro brinde para os apoiadores resgatarem.</p>
+        <a routerLink="/adm/brindes/novo" class="btn btn-primary">
+            Adicionar Primeiro Brinde
+        </a>
+    </div>
+
+    <div *ngIf="!carregando && brindes.length > 0">
+        <div class="info-box">
+            <span class="info-icon">ℹ️</span>
+            <div class="info-content">
+                <strong>Brindes Disponíveis para Resgate:</strong>
+                <p>
+                    Os brindes marcados como "Disponível" são aqueles selecionados para aparecer na página inicial
+                    (máximo 4). Use o botão "Selecionar para Resgate" para escolher quais brindes exibir.
+                </p>
+            </div>
+        </div>
+
+        <div class="brindes-grid">
+            <div *ngFor="let brinde of brindes" class="brinde-card">
+                <div class="card-foto">
+                    <img [src]="brinde.fotoUrl || 'assets/placeholders/brinde-placeholder.svg'" [alt]="brinde.nome">
+                    <div class="badges">
+                        <span class="badge" [class.badge-success]="brinde.disponivelParaResgate"
+                            [class.badge-secondary]="!brinde.disponivelParaResgate">
+                            {{ brinde.disponivelParaResgate ? '⭐ Disponível' : '⏸️ Indisponível' }}
+                        </span>
+                        <span class="badge" [class.badge-success]="brinde.ativo" [class.badge-danger]="!brinde.ativo">
+                            {{ brinde.ativo ? '✓ Ativo' : '✗ Inativo' }}
+                        </span>
+                    </div>
+                    <div *ngIf="brinde.ordem != null && brinde.ordem >= 0" class="ordem-badge">
+                        #{{ brinde.ordem }}
+                    </div>
+                </div>
+
+                <div class="card-info">
+                    <h3 class="brinde-nome">{{ brinde.nome }}</h3>
+                    <p class="brinde-descricao">{{ brinde.descricao }}</p>
+
+                    <div class="brinde-meta">
+                        <div *ngIf="brinde.quantidadeDisponivel != null" class="meta-item">
+                            <span class="meta-label">Estoque:</span>
+                            <span class="meta-value">{{ brinde.quantidadeDisponivel }} unidades</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <a [routerLink]="['/adm/brindes/editar', brinde._id]" class="btn btn-sm btn-secondary">
+                        ✏️ Editar
+                    </a>
+                    <button (click)="confirmarDelecao(brinde)" class="btn btn-sm btn-danger">
+                        🗑️ Deletar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

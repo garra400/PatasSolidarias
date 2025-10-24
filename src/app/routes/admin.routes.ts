@@ -102,6 +102,12 @@ export const adminRoutes: Routes = [
                         loadComponent: () => import('../components/admin/brindes/form-brinde/form-brinde.component')
                             .then(m => m.FormBrindeComponent),
                         title: 'Editar Brinde - Admin'
+                    },
+                    {
+                        path: 'selecionar',
+                        loadComponent: () => import('../components/admin/brindes/selecionar-brindes/selecionar-brindes.component')
+                            .then(m => m.SelecionarBrindesComponent),
+                        title: 'Selecionar Brindes para Resgate - Admin'
                     }
                 ]
             },

@@ -96,3 +96,73 @@ export const sendBulkEmail = async (recipients, { subject, html, text }) => {
 
     return results;
 };
+
+// Enviar email sobre brindes disponíveis
+export const enviarEmailBrindesDisponiveis = async (brindes) => {
+    try {
+        // Buscar todos os apoiadores ativos
+        const Usuario = (await import('../models/Usuario.model.js')).default;
+        const apoiadores = await Usuario.find({ papel: 'doador', ativo: true });
+
+        if (apoiadores.length === 0) {
+            console.log('Nenhum apoiador ativo para enviar email');
+            return { success: 0, failed: 0 };
+        }
+
+        // Gerar lista HTML de brindes
+        const brindesHtml = brindes.map(brinde => `
+            <div style="margin: 20px 0; padding: 15px; background: #f7fafc; border-radius: 8px; border-left: 4px solid #667eea;">
+                <h3 style="margin: 0 0 10px 0; color: #333;">${brinde.nome}</h3>
+                <p style="margin: 0; color: #555; line-height: 1.5;">${brinde.descricao}</p>
+            </div>
+        `).join('');
+
+        const subject = '🎁 Novos Brindes Disponíveis para Resgate!';
+        const html = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #667eea; margin: 0;">Patas Solidárias</h1>
+                    <p style="color: #666; margin: 10px 0 0 0;">Novidades para você! 🎉</p>
+                </div>
+
+                <div style="background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <p style="font-size: 16px; color: #333; line-height: 1.6;">
+                        Olá, <strong>{{nome}}</strong>!
+                    </p>
+                    
+                    <p style="font-size: 16px; color: #333; line-height: 1.6;">
+                        Temos ótimas notícias! Novos brindes estão disponíveis para resgate. 
+                        Confira abaixo quais são:
+                    </p>
+
+                    ${brindesHtml}
+
+                    <p style="font-size: 16px; color: #333; line-height: 1.6; margin-top: 30px;">
+                        Acesse sua conta para solicitar o resgate do brinde que mais te agrada!
+                    </p>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="${process.env.FRONTEND_URL}/meus-brindes" 
+                           style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                                  color: white; text-decoration: none; padding: 15px 30px; border-radius: 8px; 
+                                  font-weight: bold; font-size: 16px;">
+                            Ver Brindes Disponíveis
+                        </a>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px; color: #999; font-size: 14px;">
+                    <p>Obrigado por apoiar as Patas Solidárias! 🐾❤️</p>
+                </div>
+            </div>
+        `;
+
+        const results = await sendBulkEmail(apoiadores, { subject, html });
+
+        console.log(`📧 Emails de brindes enviados: ${results.success} sucesso, ${results.failed} falhas`);
+        return results;
+    } catch (error) {
+        console.error('❌ Erro ao enviar emails de brindes:', error);
+        throw error;
+    }
+};

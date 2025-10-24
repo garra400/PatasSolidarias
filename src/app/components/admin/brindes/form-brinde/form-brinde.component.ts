@@ -8,66 +8,8 @@ import { BrindeService } from '@services/brinde.service';
     selector: 'app-form-brinde',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
-    template: `
-    <div class="container">
-      <header>
-        <h1>{{ isEdicao ? 'Editar Brinde' : 'Novo Brinde' }}</h1>
-      </header>
-
-      <div *ngIf="erro" class="alert alert-danger">{{ erro }}</div>
-      <div *ngIf="sucesso" class="alert alert-success">{{ sucesso }}</div>
-
-      <form [formGroup]="form" (ngSubmit)="salvar()" class="form">
-        <div class="group">
-          <label>Nome *</label>
-          <input type="text" formControlName="nome" class="control" placeholder="Nome do brinde">
-        </div>
-
-        <div class="group">
-          <label>Descrição *</label>
-          <textarea formControlName="descricao" class="control" rows="4"></textarea>
-        </div>
-
-        <div class="group">
-          <label>Foto</label>
-          <input type="file" accept="image/*" (change)="onFile($event)" class="control">
-          <img *ngIf="preview" [src]="preview" class="preview">
-        </div>
-
-        <div class="group">
-          <label>
-            <input type="checkbox" formControlName="disponivelParaResgate">
-            Disponível para resgate
-          </label>
-        </div>
-
-        <div class="actions">
-          <button type="button" (click)="cancelar()" class="btn btn-secondary" [disabled]="carregando">Cancelar</button>
-          <button type="submit" class="btn btn-primary" [disabled]="carregando || form.invalid">
-            {{ carregando ? 'Salvando...' : 'Salvar' }}
-          </button>
-        </div>
-      </form>
-    </div>
-  `,
-    styles: [`
-    .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
-    h1 { font-size: 2rem; font-weight: 700; color: #333; margin-bottom: 2rem; }
-    .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
-    .alert-danger { background-color: #fee; color: #c33; border: 1px solid #fcc; }
-    .alert-success { background-color: #efe; color: #3c3; border: 1px solid #cfc; }
-    .form { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
-    .group { margin-bottom: 1.5rem; }
-    label { display: block; font-weight: 600; color: #333; margin-bottom: 0.5rem; }
-    .control { width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; }
-    .control:focus { outline: none; border-color: #667eea; }
-    .preview { max-width: 200px; margin-top: 1rem; border-radius: 8px; }
-    .actions { display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem; }
-    .btn { padding: 0.75rem 1.5rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-    .btn-secondary { background: #e2e8f0; color: #4a5568; }
-  `]
+    templateUrl: './form-brinde.component.html',
+    styleUrls: ['./form-brinde.component.scss']
 })
 export class FormBrindeComponent implements OnInit {
     form!: FormGroup;
@@ -87,8 +29,10 @@ export class FormBrindeComponent implements OnInit {
     ngOnInit(): void {
         this.form = this.fb.group({
             nome: ['', Validators.required],
+            ordem: [0, [Validators.required, Validators.min(0)]],
             descricao: ['', Validators.required],
-            disponivelParaResgate: [true]
+            quantidadeDisponivel: [null],
+            ativo: [true]
         });
 
         this.route.params.subscribe(params => {

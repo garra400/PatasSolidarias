@@ -1,0 +1,138 @@
+<div class="selecionar-brindes-container">
+    <div class="page-header">
+        <div>
+            <h1>⭐ Selecionar Brindes para Resgate</h1>
+            <p class="subtitle">Escolha até {{ MAX_SELECAO }} brindes para exibir na página inicial</p>
+        </div>
+        <div class="header-info">
+            <span class="contador" [class.contador-completo]="brindesSelecionados.length === MAX_SELECAO">
+                {{ brindesSelecionados.length }} / {{ MAX_SELECAO }} selecionados
+            </span>
+        </div>
+    </div>
+
+    <div *ngIf="erro" class="alert alert-danger">{{ erro }}</div>
+    <div *ngIf="sucesso" class="alert alert-success">{{ sucesso }}</div>
+
+    <div *ngIf="carregando" class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando brindes...</p>
+    </div>
+
+    <div *ngIf="!carregando && brindes.length === 0" class="empty-state">
+        <div class="empty-icon">🎁</div>
+        <h2>Nenhum brinde ativo encontrado</h2>
+        <p>Crie brindes ativos antes de selecionar quais exibir para resgate.</p>
+        <a [routerLink]="['/adm/brindes/novo']" class="btn btn-primary">
+            Criar Brinde
+        </a>
+    </div>
+
+    <div *ngIf="!carregando && brindes.length > 0">
+        <div class="info-box">
+            <span class="info-icon">💡</span>
+            <div class="info-content">
+                <strong>Como funciona:</strong>
+                <p>
+                    Selecione até {{ MAX_SELECAO }} brindes que os apoiadores poderão resgatar.
+                    Ao confirmar a seleção, <strong>todos os apoiadores receberão um email</strong>
+                    informando sobre os brindes disponíveis.
+                </p>
+            </div>
+        </div>
+
+        <div class="brindes-grid">
+            <div *ngFor="let brinde of brindes" class="brinde-card" [class.selecionado]="estaSelecionado(brinde._id)"
+                [class.desabilitado]="!podeSelecionar(brinde._id)"
+                (click)="podeSelecionar(brinde._id) && toggleSelecao(brinde._id)">
+                <div class="checkbox-overlay">
+                    <input type="checkbox" [checked]="estaSelecionado(brinde._id)"
+                        [disabled]="!podeSelecionar(brinde._id)" (click)="$event.stopPropagation()"
+                        (change)="toggleSelecao(brinde._id)" class="checkbox-input">
+                    <span class="checkmark">✓</span>
+                </div>
+
+                <div class="card-foto">
+                    <img [src]="brinde.fotoUrl || 'assets/placeholders/brinde-placeholder.svg'" [alt]="brinde.nome">
+                    <div *ngIf="brinde.ordem != null && brinde.ordem >= 0" class="ordem-badge">
+                        #{{ brinde.ordem }}
+                    </div>
+                </div>
+
+                <div class="card-info">
+                    <h3 class="brinde-nome">{{ brinde.nome }}</h3>
+                    <p class="brinde-descricao">{{ brinde.descricao }}</p>
+
+                    <div *ngIf="brinde.quantidadeDisponivel != null" class="estoque-info">
+                        <span class="estoque-label">Estoque:</span>
+                        <span class="estoque-valor">{{ brinde.quantidadeDisponivel }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-section" *ngIf="brindesSelecionados.length > 0">
+            <h2>📋 Preview da Seleção</h2>
+            <p class="preview-subtitle">Estes brindes aparecerão na página inicial:</p>
+
+            <div class="preview-grid">
+                <div *ngFor="let brinde of getBrindesSelecionadosDetalhes()" class="preview-item">
+                    <img [src]="brinde.fotoUrl || 'assets/placeholders/brinde-placeholder.svg'" [alt]="brinde.nome">
+                    <span class="preview-nome">{{ brinde.nome }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" (click)="cancelar()" class="btn btn-secondary" [disabled]="salvando">
+                Cancelar
+            </button>
+            <button type="button" (click)="abrirModalConfirmacao()" class="btn btn-primary"
+                [disabled]="salvando || brindesSelecionados.length === 0">
+                {{ salvando ? 'Salvando...' : 'Salvar Seleção' }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação -->
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>⚠️ Confirmar Alteração</h2>
+            <button class="btn-close" (click)="fecharModal()">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="warning-box">
+                <span class="warning-icon">📧</span>
+                <div class="warning-text">
+                    <strong>Atenção!</strong>
+                    <p>
+                        Ao confirmar, <strong>todos os apoiadores cadastrados receberão um email</strong>
+                        informando sobre os brindes disponíveis para resgate.
+                    </p>
+                </div>
+            </div>
+
+            <div class="selecao-resumo">
+                <h3>Brindes selecionados ({{ brindesSelecionados.length }}):</h3>
+                <ul>
+                    <li *ngFor="let brinde of getBrindesSelecionadosDetalhes()">
+                        <strong>{{ brinde.nome }}</strong>
+                        <span class="resumo-descricao">{{ brinde.descricao }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" (click)="fecharModal()" class="btn btn-secondary">
+                Cancelar
+            </button>
+            <button type="button" (click)="confirmarSelecao()" class="btn btn-primary">
+                Confirmar e Enviar Email
+            </button>
+        </div>
+    </div>
+</div>

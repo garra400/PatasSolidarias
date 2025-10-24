@@ -1,9 +1,19 @@
 import express from 'express';
 import { protect, authorize } from '../middlewares/auth.middleware.js';
 import { upload } from '../config/multer.js';
-import { getBrindes, getBrinde, createBrinde, updateBrinde, deleteBrinde } from '../controllers/brinde.controller.js';
+import {
+    getBrindes,
+    getBrinde,
+    createBrinde,
+    updateBrinde,
+    deleteBrinde,
+    atualizarDisponibilidadeBatch
+} from '../controllers/brinde.controller.js';
 
 const router = express.Router();
+
+// Rota de batch deve vir antes das rotas com :id
+router.put('/batch/disponibilidade', protect, authorize('admin'), atualizarDisponibilidadeBatch);
 
 router.get('/', protect, getBrindes);
 router.get('/:id', protect, getBrinde);
