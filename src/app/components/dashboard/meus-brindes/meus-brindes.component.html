@@ -78,15 +78,23 @@
       <span class="badge-count">{{ brindesDisponiveis }}</span>
     </div>
 
+    @if (isLoadingBrindes) {
+    <div class="loading-brindes">
+      <div class="spinner"></div>
+      <p>Carregando brindes...</p>
+    </div>
+    }
+
+    @if (!isLoadingBrindes && brindesCatalogo.length > 0) {
     <div class="brindes-grid">
-      @for (brinde of brindes; track brinde.id) {
+      @for (brinde of brindesCatalogo; track brinde.id) {
       <div class="brinde-card premium">
         <div class="brinde-ribbon">
           <i class="fas fa-gift"></i>
-          Brinde #{{ $index + 1 }}
+          Disponível
         </div>
         <div class="brinde-image">
-          <img [src]="brinde.imagemUrl" [alt]="brinde.nome" [title]="brinde.nome" role="img">
+          <img [src]="brinde.foto" [alt]="brinde.nome" [title]="brinde.nome" role="img">
           <div class="brinde-overlay">
             <i class="fas fa-gift fa-3x"></i>
           </div>
@@ -96,23 +104,23 @@
           <p>{{ brinde.descricao }}</p>
 
           <div class="brinde-actions">
-            @if (brinde.status === 'disponivel') {
-            <button class="btn-primary">
+            <button class="btn-primary" (click)="abrirModalResgate(brinde)">
               <i class="fas fa-hand-holding-heart"></i>
               Resgatar Brinde
             </button>
-            }
-            @if (brinde.status === 'resgatado') {
-            <div class="status-resgatado">
-              <i class="fas fa-check-circle"></i>
-              Resgatado
-            </div>
-            }
           </div>
         </div>
       </div>
       }
     </div>
+    }
+
+    @if (!isLoadingBrindes && brindesCatalogo.length === 0) {
+    <div class="empty-brindes">
+      <i class="fas fa-inbox"></i>
+      <p>Nenhum brinde disponível no momento. Em breve novos brindes serão adicionados!</p>
+    </div>
+    }
   </div>
   }
 
@@ -248,4 +256,121 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal de Resgate -->
+  @if (showModalResgate) {
+  <div class="modal-overlay" (click)="fecharModalResgate()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>
+          <i class="fas fa-gift"></i>
+          Solicitar Resgate
+        </h2>
+        <button class="btn-close" (click)="fecharModalResgate()" title="Fechar modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (successMessage) {
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i>
+          {{ successMessage }}
+        </div>
+        }
+
+        @if (errorMessage) {
+        <div class="alert alert-error">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ errorMessage }}
+        </div>
+        }
+
+        @if (!successMessage && brindeSelecionado) {
+        <div class="brinde-preview">
+          <img [src]="brindeSelecionado.foto" [alt]="brindeSelecionado.nome">
+          <div class="brinde-info-modal">
+            <h3>{{ brindeSelecionado.nome }}</h3>
+            <p>{{ brindeSelecionado.descricao }}</p>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>
+            <i class="fas fa-calendar-alt"></i>
+            Escolha a Data
+          </h3>
+          <p class="form-hint">Selecione um dia disponível para retirar seu brinde</p>
+          <input type="date" class="input-date" [min]="getMinDate()" [max]="getMaxDate()"
+            (change)="onDataChange($event)" [disabled]="isSubmitting" title="Selecione a data de resgate"
+            placeholder="Selecione uma data">
+
+          @if (dataSelecionada) {
+          <div class="data-selecionada">
+            <i class="fas fa-check-circle"></i>
+            {{ formatarData(dataSelecionada) }}
+          </div>
+          }
+        </div>
+
+        @if (horariosDisponiveis.length > 0) {
+        <div class="form-section">
+          <h3>
+            <i class="fas fa-clock"></i>
+            Escolha o Horário
+          </h3>
+          <p class="form-hint">Selecione o melhor horário para você</p>
+          <div class="horarios-grid">
+            @for (horario of horariosDisponiveis; track $index) {
+            <button class="horario-btn" [class.selected]="horarioSelecionado === horario"
+              (click)="horarioSelecionado = horario" [disabled]="isSubmitting">
+              <i class="fas fa-clock"></i>
+              {{ formatarHorario(horario) }}
+            </button>
+            }
+          </div>
+        </div>
+        }
+
+        <div class="form-section">
+          <h3>
+            <i class="fas fa-comment"></i>
+            Observações (opcional)
+          </h3>
+          <p class="form-hint">Alguma informação adicional que queira nos passar?</p>
+          <textarea class="textarea-observacoes" [(ngModel)]="observacoes"
+            placeholder="Ex: Prefiro retirar na parte da manhã..." rows="4" [disabled]="isSubmitting"></textarea>
+        </div>
+
+        <div class="info-resgate">
+          <i class="fas fa-info-circle"></i>
+          <p>
+            Após confirmar, você receberá um email com todos os detalhes do resgate.
+            Nossa equipe entrará em contato para confirmar o horário.
+          </p>
+        </div>
+        }
+      </div>
+
+      @if (!successMessage) {
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="fecharModalResgate()" [disabled]="isSubmitting">
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        <button class="btn-confirm" (click)="solicitarResgate()"
+          [disabled]="!brindeSelecionado || !dataSelecionada || !horarioSelecionado || isSubmitting">
+          @if (isSubmitting) {
+          <span class="spinner-small"></span>
+          Processando...
+          } @else {
+          <i class="fas fa-paper-plane"></i>
+          Confirmar Resgate
+          }
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+  }
 </div>

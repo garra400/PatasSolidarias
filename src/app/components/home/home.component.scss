@@ -227,6 +227,7 @@
         }
       }
     }
+
     .sponsor-image-wrapper {
       display: flex;
       flex-direction: column;
@@ -333,6 +334,7 @@
 
 // Responsive
 @media (max-width: 768px) {
+
   .project-info .info-content,
   .animal-carousel .carousel-content,
   .sponsor-section .sponsor-content {
@@ -394,7 +396,7 @@
   padding: 0.75rem;
   text-align: center;
   background: rgba(255, 255, 255, 0.95);
-  
+
   .brinde-nome {
     font-size: 0.9rem;
     font-weight: 600;
@@ -408,6 +410,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }

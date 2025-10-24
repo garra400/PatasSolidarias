@@ -35,56 +35,46 @@
 
       <!-- Loading -->
       @if (isLoadingAnimals) {
-        <div class="loading-animals">
-          <div class="spinner"></div>
-          <p>Carregando nossos animais...</p>
-        </div>
+      <div class="loading-animals">
+        <div class="spinner"></div>
+        <p>Carregando nossos animais...</p>
+      </div>
       }
 
       <!-- Carousel com animais -->
       @if (!isLoadingAnimals && currentAnimal) {
-        <div class="carousel-container">
-          <div class="carousel-content">
-            <div class="animal-image-wrapper">
-              <div class="animal-image-border">
-                <img 
-                  [src]="currentAnimal.imagemPrincipal" 
-                  [alt]="currentAnimal.nome" 
-                  [title]="currentAnimal.nome"
-                  role="img" 
-                  class="animal-image" 
-                  (error)="onImageError($event)"
-                />
-              </div>
+      <div class="carousel-container">
+        <div class="carousel-content">
+          <div class="animal-image-wrapper">
+            <div class="animal-image-border">
+              <img [src]="currentAnimal.imagemPrincipal" [alt]="currentAnimal.nome" [title]="currentAnimal.nome"
+                role="img" class="animal-image" (error)="onImageError($event)" />
             </div>
+          </div>
 
-            <div class="animal-info">
-              <h3>{{ currentAnimal.nome }}</h3>
-              <p>{{ currentAnimal.descricao }}</p>
-              <div class="carousel-controls">
-                <button (click)="previousAnimal()" class="carousel-btn" title="Anterior">❮</button>
-                <div class="carousel-dots">
-                  @for (animal of animals; track animal._id; let i = $index) {
-                    <span 
-                      [class.active]="i === currentAnimalIndex" 
-                      (click)="currentAnimalIndex = i" 
-                      class="dot"
-                      [title]="animal.nome"
-                    ></span>
-                  }
-                </div>
-                <button (click)="nextAnimal()" class="carousel-btn" title="Próximo">❯</button>
+          <div class="animal-info">
+            <h3>{{ currentAnimal.nome }}</h3>
+            <p>{{ currentAnimal.descricao }}</p>
+            <div class="carousel-controls">
+              <button (click)="previousAnimal()" class="carousel-btn" title="Anterior">❮</button>
+              <div class="carousel-dots">
+                @for (animal of animals; track animal._id; let i = $index) {
+                <span [class.active]="i === currentAnimalIndex" (click)="currentAnimalIndex = i" class="dot"
+                  [title]="animal.nome"></span>
+                }
               </div>
+              <button (click)="nextAnimal()" class="carousel-btn" title="Próximo">❯</button>
             </div>
           </div>
         </div>
+      </div>
       }
 
       <!-- Estado vazio -->
       @if (!isLoadingAnimals && !currentAnimal) {
-        <div class="empty-state">
-          <p>Nenhum animal cadastrado no momento</p>
-        </div>
+      <div class="empty-state">
+        <p>Nenhum animal cadastrado no momento</p>
+      </div>
       }
     </div>
   </section>
@@ -116,50 +106,45 @@
 
       <div class="stickers-showcase">
         <h3>{{ getTituloBrindes() }}</h3>
-        
+
         <!-- Loading -->
         @if (isLoadingBrindes) {
-          <div class="loading-brindes">
-            <div class="spinner"></div>
-            <p>Carregando brindes...</p>
-          </div>
+        <div class="loading-brindes">
+          <div class="spinner"></div>
+          <p>Carregando brindes...</p>
+        </div>
         }
 
         <!-- Brindes da API -->
         @if (!isLoadingBrindes && brindesDestaque.length > 0) {
-          <div class="stickers-grid">
-            @for (brinde of brindesDestaque; track brinde.id) {
-              <div class="sticker-item">
-                <img 
-                  [src]="getImageUrl(brinde)" 
-                  [alt]="brinde.nome"
-                  [title]="brinde.nome"
-                  (error)="onImageError($event)"
-                />
-                <div class="brinde-info">
-                  <span class="brinde-nome">{{ brinde.nome }}</span>
-                </div>
-              </div>
-            }
+        <div class="stickers-grid">
+          @for (brinde of brindesDestaque; track brinde.id) {
+          <div class="sticker-item">
+            <img [src]="getImageUrl(brinde)" [alt]="brinde.nome" [title]="brinde.nome" (error)="onImageError($event)" />
+            <div class="brinde-info">
+              <span class="brinde-nome">{{ brinde.nome }}</span>
+            </div>
           </div>
+          }
+        </div>
         }
 
         <!-- Fallback para imagens estáticas -->
         @if (!isLoadingBrindes && brindesDestaque.length === 0) {
-          <div class="stickers-grid">
-            <div class="sticker-item">
-              <img src="/assets/images/figurinha1.jpg" alt="Adesivo 1">
-            </div>
-            <div class="sticker-item">
-              <img src="/assets/images/figurinha2.jpg" alt="Adesivo 2">
-            </div>
-            <div class="sticker-item">
-              <img src="/assets/images/figurinha3.jpg" alt="Adesivo 3">
-            </div>
-            <div class="sticker-item">
-              <img src="/assets/images/figurinha4.jpg" alt="Adesivo 4">
-            </div>
+        <div class="stickers-grid">
+          <div class="sticker-item">
+            <img src="/assets/images/figurinha1.jpg" alt="Adesivo 1">
           </div>
+          <div class="sticker-item">
+            <img src="/assets/images/figurinha2.jpg" alt="Adesivo 2">
+          </div>
+          <div class="sticker-item">
+            <img src="/assets/images/figurinha3.jpg" alt="Adesivo 3">
+          </div>
+          <div class="sticker-item">
+            <img src="/assets/images/figurinha4.jpg" alt="Adesivo 4">
+          </div>
+        </div>
         }
       </div>
     </div>

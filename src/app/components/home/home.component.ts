@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
         this.animals = animais;
         console.log('✅ Animais carregados:', animais.length);
         this.isLoadingAnimals = false;
-        
+
         if (this.animals.length > 0) {
           this.startCarousel();
         }
@@ -124,7 +124,7 @@ export class HomeComponent implements OnInit {
         ativo: true
       }
     ];
-    
+
     if (this.animals.length > 0) {
       this.startCarousel();
     }
@@ -159,10 +159,10 @@ export class HomeComponent implements OnInit {
 
   getTituloBrindes(): string {
     if (this.brindesDestaque.length === 0) return 'Brindes Exclusivos';
-    
+
     // Verificar se todos são do mesmo tipo
     const tipos = [...new Set(this.brindesDestaque.map(b => b.nome.toLowerCase()))];
-    
+
     if (tipos.length === 1) {
       const tipo = tipos[0];
       if (tipo.includes('adesivo') || tipo.includes('figurinha')) {
@@ -175,7 +175,7 @@ export class HomeComponent implements OnInit {
         return 'Confira as camisetas exclusivas dos nossos pets';
       }
     }
-    
+
     return 'Confira os brindes exclusivos dos nossos pets';
   }
 
