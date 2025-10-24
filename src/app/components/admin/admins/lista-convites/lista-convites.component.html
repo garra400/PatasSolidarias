@@ -1,0 +1,305 @@
+<div class="convites-container">
+    <!-- Header -->
+    <div class="header">
+        <div class="titulo-secao">
+            <div class="icone-titulo">✉️</div>
+            <div>
+                <h1>Convites de Administrador</h1>
+                <p class="subtitulo">Gerencie convites e permissões de acesso ao painel administrativo</p>
+            </div>
+        </div>
+        <button class="btn-novo-convite" (click)="abrirModalPermissoes()">
+            <span class="icon">➕</span>
+            Enviar Novo Convite
+        </button>
+    </div>
+
+    <!-- Alertas -->
+    @if (sucesso) {
+    <div class="alert alert-sucesso">
+        <span class="alert-icon">✅</span>
+        <p>{{ sucesso }}</p>
+        <button class="alert-close" (click)="sucesso = ''">&times;</button>
+    </div>
+    }
+
+    @if (erro) {
+    <div class="alert alert-erro">
+        <span class="alert-icon">⚠️</span>
+        <p>{{ erro }}</p>
+        <button class="alert-close" (click)="erro = ''">&times;</button>
+    </div>
+    }
+
+    <!-- Estatísticas -->
+    <div class="stats-grid">
+        <div class="stat-card total">
+            <div class="stat-icon">📧</div>
+            <div class="stat-info">
+                <span class="stat-valor">{{ stats.total }}</span>
+                <span class="stat-label">Total de Convites</span>
+            </div>
+        </div>
+
+        <div class="stat-card pendentes">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <span class="stat-valor">{{ stats.pendentes }}</span>
+                <span class="stat-label">Pendentes</span>
+            </div>
+        </div>
+
+        <div class="stat-card aceitos">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <span class="stat-valor">{{ stats.aceitos }}</span>
+                <span class="stat-label">Aceitos</span>
+            </div>
+        </div>
+
+        <div class="stat-card expirados">
+            <div class="stat-icon">⏰</div>
+            <div class="stat-info">
+                <span class="stat-valor">{{ stats.expirados }}</span>
+                <span class="stat-label">Expirados</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros-container">
+        <button class="filtro-btn" [class.active]="filtroStatus === 'todos'" (click)="alterarFiltro('todos')">
+            Todos ({{ stats.total }})
+        </button>
+        <button class="filtro-btn" [class.active]="filtroStatus === 'pendente'" (click)="alterarFiltro('pendente')">
+            Pendentes ({{ stats.pendentes }})
+        </button>
+        <button class="filtro-btn" [class.active]="filtroStatus === 'aceito'" (click)="alterarFiltro('aceito')">
+            Aceitos ({{ stats.aceitos }})
+        </button>
+        <button class="filtro-btn" [class.active]="filtroStatus === 'expirado'" (click)="alterarFiltro('expirado')">
+            Expirados ({{ stats.expirados }})
+        </button>
+    </div>
+
+    <!-- Loading -->
+    @if (carregando) {
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando convites...</p>
+    </div>
+    }
+
+    <!-- Tabela de Convites -->
+    @if (!carregando && convitesFiltrados.length > 0) {
+    <div class="tabela-wrapper">
+        <table class="convites-table">
+            <thead>
+                <tr>
+                    <th>Email do Convidado</th>
+                    <th>Convidado Por</th>
+                    <th>Status</th>
+                    <th>Data do Convite</th>
+                    <th>Expira em</th>
+                    <th>Permissões</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (convite of convitesFiltrados; track convite._id || convite.id) {
+                <tr>
+                    <td>
+                        <div class="email-cell">
+                            <span class="email-icon">📧</span>
+                            <span class="email-text">{{ convite.emailConvidado || convite.usuarioEmail }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="user-cell">
+                            <span class="user-icon">👤</span>
+                            <span>{{ convite.convidadoPorNome || 'Admin' }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge" [ngClass]="getStatusClass(convite.status)">
+                            {{ getStatusIcon(convite.status) }} {{ convite.status }}
+                        </span>
+                    </td>
+                    <td>{{ formatarData(convite.dataCriacao || convite.dataConvite) }}</td>
+                    <td>{{ formatarData(convite.dataExpiracao) }}</td>
+                    <td>
+                        <span class="permissoes-badge">
+                            🔑 {{ contarPermissoes(convite.permissoes) }} permissões
+                        </span>
+                    </td>
+                    <td>
+                        <div class="acoes-cell">
+                            @if (convite.status === 'pendente') {
+                            <button class="btn-acao btn-copiar" (click)="copiarLink(convite)"
+                                title="Copiar link do convite">
+                                📋
+                            </button>
+                            <button class="btn-acao btn-reenviar" (click)="reenviarConvite(convite)"
+                                title="Reenviar convite">
+                                🔄
+                            </button>
+                            <button class="btn-acao btn-cancelar" (click)="cancelarConvite(convite._id || convite.id)"
+                                title="Cancelar convite">
+                                ❌
+                            </button>
+                            }
+                            @if (convite.status === 'expirado') {
+                            <button class="btn-acao btn-reenviar" (click)="reenviarConvite(convite)"
+                                title="Reenviar convite">
+                                🔄 Reenviar
+                            </button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+    <!-- Estado Vazio -->
+    @if (!carregando && convitesFiltrados.length === 0) {
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h2>Nenhum convite encontrado</h2>
+        <p>
+            @if (filtroStatus !== 'todos') {
+            Não há convites com o status "{{ filtroStatus }}"
+            } @else {
+            Comece enviando um novo convite para adicionar administradores
+            }
+        </p>
+        <button class="btn-primary" (click)="abrirModalPermissoes()">
+            ➕ Enviar Primeiro Convite
+        </button>
+    </div>
+    }
+
+    <!-- Modal de Permissões -->
+    @if (mostrarModalPermissoes) {
+    <div class="modal-overlay" (click)="fecharModalPermissoes()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>✉️ Enviar Convite de Administrador</h2>
+                <button class="modal-close" (click)="fecharModalPermissoes()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email do Convidado *</label>
+                    <input type="email" id="email" [(ngModel)]="novoEmail" placeholder="exemplo@email.com"
+                        class="form-control" [class.invalid]="!validarEmail(novoEmail) && novoEmail.length > 0" />
+                    @if (!validarEmail(novoEmail) && novoEmail.length > 0) {
+                    <span class="error-msg">Por favor, insira um email válido</span>
+                    }
+                </div>
+
+                <!-- Permissões -->
+                <div class="permissoes-section">
+                    <h3>🔑 Configurar Permissões</h3>
+                    <p class="permissoes-desc">Selecione as permissões que o novo administrador terá</p>
+
+                    <div class="permissoes-grid">
+                        <label class="permissao-item">
+                            <input type="checkbox" [(ngModel)]="permissoes.gerenciarAnimais" />
+                            <div class="permissao-info">
+                                <span class="permissao-icon">🐾</span>
+                                <div>
+                                    <strong>Gerenciar Animais</strong>
+                                    <p>Cadastrar, editar e remover animais</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="permissao-item">
+                            <input type="checkbox" [(ngModel)]="permissoes.gerenciarFotos" />
+                            <div class="permissao-info">
+                                <span class="permissao-icon">📸</span>
+                                <div>
+                                    <strong>Gerenciar Fotos</strong>
+                                    <p>Upload, publicar e gerenciar fotos</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="permissao-item">
+                            <input type="checkbox" [(ngModel)]="permissoes.gerenciarBrindes" />
+                            <div class="permissao-info">
+                                <span class="permissao-icon">🎁</span>
+                                <div>
+                                    <strong>Gerenciar Brindes</strong>
+                                    <p>Criar e gerenciar brindes para apoiadores</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="permissao-item">
+                            <input type="checkbox" [(ngModel)]="permissoes.gerenciarPosts" />
+                            <div class="permissao-info">
+                                <span class="permissao-icon">📝</span>
+                                <div>
+                                    <strong>Gerenciar Posts</strong>
+                                    <p>Criar e enviar newsletters</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="permissao-item">
+                            <input type="checkbox" [(ngModel)]="permissoes.visualizarAssinantes" />
+                            <div class="permissao-info">
+                                <span class="permissao-icon">👥</span>
+                                <div>
+                                    <strong>Visualizar Assinantes</strong>
+                                    <p>Ver dados e estatísticas de apoiadores</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="permissao-item">
+                            <input type="checkbox" [(ngModel)]="permissoes.convidarAdmins" />
+                            <div class="permissao-info">
+                                <span class="permissao-icon">✉️</span>
+                                <div>
+                                    <strong>Convidar Admins</strong>
+                                    <p>Enviar convites para novos administradores</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="permissao-item">
+                            <input type="checkbox" [(ngModel)]="permissoes.gerenciarConfiguracoes" />
+                            <div class="permissao-info">
+                                <span class="permissao-icon">⚙️</span>
+                                <div>
+                                    <strong>Gerenciar Configurações</strong>
+                                    <p>Alterar configurações do sistema</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secundario" (click)="fecharModalPermissoes()" [disabled]="enviando">
+                    Cancelar
+                </button>
+                <button class="btn-primary" (click)="enviarConvite()" [disabled]="!validarEmail(novoEmail) || enviando">
+                    @if (enviando) {
+                    <span class="spinner-sm"></span> Enviando...
+                    } @else {
+                    ✉️ Enviar Convite
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+</div>

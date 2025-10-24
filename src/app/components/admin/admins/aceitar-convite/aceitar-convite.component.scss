@@ -1,0 +1,430 @@
+.aceitar-convite-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.5s ease-out;
+}
+
+// Loading
+.loading {
+    padding: 2rem 0;
+
+    .spinner {
+        font-size: 3rem;
+        animation: spin 2s linear infinite;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        color: #6b7280;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+}
+
+// Header
+.icon-header {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    animation: bounce 1s ease-in-out infinite alternate;
+}
+
+h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 1rem 0;
+}
+
+.descricao {
+    font-size: 1.1rem;
+    color: #6b7280;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+// Informações do Convite
+.convite-info {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid #e5e7eb;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .label {
+        font-size: 0.9rem;
+        color: #6b7280;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .value {
+        font-size: 0.95rem;
+        color: #1f2937;
+        font-weight: 600;
+        text-align: right;
+    }
+}
+
+// Permissões
+.permissoes-detalhes {
+    background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+
+    h3 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0 0 1rem 0;
+        text-align: left;
+    }
+}
+
+.permissoes-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.permissao-badge {
+    padding: 0.625rem 1rem;
+    background: white;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #7c3aed;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(124, 58, 237, 0.2);
+    }
+}
+
+// Ações
+.acoes {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 160px;
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.btn-aceitar {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+
+    &:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+}
+
+.btn-recusar {
+    background: #e5e7eb;
+    color: #4b5563;
+
+    &:hover:not(:disabled) {
+        background: #d1d5db;
+        transform: translateY(-3px);
+    }
+}
+
+// Estado de Sucesso
+.sucesso-state {
+    padding: 2rem 0;
+
+    .icon-success {
+        font-size: 6rem;
+        margin-bottom: 1.5rem;
+        animation: bounceIn 0.8s ease-out;
+    }
+
+    h1 {
+        color: #10b981;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        color: #6b7280;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .redirect-msg {
+        color: #9ca3af;
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+        font-style: italic;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto;
+        border: 4px solid #e5e7eb;
+        border-top: 4px solid #10b981;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+}
+
+// Estado de Erro
+.erro-state {
+    padding: 2rem 0;
+
+    .icon-erro {
+        font-size: 5rem;
+        margin-bottom: 1.5rem;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    h1 {
+        color: #ef4444;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        color: #6b7280;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    .btn-voltar {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+    }
+}
+
+// Spinner pequeno
+.spinner-sm {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+}
+
+// Animações
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-10px);
+    }
+
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+    .aceitar-convite-container {
+        padding: 1rem;
+    }
+
+    .card {
+        padding: 2rem 1.5rem;
+    }
+
+    .icon-header {
+        font-size: 4rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .descricao {
+        font-size: 1rem;
+    }
+
+    .acoes {
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .aceitar-convite-container {
+        padding: 0.5rem;
+    }
+
+    .card {
+        padding: 1.5rem 1rem;
+        border-radius: 16px;
+    }
+
+    .icon-header {
+        font-size: 3rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .convite-info,
+    .permissoes-detalhes {
+        padding: 1rem;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+
+        .value {
+            text-align: left;
+        }
+    }
+
+    .permissoes-lista {
+        gap: 0.5rem;
+    }
+
+    .permissao-badge {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.875rem;
+    }
+
+    button {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}

@@ -1,0 +1,112 @@
+<div class="aceitar-convite-container">
+    <!-- Loading -->
+    @if (carregando) {
+    <div class="card">
+        <div class="loading">
+            <div class="spinner">⏳</div>
+            <p>Verificando convite...</p>
+        </div>
+    </div>
+    }
+
+    <!-- Convite Válido -->
+    @if (!carregando && convite && !erro) {
+    <div class="card">
+        @if (!sucesso) {
+        <div class="icon-header">✉️</div>
+        <h1>Convite de Administrador</h1>
+        <p class="descricao">Você foi convidado para se tornar um administrador do sistema</p>
+
+        <div class="convite-info">
+            <div class="info-item">
+                <span class="label">📧 Email</span>
+                <span class="value">{{ convite.emailConvidado || convite.usuarioEmail }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">👤 Convidado por</span>
+                <span class="value">{{ convite.convidadoPorNome || convite.convidadoPor || 'Administrador' }}</span>
+            </div>
+
+            @if (convite.dataExpiracao) {
+            <div class="info-item">
+                <span class="label">⏰ Expira em</span>
+                <span class="value">{{ formatarData(convite.dataExpiracao) }}</span>
+            </div>
+            }
+
+            @if (convite.permissoes) {
+            <div class="info-item">
+                <span class="label">🔑 Permissões concedidas</span>
+                <span class="value">{{ contarPermissoes(convite.permissoes) }} permissões</span>
+            </div>
+            }
+        </div>
+
+        <!-- Permissões Detalhadas -->
+        @if (convite.permissoes) {
+        <div class="permissoes-detalhes">
+            <h3>🔑 Suas Permissões</h3>
+            <div class="permissoes-lista">
+                @if (convite.permissoes.gerenciarAnimais) {
+                <div class="permissao-badge">🐾 Gerenciar Animais</div>
+                }
+                @if (convite.permissoes.gerenciarFotos) {
+                <div class="permissao-badge">📸 Gerenciar Fotos</div>
+                }
+                @if (convite.permissoes.gerenciarBrindes) {
+                <div class="permissao-badge">🎁 Gerenciar Brindes</div>
+                }
+                @if (convite.permissoes.gerenciarPosts) {
+                <div class="permissao-badge">📝 Gerenciar Posts</div>
+                }
+                @if (convite.permissoes.visualizarAssinantes) {
+                <div class="permissao-badge">👥 Visualizar Assinantes</div>
+                }
+                @if (convite.permissoes.convidarAdmins) {
+                <div class="permissao-badge">✉️ Convidar Admins</div>
+                }
+                @if (convite.permissoes.gerenciarConfiguracoes) {
+                <div class="permissao-badge">⚙️ Gerenciar Configurações</div>
+                }
+            </div>
+        </div>
+        }
+
+        <div class="acoes">
+            <button class="btn-aceitar" (click)="aceitar()" [disabled]="processando">
+                @if (processando) {
+                <span class="spinner-sm"></span> Processando...
+                } @else {
+                ✅ Aceitar Convite
+                }
+            </button>
+            <button class="btn-recusar" (click)="recusar()" [disabled]="processando">
+                ❌ Recusar
+            </button>
+        </div>
+        } @else {
+        <!-- Sucesso -->
+        <div class="sucesso-state">
+            <div class="icon-success">🎉</div>
+            <h1>Convite Aceito!</h1>
+            <p>Você agora é um administrador do sistema</p>
+            <p class="redirect-msg">Redirecionando para o painel administrativo...</p>
+            <div class="spinner"></div>
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Erro -->
+    @if (!carregando && erro) {
+    <div class="card">
+        <div class="erro-state">
+            <div class="icon-erro">❌</div>
+            <h1>Convite Inválido</h1>
+            <p>{{ erro }}</p>
+            <a [routerLink]="['/']" class="btn-voltar">🏠 Voltar para Home</a>
+        </div>
+    </div>
+    }
+</div>

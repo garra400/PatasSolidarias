@@ -2,108 +2,217 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '@services/admin.service';
+import { ConviteAdmin, AdminPermissoes } from '../../../../model/admin.model';
 
 @Component({
     selector: 'app-lista-convites',
     standalone: true,
     imports: [CommonModule, FormsModule],
-    template: `
-    <div class="container">
-      <h1>Convites de Admin</h1>
-      
-      <div class="form-card">
-        <h2>Enviar Novo Convite</h2>
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" [(ngModel)]="novoEmail" class="control" placeholder="email@exemplo.com">
-        </div>
-        <button (click)="enviarConvite()" class="btn-primary" [disabled]="!novoEmail">Enviar Convite</button>
-      </div>
-
-      <div *ngIf="carregando">Carregando convites...</div>
-      <table *ngIf="!carregando && convites.length > 0">
-        <thead>
-          <tr><th>Email</th><th>Status</th><th>Data Criação</th><th>Expira em</th><th>Ações</th></tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let c of convites">
-            <td>{{ c.emailConvidado }}</td>
-            <td><span [class]="c.status">{{ c.status }}</span></td>
-            <td>{{ c.dataCriacao | date:'dd/MM/yyyy' }}</td>
-            <td>{{ c.dataExpiracao | date:'dd/MM/yyyy' }}</td>
-            <td><button (click)="cancelar(c._id)" class="btn-sm">Cancelar</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  `,
-    styles: [`
-    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 2rem; }
-    .form-card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 2rem; }
-    h2 { font-size: 1.3rem; margin-bottom: 1.5rem; }
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
-    .control { width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; }
-    .btn-primary { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600; cursor: pointer; }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    table { width: 100%; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    th { background: #f7fafc; padding: 1rem; text-align: left; font-weight: 600; }
-    td { padding: 1rem; border-top: 1px solid #e2e8f0; }
-    .pendente { color: #ed8936; font-weight: 600; }
-    .aceito { color: #48bb78; font-weight: 600; }
-    .cancelado, .expirado { color: #f56565; font-weight: 600; }
-    .btn-sm { padding: 0.5rem 1rem; border: none; border-radius: 6px; background: #718096; color: white; cursor: pointer; }
-  `]
+    templateUrl: './lista-convites.component.html',
+    styleUrl: './lista-convites.component.scss'
 })
 export class ListaConvitesComponent implements OnInit {
     private adminService = inject(AdminService);
-    convites: any[] = [];
+
+    convites: any[] = [];  // Usando any pois o backend pode retornar propriedades diferentes da interface
+    convitesFiltrados: any[] = [];
     novoEmail = '';
     carregando = true;
+    enviando = false;
+    erro = '';
+    sucesso = '';
+    filtroStatus: 'todos' | 'pendente' | 'aceito' | 'expirado' | 'cancelado' = 'todos';
+
+    // Modal de permissões
+    mostrarModalPermissoes = false;
+    permissoes: AdminPermissoes = {
+        gerenciarAnimais: true,
+        gerenciarFotos: true,
+        gerenciarBrindes: true,
+        gerenciarPosts: true,
+        visualizarAssinantes: true,
+        convidarAdmins: false,
+        gerenciarConfiguracoes: false
+    };
+
+    // Estatísticas
+    stats = {
+        total: 0,
+        pendentes: 0,
+        aceitos: 0,
+        expirados: 0
+    };
 
     ngOnInit(): void {
         this.carregar();
     }
 
     carregar(): void {
+        this.carregando = true;
+        this.erro = '';
+
         this.adminService.listarConvites().subscribe({
-            next: (data: any) => {
-                this.convites = data;
+            next: (response: any) => {
+                this.convites = response.convites || response || [];
+                this.aplicarFiltro();
+                this.calcularEstatisticas();
                 this.carregando = false;
+            },
+            error: (err) => {
+                this.erro = 'Erro ao carregar convites';
+                this.carregando = false;
+                console.error('Erro ao carregar convites:', err);
             }
         });
+    }
+
+    aplicarFiltro(): void {
+        if (this.filtroStatus === 'todos') {
+            this.convitesFiltrados = [...this.convites];
+        } else {
+            this.convitesFiltrados = this.convites.filter(c => c.status === this.filtroStatus);
+        }
+    }
+
+    alterarFiltro(status: 'todos' | 'pendente' | 'aceito' | 'expirado' | 'cancelado'): void {
+        this.filtroStatus = status;
+        this.aplicarFiltro();
+    }
+
+    calcularEstatisticas(): void {
+        this.stats.total = this.convites.length;
+        this.stats.pendentes = this.convites.filter(c => c.status === 'pendente').length;
+        this.stats.aceitos = this.convites.filter(c => c.status === 'aceito').length;
+        this.stats.expirados = this.convites.filter(c => c.status === 'expirado').length;
+    }
+
+    abrirModalPermissoes(): void {
+        this.mostrarModalPermissoes = true;
+    }
+
+    fecharModalPermissoes(): void {
+        this.mostrarModalPermissoes = false;
     }
 
     enviarConvite(): void {
-        if (!this.novoEmail) return;
+        if (!this.novoEmail || !this.validarEmail(this.novoEmail)) {
+            this.erro = 'Por favor, insira um email válido';
+            return;
+        }
 
-        const permissoesDefault = {
-            gerenciarAnimais: true,
-            gerenciarFotos: true,
-            gerenciarBrindes: true,
-            gerenciarPosts: true,
-            visualizarAssinantes: true,
-            convidarAdmins: false,
-            gerenciarConfiguracoes: false
-        };
+        this.enviando = true;
+        this.erro = '';
+        this.sucesso = '';
 
-        this.adminService.criarConvite(this.novoEmail, permissoesDefault).subscribe({
-            next: () => {
-                alert('Convite enviado!');
+        this.adminService.criarConvite(this.novoEmail, this.permissoes).subscribe({
+            next: (response) => {
+                this.sucesso = 'Convite enviado com sucesso! Um email foi enviado para ' + this.novoEmail;
                 this.novoEmail = '';
+                this.fecharModalPermissoes();
                 this.carregar();
+                this.enviando = false;
+
+                // Limpar mensagem de sucesso após 5 segundos
+                setTimeout(() => this.sucesso = '', 5000);
             },
-            error: () => alert('Erro ao enviar convite')
+            error: (err) => {
+                this.erro = err.error?.message || 'Erro ao enviar convite';
+                this.enviando = false;
+                console.error('Erro ao enviar convite:', err);
+            }
         });
     }
 
-    cancelar(id: string): void {
+    validarEmail(email: string): boolean {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+    cancelarConvite(id: string): void {
+        if (!confirm('Tem certeza que deseja cancelar este convite?')) {
+            return;
+        }
+
         this.adminService.cancelarConvite(id).subscribe({
             next: () => {
-                alert('Convite cancelado!');
+                this.sucesso = 'Convite cancelado com sucesso';
                 this.carregar();
+                setTimeout(() => this.sucesso = '', 3000);
+            },
+            error: (err) => {
+                this.erro = 'Erro ao cancelar convite';
+                console.error('Erro ao cancelar convite:', err);
             }
         });
+    }
+
+    reenviarConvite(convite: any): void {
+        if (!confirm('Deseja reenviar o convite para ' + convite.emailConvidado + '?')) {
+            return;
+        }
+
+        // Primeiro cancela o convite antigo
+        this.adminService.cancelarConvite(convite._id || convite.id).subscribe({
+            next: () => {
+                // Depois cria um novo
+                this.adminService.criarConvite(convite.emailConvidado, convite.permissoes).subscribe({
+                    next: () => {
+                        this.sucesso = 'Convite reenviado com sucesso!';
+                        this.carregar();
+                        setTimeout(() => this.sucesso = '', 3000);
+                    },
+                    error: () => {
+                        this.erro = 'Erro ao reenviar convite';
+                    }
+                });
+            },
+            error: () => {
+                this.erro = 'Erro ao processar reenvio';
+            }
+        });
+    }
+
+    copiarLink(convite: ConviteAdmin): void {
+        const link = `${window.location.origin}/admin/convite/aceitar/${convite.token}`;
+        navigator.clipboard.writeText(link).then(() => {
+            this.sucesso = 'Link copiado para a área de transferência!';
+            setTimeout(() => this.sucesso = '', 3000);
+        }).catch(() => {
+            this.erro = 'Erro ao copiar link';
+        });
+    }
+
+    formatarData(data: Date): string {
+        return new Date(data).toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    getStatusClass(status: string): string {
+        const classes: { [key: string]: string } = {
+            'pendente': 'status-pendente',
+            'aceito': 'status-aceito',
+            'expirado': 'status-expirado',
+            'cancelado': 'status-cancelado'
+        };
+        return classes[status] || '';
+    }
+
+    getStatusIcon(status: string): string {
+        const icons: { [key: string]: string } = {
+            'pendente': '⏳',
+            'aceito': '✅',
+            'expirado': '⏰',
+            'cancelado': '❌'
+        };
+        return icons[status] || '📧';
+    }
+
+    contarPermissoes(permissoes: AdminPermissoes): number {
+        return Object.values(permissoes).filter(v => v === true).length;
     }
 }
