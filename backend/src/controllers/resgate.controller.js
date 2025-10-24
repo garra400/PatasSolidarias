@@ -1,6 +1,7 @@
 import Resgate from '../models/Resgate.model.js';
 import Brinde from '../models/Brinde.model.js';
 import User from '../models/User.model.js';
+import ConfigResgate from '../models/ConfigResgate.model.js';
 
 export const getResgates = async (req, res, next) => {
     try {
@@ -124,3 +125,85 @@ export const cancelResgate = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getConfiguracao = async (req, res, next) => {
+    try {
+        let config = await ConfigResgate.findOne();
+
+        // Se não existe configuração, criar uma padrão
+        if (!config) {
+            config = await ConfigResgate.create({
+                diasDisponiveis: ['segunda', 'terça', 'quarta', 'quinta', 'sexta'],
+                horariosDisponiveis: [
+                    { inicio: '09:00', fim: '12:00' },
+                    { inicio: '14:00', fim: '18:00' }
+                ],
+                ativo: true
+            });
+        }
+
+        // Converter para formato esperado pelo frontend
+        const diasSemanaMap = {
+            'domingo': 0,
+            'segunda': 1,
+            'terça': 2,
+            'quarta': 3,
+            'quinta': 4,
+            'sexta': 5,
+            'sábado': 6
+        };
+
+        const response = {
+            id: config._id,
+            diasSemana: config.diasDisponiveis.map(dia => diasSemanaMap[dia]),
+            horariosDisponiveis: config.horariosDisponiveis.map(h => ({
+                horaInicio: h.inicio,
+                horaFim: h.fim
+            })),
+            intervaloMinutos: 30, // Padrão
+            ativo: config.ativo
+        };
+
+        res.json({ success: true, config: response });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const atualizarConfiguracao = async (req, res, next) => {
+    try {
+        const { diasSemana, horariosDisponiveis, intervaloMinutos, ativo } = req.body;
+
+        const diasNomes = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+        const diasDisponiveis = diasSemana.map(num => diasNomes[num]);
+
+        const horariosFormatados = horariosDisponiveis.map(h => ({
+            inicio: h.horaInicio,
+            fim: h.horaFim
+        }));
+
+        let config = await ConfigResgate.findOne();
+
+        if (config) {
+            config.diasDisponiveis = diasDisponiveis;
+            config.horariosDisponiveis = horariosFormatados;
+            config.ativo = ativo;
+            await config.save();
+        } else {
+            config = await ConfigResgate.create({
+                diasDisponiveis,
+                horariosDisponiveis: horariosFormatados,
+                ativo
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Configuração atualizada com sucesso',
+            config
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+

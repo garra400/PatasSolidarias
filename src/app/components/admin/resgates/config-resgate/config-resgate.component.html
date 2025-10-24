@@ -1,0 +1,161 @@
+<div class="config-resgate-container">
+    <div class="page-header">
+        <div>
+            <h1>⏰ Configuração de Horários de Resgate</h1>
+            <p class="subtitle">Defina os dias e horários disponíveis para retirada de brindes</p>
+        </div>
+    </div>
+
+    <div *ngIf="erro" class="alert alert-danger">{{ erro }}</div>
+    <div *ngIf="sucesso" class="alert alert-success">{{ sucesso }}</div>
+
+    <div *ngIf="carregando" class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando configurações...</p>
+    </div>
+
+    <form *ngIf="!carregando" [formGroup]="form" (ngSubmit)="salvar()" class="config-form">
+
+        <!-- Seção: Dias da Semana -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>📅 Dias Disponíveis</h2>
+                <p>Selecione os dias da semana em que será possível retirar brindes</p>
+            </div>
+
+            <div class="dias-grid">
+                <div *ngFor="let dia of diasSemana" class="dia-card" [class.selecionado]="isDiaSelecionado(dia.valor)"
+                    (click)="toggleDia(dia.valor)">
+                    <div class="dia-icon">{{ dia.emoji }}</div>
+                    <span class="dia-nome">{{ dia.nome }}</span>
+                    <div class="checkbox-wrapper">
+                        <label [for]="'dia-' + dia.valor" class="sr-only">Selecionar {{ dia.nome }}</label>
+                        <input type="checkbox" [checked]="isDiaSelecionado(dia.valor)" (change)="toggleDia(dia.valor)"
+                            (click)="$event.stopPropagation()" class="checkbox-input" [id]="'dia-' + dia.valor"
+                            title="Selecionar dia da semana" [attr.aria-label]="'Selecionar ' + dia.nome">
+                        <span class="checkmark">✓</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hint-box">
+                <span class="hint-icon">💡</span>
+                <p>Selecione pelo menos um dia da semana para habilitar resgates</p>
+            </div>
+        </div>
+
+        <!-- Seção: Períodos de Horário -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>🕐 Períodos de Atendimento</h2>
+                <p>Defina os períodos em que os brindes podem ser retirados</p>
+            </div>
+
+            <div class="periodos-list">
+                <div *ngFor="let periodo of horarios.controls; let i = index" class="periodo-card"
+                    [formGroup]="getPeriodoFormGroup(i)">
+                    <div class="periodo-numero">Período {{ i + 1 }}</div>
+
+                    <div class="periodo-inputs">
+                        <div class="input-group">
+                            <label [for]="'inicio-' + i">Início</label>
+                            <input type="time" formControlName="horaInicio" [id]="'inicio-' + i" class="time-input"
+                                [attr.aria-label]="'Horário de início do período ' + (i + 1)" title="Horário de início">
+                            <div *ngIf="periodo.get('horaInicio')?.invalid && periodo.get('horaInicio')?.touched"
+                                class="error-message">
+                                Horário de início obrigatório
+                            </div>
+                        </div>
+
+                        <span class="separator">até</span>
+
+                        <div class="input-group">
+                            <label [for]="'fim-' + i">Fim</label>
+                            <input type="time" formControlName="horaFim" [id]="'fim-' + i" class="time-input"
+                                [attr.aria-label]="'Horário de fim do período ' + (i + 1)" title="Horário de fim">
+                            <div *ngIf="periodo.get('horaFim')?.invalid && periodo.get('horaFim')?.touched"
+                                class="error-message">
+                                Horário de fim obrigatório
+                            </div>
+                        </div>
+
+                        <button type="button" (click)="removerPeriodo(i)" class="btn-remove"
+                            [disabled]="horarios.length === 1" title="Remover período">
+                            🗑️
+                        </button>
+                    </div>
+
+                    <div *ngIf="validarPeriodo(i) && periodo.touched" class="error-message">
+                        O horário de fim deve ser posterior ao horário de início
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" (click)="adicionarPeriodo()" class="btn btn-add">
+                ➕ Adicionar Período
+            </button>
+        </div>
+
+        <!-- Seção: Intervalo -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>⏱️ Intervalo entre Horários</h2>
+                <p>Define o espaçamento entre os horários disponíveis</p>
+            </div>
+
+            <div class="intervalo-selector">
+                <div *ngFor="let opcao of opcoesIntervalo" class="intervalo-option"
+                    [class.selected]="form.get('intervaloMinutos')?.value === opcao.valor"
+                    (click)="form.get('intervaloMinutos')?.setValue(opcao.valor)">
+                    <div class="option-icon">⏱️</div>
+                    <div class="option-label">{{ opcao.label }}</div>
+                    <div class="option-value">{{ opcao.descricao }}</div>
+                </div>
+            </div>
+
+            <div class="preview-box">
+                <h3>📋 Preview dos Horários</h3>
+                <p class="preview-subtitle">Exemplo de horários gerados (Período 1: {{ getPreviewPeriodo() }}):</p>
+                <div class="horarios-preview">
+                    <span *ngFor="let hora of getHorariosPreview()" class="horario-chip">
+                        {{ hora }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção: Status -->
+        <div class="form-section">
+            <div class="section-header">
+                <h2>🔧 Status do Sistema</h2>
+                <p>Habilitar ou desabilitar o sistema de resgates</p>
+            </div>
+
+            <div class="status-toggle">
+                <label class="toggle-label">
+                    <input type="checkbox" formControlName="ativo" class="toggle-input">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-text">
+                        Sistema de Resgates {{ form.get('ativo')?.value ? 'Ativo' : 'Inativo' }}
+                    </span>
+                </label>
+                <p class="toggle-description">
+                    {{ form.get('ativo')?.value
+                    ? 'Os apoiadores podem solicitar resgates de brindes'
+                    : 'Sistema de resgates temporariamente desabilitado'
+                    }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="form-actions">
+            <button type="button" (click)="resetar()" class="btn btn-secondary" [disabled]="salvando">
+                🔄 Resetar
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="salvando || form.invalid">
+                {{ salvando ? '💾 Salvando...' : '💾 Salvar Configuração' }}
+            </button>
+        </div>
+    </form>
+</div>

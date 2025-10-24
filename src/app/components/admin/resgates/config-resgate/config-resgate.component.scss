@@ -1,0 +1,541 @@
+.config-resgate-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+// Classe para acessibilidade (screen reader only)
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+
+    h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.3rem;
+    }
+
+    .subtitle {
+        color: #666;
+        font-size: 1rem;
+    }
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+
+    &.alert-danger {
+        background-color: #fee;
+        color: #c33;
+        border: 1px solid #fcc;
+    }
+
+    &.alert-success {
+        background-color: #efe;
+        color: #3c3;
+        border: 1px solid #cfc;
+    }
+}
+
+.loading-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 1rem;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.config-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-section {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+    margin-bottom: 1.5rem;
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        color: #666;
+        font-size: 0.9rem;
+    }
+}
+
+// Dias da Semana
+.dias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dia-card {
+    position: relative;
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    &.selecionado {
+        background: #f0fff4;
+        border-color: #48bb78;
+
+        .checkbox-wrapper .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .dia-icon {
+        font-size: 2rem;
+    }
+
+    .dia-nome {
+        font-weight: 600;
+        color: #333;
+        text-align: center;
+    }
+}
+
+.checkbox-wrapper {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .checkbox-input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+    }
+
+    .checkmark {
+        color: white;
+        font-weight: bold;
+        font-size: 0.9rem;
+        background: #48bb78;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.2s;
+    }
+}
+
+.hint-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+
+    .hint-icon {
+        font-size: 1.2rem;
+    }
+
+    p {
+        margin: 0;
+        color: #3b82f6;
+        font-size: 0.9rem;
+    }
+}
+
+// Períodos
+.periodos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.periodo-card {
+    background: #f7fafc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 2px solid #e2e8f0;
+}
+
+.periodo-numero {
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.periodo-inputs {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto;
+    gap: 1rem;
+    align-items: start;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+        font-weight: 600;
+        color: #555;
+        font-size: 0.85rem;
+    }
+}
+
+.time-input {
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+
+    &:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+}
+
+.separator {
+    color: #718096;
+    font-weight: 600;
+    align-self: center;
+    margin-top: 1.5rem;
+}
+
+.btn-remove {
+    background: #fed7d7;
+    color: #c53030;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+    align-self: center;
+    margin-top: 1.5rem;
+
+    &:hover:not(:disabled) {
+        background: #fc8181;
+        color: white;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.error-message {
+    color: #f56565;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+// Intervalo
+.intervalo-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.intervalo-option {
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    &.selected {
+        background: #eff6ff;
+        border-color: #3b82f6;
+
+        .option-icon {
+            transform: scale(1.2);
+        }
+    }
+
+    .option-icon {
+        font-size: 1.8rem;
+        transition: transform 0.2s;
+    }
+
+    .option-label {
+        font-weight: 700;
+        color: #333;
+        font-size: 1.1rem;
+    }
+
+    .option-value {
+        color: #666;
+        font-size: 0.85rem;
+    }
+}
+
+.preview-box {
+    background: #fffbeb;
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 1.5rem;
+
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #92400e;
+        margin-bottom: 0.5rem;
+    }
+
+    .preview-subtitle {
+        color: #b45309;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+}
+
+.horarios-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.horario-chip {
+    background: white;
+    border: 1px solid #d97706;
+    color: #92400e;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+// Status Toggle
+.status-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+.toggle-input {
+    display: none;
+}
+
+.toggle-slider {
+    width: 60px;
+    height: 32px;
+    background: #cbd5e0;
+    border-radius: 16px;
+    position: relative;
+    transition: background 0.3s;
+
+    &::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background: white;
+        border-radius: 50%;
+        top: 4px;
+        left: 4px;
+        transition: transform 0.3s;
+    }
+}
+
+.toggle-input:checked+.toggle-slider {
+    background: #48bb78;
+
+    &::after {
+        transform: translateX(28px);
+    }
+}
+
+.toggle-text {
+    font-weight: 700;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.toggle-description {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+    padding-left: 76px;
+}
+
+// Botões
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    &.btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+    }
+
+    &.btn-secondary {
+        background: #e2e8f0;
+        color: #4a5568;
+
+        &:hover:not(:disabled) {
+            background: #cbd5e0;
+        }
+    }
+
+    &.btn-add {
+        background: #f0fff4;
+        color: #22543d;
+        border: 2px dashed #48bb78;
+
+        &:hover:not(:disabled) {
+            background: #c6f6d5;
+        }
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .config-resgate-container {
+        padding: 1rem;
+    }
+
+    .form-section {
+        padding: 1.5rem;
+    }
+
+    .dias-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .periodo-inputs {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+
+        .separator {
+            display: none;
+        }
+
+        .btn-remove {
+            margin-top: 0;
+        }
+    }
+
+    .intervalo-selector {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+
+        .btn {
+            width: 100%;
+        }
+    }
+
+    .toggle-description {
+        padding-left: 0;
+    }
+}

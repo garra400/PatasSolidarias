@@ -1,112 +1,266 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ResgateService } from '@services/resgate.service';
+import { ConfiguracaoResgate } from '@models/brinde.model';
+
+interface DiaOpcao {
+    valor: number;
+    nome: string;
+    emoji: string;
+}
+
+interface IntervaloOpcao {
+    valor: number;
+    label: string;
+    descricao: string;
+}
 
 @Component({
     selector: 'app-config-resgate',
     standalone: true,
-    imports: [CommonModule, FormsModule],
-    template: `
-    <div class="container">
-      <h1>Configuração de Resgates</h1>
-      <div *ngIf="carregando">Carregando...</div>
-      <form *ngIf="!carregando" (ngSubmit)="salvar()" class="form">
-        <div class="group">
-          <label>Dias da Semana</label>
-          <div *ngFor="let dia of diasSemana" class="checkbox">
-            <input type="checkbox" [id]="dia" [(ngModel)]="config.diasSemana[dia]" [name]="dia">
-            <label [for]="dia">{{ dia }}</label>
-          </div>
-        </div>
-        
-        <div class="group">
-          <label>Horários (HH:MM)</label>
-          <div *ngFor="let h of config.horariosDisponiveis; let i = index" class="horario">
-            <input type="text" [(ngModel)]="config.horariosDisponiveis[i]" [name]="'h'+i" placeholder="09:00">
-            <button type="button" (click)="removerHorario(i)">❌</button>
-          </div>
-          <button type="button" (click)="adicionarHorario()">➕ Adicionar Horário</button>
-        </div>
-
-        <div class="group">
-          <label>Intervalo (minutos)</label>
-          <input type="number" [(ngModel)]="config.intervaloMinutos" name="intervalo" min="15">
-        </div>
-
-        <button type="submit" class="btn-primary">Salvar Configuração</button>
-      </form>
-    </div>
-  `,
-    styles: [`
-    .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 2rem; }
-    .form { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .group { margin-bottom: 2rem; }
-    label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
-    .checkbox { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
-    .horario { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
-    input[type="text"], input[type="number"] { padding: 0.5rem; border: 2px solid #e2e8f0; border-radius: 6px; }
-    button { padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
-    .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 0.75rem 2rem; }
-  `]
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './config-resgate.component.html',
+    styleUrls: ['./config-resgate.component.scss']
 })
 export class ConfigResgateComponent implements OnInit {
-    config: any = {
-        diasSemana: {},
-        horariosDisponiveis: [],
-        intervaloMinutos: 30
-    };
-    diasSemana = ['segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'];
-    diasSemanaMap: { [key: string]: number } = {
-        'segunda': 1,
-        'terca': 2,
-        'quarta': 3,
-        'quinta': 4,
-        'sexta': 5,
-        'sabado': 6,
-        'domingo': 0
-    };
+    form!: FormGroup;
     carregando = true;
+    salvando = false;
+    erro = '';
+    sucesso = '';
 
+    diasSemana: DiaOpcao[] = [
+        { valor: 0, nome: 'Domingo', emoji: '☀️' },
+        { valor: 1, nome: 'Segunda', emoji: '📅' },
+        { valor: 2, nome: 'Terça', emoji: '📅' },
+        { valor: 3, nome: 'Quarta', emoji: '📅' },
+        { valor: 4, nome: 'Quinta', emoji: '📅' },
+        { valor: 5, nome: 'Sexta', emoji: '📅' },
+        { valor: 6, nome: 'Sábado', emoji: '🎉' }
+    ];
+
+    opcoesIntervalo: IntervaloOpcao[] = [
+        { valor: 15, label: '15 min', descricao: 'Mais flexibilidade' },
+        { valor: 30, label: '30 min', descricao: 'Recomendado' },
+        { valor: 60, label: '1 hora', descricao: 'Menos agendamentos' }
+    ];
+
+    private fb = inject(FormBuilder);
     private resgateService = inject(ResgateService);
 
     ngOnInit(): void {
+        this.inicializarForm();
+        this.carregarConfiguracao();
+    }
+
+    inicializarForm(): void {
+        this.form = this.fb.group({
+            diasSemana: [[]],
+            horarios: this.fb.array([this.criarPeriodoForm()]),
+            intervaloMinutos: [30, [Validators.required, Validators.min(15)]],
+            ativo: [true]
+        });
+    }
+
+    get horarios(): FormArray {
+        return this.form.get('horarios') as FormArray;
+    }
+
+    criarPeriodoForm(): FormGroup {
+        return this.fb.group({
+            horaInicio: ['09:00', Validators.required],
+            horaFim: ['17:00', Validators.required]
+        });
+    }
+
+    getPeriodoFormGroup(index: number): FormGroup {
+        return this.horarios.at(index) as FormGroup;
+    }
+
+    carregarConfiguracao(): void {
+        this.carregando = true;
+        this.erro = '';
+
         this.resgateService.buscarConfiguracao().subscribe({
-            next: (data: any) => {
-                if (data) {
-                    this.config = data;
-                    const dias: any = {};
-                    this.diasSemana.forEach(d => dias[d] = data.diasSemana?.includes(d));
-                    this.config.diasSemana = dias;
+            next: (config: any) => {
+                if (config) {
+                    this.preencherForm(config);
                 }
+                this.carregando = false;
+            },
+            error: (err) => {
+                console.error('Erro ao carregar configuração:', err);
+                // Se não houver configuração, usar padrões
                 this.carregando = false;
             }
         });
     }
 
-    adicionarHorario(): void {
-        this.config.horariosDisponiveis.push('');
+    preencherForm(config: any): void {
+        // Preencher dias da semana
+        this.form.patchValue({
+            diasSemana: config.diasSemana || [],
+            intervaloMinutos: config.intervaloMinutos || 30,
+            ativo: config.ativo !== undefined ? config.ativo : true
+        });
+
+        // Preencher horários
+        if (config.horariosDisponiveis && config.horariosDisponiveis.length > 0) {
+            this.horarios.clear();
+            config.horariosDisponiveis.forEach((horario: any) => {
+                const periodoForm = this.fb.group({
+                    horaInicio: [horario.horaInicio, Validators.required],
+                    horaFim: [horario.horaFim, Validators.required]
+                });
+                this.horarios.push(periodoForm);
+            });
+        }
     }
 
-    removerHorario(i: number): void {
-        this.config.horariosDisponiveis.splice(i, 1);
+    isDiaSelecionado(dia: number): boolean {
+        const dias = this.form.get('diasSemana')?.value || [];
+        return dias.includes(dia);
+    }
+
+    toggleDia(dia: number): void {
+        const diasControl = this.form.get('diasSemana');
+        const dias = diasControl?.value || [];
+
+        const index = dias.indexOf(dia);
+        if (index > -1) {
+            dias.splice(index, 1);
+        } else {
+            dias.push(dia);
+        }
+
+        dias.sort((a: number, b: number) => a - b);
+        diasControl?.setValue(dias);
+    }
+
+    adicionarPeriodo(): void {
+        this.horarios.push(this.criarPeriodoForm());
+    }
+
+    removerPeriodo(index: number): void {
+        if (this.horarios.length > 1) {
+            this.horarios.removeAt(index);
+        }
+    }
+
+    validarPeriodo(index: number): boolean {
+        const periodo = this.horarios.at(index) as FormGroup;
+        const inicio = periodo.get('horaInicio')?.value;
+        const fim = periodo.get('horaFim')?.value;
+
+        if (!inicio || !fim) return false;
+
+        const [horaI, minI] = inicio.split(':').map(Number);
+        const [horaF, minF] = fim.split(':').map(Number);
+
+        const minutosInicio = horaI * 60 + minI;
+        const minutosFim = horaF * 60 + minF;
+
+        return minutosFim <= minutosInicio;
+    }
+
+    getPreviewPeriodo(): string {
+        if (this.horarios.length === 0) return '--:-- até --:--';
+
+        const periodo = this.horarios.at(0) as FormGroup;
+        const inicio = periodo.get('horaInicio')?.value || '--:--';
+        const fim = periodo.get('horaFim')?.value || '--:--';
+
+        return `${inicio} até ${fim}`;
+    }
+
+    getHorariosPreview(): string[] {
+        if (this.horarios.length === 0) return [];
+
+        const periodo = this.horarios.at(0) as FormGroup;
+        const inicio = periodo.get('horaInicio')?.value;
+        const fim = periodo.get('horaFim')?.value;
+        const intervalo = this.form.get('intervaloMinutos')?.value || 30;
+
+        if (!inicio || !fim) return [];
+
+        const [horaI, minI] = inicio.split(':').map(Number);
+        const [horaF, minF] = fim.split(':').map(Number);
+
+        const minutosInicio = horaI * 60 + minI;
+        const minutosFim = horaF * 60 + minF;
+
+        if (minutosFim <= minutosInicio) return [];
+
+        const horarios: string[] = [];
+        let minutosAtual = minutosInicio;
+
+        // Limitar preview a 10 horários
+        let count = 0;
+        while (minutosAtual < minutosFim && count < 10) {
+            const hora = Math.floor(minutosAtual / 60);
+            const minuto = minutosAtual % 60;
+            horarios.push(`${String(hora).padStart(2, '0')}:${String(minuto).padStart(2, '0')}`);
+            minutosAtual += intervalo;
+            count++;
+        }
+
+        if (minutosAtual < minutosFim) {
+            horarios.push('...');
+        }
+
+        return horarios;
+    }
+
+    resetar(): void {
+        if (confirm('Tem certeza que deseja resetar todas as configurações?')) {
+            this.inicializarForm();
+        }
     }
 
     salvar(): void {
-        const diasSelecionados = Object.keys(this.config.diasSemana)
-            .filter(d => this.config.diasSemana[d])
-            .map(d => this.diasSemanaMap[d]);
+        if (this.form.invalid) {
+            this.erro = 'Por favor, preencha todos os campos obrigatórios';
+            this.form.markAllAsTouched();
+            return;
+        }
 
-        const dados = {
-            diasSemana: diasSelecionados,
-            horariosDisponiveis: this.config.horariosDisponiveis.filter((h: string) => h),
-            intervaloMinutos: this.config.intervaloMinutos
+        const diasSelecionados = this.form.get('diasSemana')?.value;
+        if (!diasSelecionados || diasSelecionados.length === 0) {
+            this.erro = 'Selecione pelo menos um dia da semana';
+            return;
+        }
+
+        // Validar todos os períodos
+        for (let i = 0; i < this.horarios.length; i++) {
+            if (this.validarPeriodo(i)) {
+                this.erro = `Período ${i + 1}: O horário de fim deve ser posterior ao horário de início`;
+                return;
+            }
+        }
+
+        this.salvando = true;
+        this.erro = '';
+        this.sucesso = '';
+
+        const config: Partial<ConfiguracaoResgate> = {
+            diasSemana: this.form.get('diasSemana')?.value,
+            horariosDisponiveis: this.horarios.value,
+            intervaloMinutos: this.form.get('intervaloMinutos')?.value,
+            ativo: this.form.get('ativo')?.value
         };
 
-        this.resgateService.atualizarConfiguracao(dados).subscribe({
-            next: () => alert('Salvo!'),
-            error: () => alert('Erro!')
+        this.resgateService.atualizarConfiguracao(config).subscribe({
+            next: () => {
+                this.sucesso = 'Configuração salva com sucesso!';
+                this.salvando = false;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+            error: (err) => {
+                this.erro = 'Erro ao salvar configuração. Tente novamente.';
+                this.salvando = false;
+                console.error(err);
+            }
         });
     }
 }
