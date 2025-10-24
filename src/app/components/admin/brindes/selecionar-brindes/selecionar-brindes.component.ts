@@ -32,8 +32,8 @@ export class SelecionarBrindesComponent implements OnInit {
         this.carregando = true;
         this.erro = '';
 
-        // Carregar apenas brindes ativos
-        this.brindeService.listarBrindes({ ativo: true }).subscribe({
+        // Carregar todos os brindes
+        this.brindeService.listarBrindes().subscribe({
             next: (data: any) => {
                 this.brindes = data;
                 // Pré-selecionar os brindes que já estão disponíveis para resgate

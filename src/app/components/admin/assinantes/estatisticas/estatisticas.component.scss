@@ -1,0 +1,532 @@
+.estatisticas-container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.header {
+    margin-bottom: 2rem;
+
+    .titulo-secao {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .icone-titulo {
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitulo {
+            margin: 0.25rem 0 0 0;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+    }
+}
+
+// Loading State
+.loading-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    animation: fadeIn 0.3s ease-in;
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        margin: 0 auto 1rem;
+        border: 4px solid #f3f4f6;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    p {
+        color: #6b7280;
+        font-size: 1rem;
+    }
+}
+
+// Erro State
+.erro-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    border-radius: 16px;
+    animation: fadeIn 0.3s ease-in;
+
+    .erro-icon {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        color: #dc2626;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-retry {
+        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+    }
+}
+
+// Conteúdo
+.estatisticas-content {
+    animation: slideUp 0.5s ease-out;
+}
+
+// Grid de Métricas Principais
+.metricas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.metrica-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .metrica-icon {
+        font-size: 2.5rem;
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        flex-shrink: 0;
+    }
+
+    .metrica-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+
+        .metrica-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metrica-valor {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            line-height: 1;
+        }
+
+        .metrica-subtitulo {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+    }
+
+    &.total {
+        border-color: #667eea20;
+
+        .metrica-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .metrica-valor {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    }
+
+    &.ativos {
+        border-color: #10b98120;
+
+        .metrica-icon {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .metrica-valor {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    }
+
+    &.arrecadacao {
+        border-color: #f59e0b20;
+
+        .metrica-icon {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .metrica-valor {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    }
+
+    &.media {
+        border-color: #8b5cf620;
+
+        .metrica-icon {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+        }
+
+        .metrica-valor {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    }
+}
+
+// Métricas Secundárias
+.metricas-secundarias {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.metrica-secundaria {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .metrica-sec-icon {
+        font-size: 2rem;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        flex-shrink: 0;
+    }
+
+    .metrica-sec-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .metrica-sec-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .metrica-sec-valor {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+    }
+}
+
+// Cards de Gráficos
+.grafico-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .grafico-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f3f4f6;
+
+        h2 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .grafico-descricao {
+            margin: 0;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+    }
+
+    .grafico-container {
+        position: relative;
+        width: 100%;
+        height: 400px;
+
+        canvas {
+            max-height: 400px;
+        }
+    }
+}
+
+// Card de Insights
+.insights-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    color: white;
+
+    h2 {
+        margin: 0 0 1.5rem 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .insights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .insight-item {
+        background: rgba(255, 255, 255, 0.15);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 1.25rem;
+        display: flex;
+        gap: 1rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .insight-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .insight-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            strong {
+                font-size: 1rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                opacity: 0.95;
+            }
+
+            p {
+                margin: 0;
+                font-size: 0.9rem;
+                opacity: 0.85;
+                line-height: 1.4;
+            }
+        }
+    }
+}
+
+// Animações
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// Responsividade
+@media (max-width: 1024px) {
+    .estatisticas-container {
+        padding: 1.5rem;
+    }
+
+    .metricas-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+    }
+
+    .grafico-card .grafico-container {
+        height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .estatisticas-container {
+        padding: 1rem;
+    }
+
+    .header .titulo-secao {
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        .icone-titulo {
+            width: 50px;
+            height: 50px;
+            font-size: 2rem;
+        }
+    }
+
+    .metricas-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metrica-card {
+        .metrica-info .metrica-valor {
+            font-size: 1.75rem;
+        }
+    }
+
+    .metricas-secundarias {
+        grid-template-columns: 1fr;
+    }
+
+    .grafico-card {
+        padding: 1.5rem;
+
+        .grafico-container {
+            height: 300px;
+        }
+
+        .grafico-header h2 {
+            font-size: 1.25rem;
+        }
+    }
+
+    .insights-card {
+        padding: 1.5rem;
+
+        .insights-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .header .titulo-secao {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .icone-titulo {
+            width: 45px;
+            height: 45px;
+            font-size: 1.75rem;
+        }
+
+        h1 {
+            font-size: 1.25rem;
+        }
+    }
+
+    .metrica-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+
+        .metrica-info .metrica-valor {
+            font-size: 1.5rem;
+        }
+    }
+
+    .metrica-secundaria {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .grafico-card .grafico-container {
+        height: 250px;
+    }
+}

@@ -1,0 +1,155 @@
+<div class="estatisticas-container">
+    <div class="header">
+        <div class="titulo-secao">
+            <div class="icone-titulo">📊</div>
+            <div>
+                <h1>Estatísticas de Apoiadores</h1>
+                <p class="subtitulo">Acompanhe métricas e tendências dos apoiadores</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    @if (carregando) {
+    <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando estatísticas...</p>
+    </div>
+    }
+
+    <!-- Erro -->
+    @if (erro && !carregando) {
+    <div class="erro-state">
+        <span class="erro-icon">⚠️</span>
+        <p>{{ erro }}</p>
+        <button class="btn-retry" (click)="carregarEstatisticas()">Tentar Novamente</button>
+    </div>
+    }
+
+    <!-- Conteúdo -->
+    @if (!carregando && !erro) {
+    <div class="estatisticas-content">
+        <!-- Cards de Métricas Principais -->
+        <div class="metricas-grid">
+            <div class="metrica-card total">
+                <div class="metrica-icon">👥</div>
+                <div class="metrica-info">
+                    <span class="metrica-label">Total de Apoiadores</span>
+                    <span class="metrica-valor">{{ stats.totalApoiadores }}</span>
+                    <span class="metrica-subtitulo">Cadastrados no sistema</span>
+                </div>
+            </div>
+
+            <div class="metrica-card ativos">
+                <div class="metrica-icon">✅</div>
+                <div class="metrica-info">
+                    <span class="metrica-label">Apoiadores Ativos</span>
+                    <span class="metrica-valor">{{ stats.apoiadoresAtivos }}</span>
+                    <span class="metrica-subtitulo">Com contribuição ativa</span>
+                </div>
+            </div>
+
+            <div class="metrica-card arrecadacao">
+                <div class="metrica-icon">💰</div>
+                <div class="metrica-info">
+                    <span class="metrica-label">Total Arrecadado</span>
+                    <span class="metrica-valor">{{ stats.totalArrecadado | currency:'BRL' }}</span>
+                    <span class="metrica-subtitulo">Valor acumulado</span>
+                </div>
+            </div>
+
+            <div class="metrica-card media">
+                <div class="metrica-icon">📈</div>
+                <div class="metrica-info">
+                    <span class="metrica-label">Média por Apoiador</span>
+                    <span class="metrica-valor">{{ stats.valorMedioPorApoiador | currency:'BRL' }}</span>
+                    <span class="metrica-subtitulo">Contribuição média</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Métricas Secundárias -->
+        <div class="metricas-secundarias">
+            <div class="metrica-secundaria">
+                <div class="metrica-sec-icon">⏱️</div>
+                <div class="metrica-sec-info">
+                    <span class="metrica-sec-label">Tempo Médio de Apoio</span>
+                    <span class="metrica-sec-valor">{{ formatarMeses(stats.tempoMedioApoio) }}</span>
+                </div>
+            </div>
+
+            <div class="metrica-secundaria">
+                <div class="metrica-sec-icon">🎯</div>
+                <div class="metrica-sec-info">
+                    <span class="metrica-sec-label">Taxa de Retenção</span>
+                    <span class="metrica-sec-valor">{{ stats.taxaRetencao }}%</span>
+                </div>
+            </div>
+
+            <div class="metrica-secundaria">
+                <div class="metrica-sec-icon">💵</div>
+                <div class="metrica-sec-info">
+                    <span class="metrica-sec-label">Arrecadação Mensal Média</span>
+                    <span class="metrica-sec-valor">{{ stats.valorMedioMensal | currency:'BRL' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Evolução Mensal -->
+        <div class="grafico-card">
+            <div class="grafico-header">
+                <h2>📈 Evolução Mensal</h2>
+                <p class="grafico-descricao">Acompanhe o crescimento e movimentação de apoiadores ao longo dos meses</p>
+            </div>
+            <div class="grafico-container">
+                <canvas baseChart [data]="evolucaoMensalChartData" [options]="evolucaoMensalChartOptions"
+                    [type]="evolucaoMensalChartType">
+                </canvas>
+            </div>
+        </div>
+
+        <!-- Gráfico de Apoiadores por Dia da Semana -->
+        <div class="grafico-card">
+            <div class="grafico-header">
+                <h2>📅 Apoiadores por Dia da Semana</h2>
+                <p class="grafico-descricao">Distribuição de apoiadores por dia da semana em que começaram a contribuir
+                </p>
+            </div>
+            <div class="grafico-container">
+                <canvas baseChart [data]="apoiadoresPorDiaChartData" [options]="apoiadoresPorDiaChartOptions"
+                    [type]="apoiadoresPorDiaChartType">
+                </canvas>
+            </div>
+        </div>
+
+        <!-- Insights -->
+        <div class="insights-card">
+            <h2>💡 Insights</h2>
+            <div class="insights-grid">
+                <div class="insight-item">
+                    <span class="insight-icon">🎯</span>
+                    <div class="insight-content">
+                        <strong>Engajamento</strong>
+                        <p>{{ ((stats.apoiadoresAtivos / stats.totalApoiadores) * 100).toFixed(1) }}% dos apoiadores
+                            estão ativos</p>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-icon">⭐</span>
+                    <div class="insight-content">
+                        <strong>Fidelidade</strong>
+                        <p>Tempo médio de apoio de {{ formatarMeses(stats.tempoMedioApoio) }}</p>
+                    </div>
+                </div>
+                <div class="insight-item">
+                    <span class="insight-icon">💚</span>
+                    <div class="insight-content">
+                        <strong>Retenção</strong>
+                        <p>Taxa de retenção de {{ stats.taxaRetencao }}% indica boa satisfação</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>
