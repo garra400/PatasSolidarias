@@ -1,0 +1,147 @@
+<div class="editor-container">
+    <div class="header">
+        <div class="titulo-secao">
+            <div class="icone-titulo">📰</div>
+            <div>
+                <h1>{{ postId ? 'Editar' : 'Nova' }} Newsletter</h1>
+                <p class="subtitulo">Crie e envie newsletters para {{ totalDestinatarios }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensagens de Sucesso/Erro -->
+    <div *ngIf="sucesso" class="alert alert-success">
+        <span class="alert-icon">✅</span>
+        <p>{{ sucesso }}</p>
+    </div>
+
+    <div *ngIf="erro" class="alert alert-erro">
+        <span class="alert-icon">⚠️</span>
+        <p>{{ erro }}</p>
+    </div>
+
+    <!-- Formulário -->
+    <div class="form-card">
+        <!-- Título -->
+        <div class="form-grupo">
+            <label for="titulo">Título da Newsletter *</label>
+            <input type="text" id="titulo" [(ngModel)]="titulo"
+                placeholder="Digite um título atrativo para a newsletter..." class="input-titulo">
+        </div>
+
+        <!-- Destinatários -->
+        <div class="form-grupo">
+            <label for="destinatarios">Destinatários *</label>
+            <div class="destinatarios-options">
+                <label class="radio-option" [class.selected]="destinatarios === 'apoiadores'">
+                    <input type="radio" name="destinatarios" value="apoiadores" [(ngModel)]="destinatarios">
+                    <div class="option-content">
+                        <span class="option-icon">🎁</span>
+                        <div>
+                            <strong>Apenas Apoiadores</strong>
+                            <small>Usuários com contribuição ativa</small>
+                        </div>
+                    </div>
+                </label>
+                <label class="radio-option" [class.selected]="destinatarios === 'todos'">
+                    <input type="radio" name="destinatarios" value="todos" [(ngModel)]="destinatarios">
+                    <div class="option-content">
+                        <span class="option-icon">👥</span>
+                        <div>
+                            <strong>Todos os Usuários</strong>
+                            <small>Todos cadastrados na plataforma</small>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Editor de Conteúdo -->
+        <div class="form-grupo">
+            <div class="editor-header">
+                <label>Conteúdo da Newsletter *</label>
+                <button class="btn-biblioteca" (click)="abrirBiblioteca()" type="button">
+                    <span class="icon">🖼️</span>
+                    Inserir Imagem
+                </button>
+            </div>
+
+            <quill-editor [(ngModel)]="conteudo" [modules]="quillModules"
+                placeholder="Escreva o conteúdo da sua newsletter aqui..." class="editor-quill">
+            </quill-editor>
+        </div>
+
+        <!-- Ações -->
+        <div class="form-acoes">
+            <button class="btn-cancelar" (click)="cancelar()" [disabled]="salvando || enviando">
+                Cancelar
+            </button>
+            <button class="btn-rascunho" (click)="salvarRascunho()" [disabled]="salvando || enviando">
+                <span *ngIf="!salvando">💾 Salvar Rascunho</span>
+                <span *ngIf="salvando">Salvando...</span>
+            </button>
+            <button class="btn-enviar" (click)="enviarNewsletter()" [disabled]="salvando || enviando">
+                <span *ngIf="!enviando">📧 Enviar Newsletter</span>
+                <span *ngIf="enviando">Enviando...</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Biblioteca de Imagens -->
+<div class="modal-overlay" *ngIf="mostrarBiblioteca" (click)="fecharBiblioteca()">
+    <div class="modal-content biblioteca" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>📚 Biblioteca de Imagens</h2>
+            <button class="btn-fechar" (click)="fecharBiblioteca()">✕</button>
+        </div>
+
+        <!-- Filtros -->
+        <div class="biblioteca-filtros">
+            <button class="filtro-btn" [class.active]="tipoImagemFiltro === 'todos'"
+                (click)="tipoImagemFiltro = 'todos'">
+                Todas
+            </button>
+            <button class="filtro-btn" [class.active]="tipoImagemFiltro === 'animal'"
+                (click)="tipoImagemFiltro = 'animal'">
+                🐾 Animais
+            </button>
+            <button class="filtro-btn" [class.active]="tipoImagemFiltro === 'brinde'"
+                (click)="tipoImagemFiltro = 'brinde'">
+                🎁 Brindes
+            </button>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="carregandoImagens" class="biblioteca-loading">
+            <div class="spinner"></div>
+            <p>Carregando imagens...</p>
+        </div>
+
+        <!-- Grid de Imagens -->
+        <div *ngIf="!carregandoImagens" class="biblioteca-grid">
+            <div *ngIf="imagensFiltradas.length === 0" class="biblioteca-empty">
+                <span class="empty-icon">🖼️</span>
+                <p>Nenhuma imagem encontrada</p>
+            </div>
+
+            <div *ngFor="let imagem of imagensFiltradas" class="imagem-card" (click)="inserirImagem(imagem)">
+                <div class="imagem-preview">
+                    <img [src]="imagem.url" [alt]="imagem.nome">
+                    <div class="imagem-overlay">
+                        <span class="overlay-icon">✓</span>
+                        <span class="overlay-text">Inserir</span>
+                    </div>
+                </div>
+                <div class="imagem-info">
+                    <span class="tipo-badge" [class.animal]="imagem.tipo === 'animal'"
+                        [class.brinde]="imagem.tipo === 'brinde'">
+                        {{ imagem.tipo === 'animal' ? '🐾' : '🎁' }}
+                    </span>
+                    <strong>{{ imagem.nome }}</strong>
+                    <small *ngIf="imagem.descricao">{{ imagem.descricao }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
