@@ -1,0 +1,270 @@
+<div class="resgates-container">
+    <div class="header">
+        <div class="titulo-secao">
+            <div class="icone-titulo">📦</div>
+            <div>
+                <h1>Solicitações de Resgate</h1>
+                <p class="subtitulo">Gerencie as solicitações de resgate de brindes</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="stats-grid">
+        <div class="stat-card total">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <span class="stat-valor">{{ totalResgates }}</span>
+                <span class="stat-label">Total de Resgates</span>
+            </div>
+        </div>
+        <div class="stat-card pendente">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <span class="stat-valor">{{ resgatesPendentes }}</span>
+                <span class="stat-label">Pendentes</span>
+            </div>
+        </div>
+        <div class="stat-card confirmado">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <span class="stat-valor">{{ resgatesConfirmados }}</span>
+                <span class="stat-label">Confirmados</span>
+            </div>
+        </div>
+        <div class="stat-card retirado">
+            <div class="stat-icon">🎉</div>
+            <div class="stat-info">
+                <span class="stat-valor">{{ resgatesRetirados }}</span>
+                <span class="stat-label">Retirados</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros-card">
+        <div class="filtros-header">
+            <h3>🔍 Filtros</h3>
+            <button class="btn-limpar" (click)="limparFiltros()"
+                *ngIf="filtroStatus || filtroDataInicio || filtroDataFim">
+                Limpar Filtros
+            </button>
+        </div>
+        <div class="filtros-content">
+            <div class="filtro-grupo">
+                <label for="filtro-status">Status</label>
+                <select id="filtro-status" [(ngModel)]="filtroStatus" (ngModelChange)="aplicarFiltros()"
+                    class="select-filtro">
+                    <option *ngFor="let opcao of statusOpcoes" [value]="opcao.valor">
+                        {{ opcao.label }}
+                    </option>
+                </select>
+            </div>
+            <div class="filtro-grupo">
+                <label for="filtro-data-inicio">Data Início</label>
+                <input type="date" id="filtro-data-inicio" [(ngModel)]="filtroDataInicio"
+                    (ngModelChange)="aplicarFiltros()" class="input-filtro">
+            </div>
+            <div class="filtro-grupo">
+                <label for="filtro-data-fim">Data Fim</label>
+                <input type="date" id="filtro-data-fim" [(ngModel)]="filtroDataFim" (ngModelChange)="aplicarFiltros()"
+                    class="input-filtro">
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="carregando" class="loading-state">
+        <div class="spinner"></div>
+        <p>Carregando resgates...</p>
+    </div>
+
+    <!-- Erro -->
+    <div *ngIf="erro" class="erro-state">
+        <span class="erro-icon">⚠️</span>
+        <p>{{ erro }}</p>
+        <button class="btn-retry" (click)="carregarResgates()">Tentar Novamente</button>
+    </div>
+
+    <!-- Lista de Resgates -->
+    <div *ngIf="!carregando && !erro" class="resgates-content">
+        <div *ngIf="resgatesFiltrados.length === 0" class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h3>Nenhum resgate encontrado</h3>
+            <p *ngIf="filtroStatus || filtroDataInicio || filtroDataFim">
+                Tente ajustar os filtros para ver mais resultados
+            </p>
+            <p *ngIf="!filtroStatus && !filtroDataInicio && !filtroDataFim">
+                Ainda não há solicitações de resgate cadastradas
+            </p>
+        </div>
+
+        <div *ngIf="resgatesFiltrados.length > 0" class="resgates-table-wrapper">
+            <table class="resgates-table">
+                <thead>
+                    <tr>
+                        <th>Usuário</th>
+                        <th>Brinde</th>
+                        <th>Data/Horário</th>
+                        <th>Status</th>
+                        <th>Solicitado em</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let resgate of resgatesFiltrados" class="resgate-row">
+                        <td>
+                            <div class="usuario-info">
+                                <div class="usuario-avatar">{{ resgate.usuarioNome.charAt(0).toUpperCase() }}</div>
+                                <div class="usuario-dados">
+                                    <span class="usuario-nome">{{ resgate.usuarioNome }}</span>
+                                    <span class="usuario-email">{{ resgate.usuarioEmail }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="brinde-info">
+                                <span class="brinde-nome">{{ resgate.brindeNome }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="data-info">
+                                <span class="data">{{ formatarData(resgate.dataHorarioEscolhido) }}</span>
+                                <span class="horario">{{ formatarHorario(resgate.dataHorarioEscolhido) }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge" [style.background-color]="getStatusCor(resgate.status)">
+                                {{ getStatusLabel(resgate.status) }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="data-criacao">{{ formatarDataHora(resgate.dataSolicitacao) }}</span>
+                        </td>
+                        <td>
+                            <div class="acoes-grupo">
+                                <button class="btn-acao ver" (click)="verDetalhes(resgate)" title="Ver detalhes">
+                                    👁️
+                                </button>
+                                <button class="btn-acao atualizar" (click)="abrirModalStatus(resgate)"
+                                    [disabled]="!podeAtualizar(resgate)"
+                                    [title]="podeAtualizar(resgate) ? 'Atualizar status' : 'Status final'">
+                                    ✏️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Detalhes -->
+<div class="modal-overlay" *ngIf="mostrarModal" (click)="fecharModal()">
+    <div class="modal-content detalhes" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Detalhes do Resgate</h2>
+            <button class="btn-fechar" (click)="fecharModal()">✕</button>
+        </div>
+        <div class="modal-body" *ngIf="resgateDetalhes">
+            <div class="detalhe-secao">
+                <h3>👤 Usuário</h3>
+                <div class="detalhe-conteudo">
+                    <p><strong>Nome:</strong> {{ resgateDetalhes.usuarioNome }}</p>
+                    <p><strong>Email:</strong> {{ resgateDetalhes.usuarioEmail }}</p>
+                </div>
+            </div>
+            <div class="detalhe-secao">
+                <h3>🎁 Brinde</h3>
+                <div class="detalhe-conteudo">
+                    <p><strong>Nome:</strong> {{ resgateDetalhes.brindeNome }}</p>
+                </div>
+            </div>
+            <div class="detalhe-secao">
+                <h3>📅 Agendamento</h3>
+                <div class="detalhe-conteudo">
+                    <p><strong>Data:</strong> {{ formatarData(resgateDetalhes.dataHorarioEscolhido) }}</p>
+                    <p><strong>Horário:</strong> {{ formatarHorario(resgateDetalhes.dataHorarioEscolhido) }}</p>
+                </div>
+            </div>
+            <div class="detalhe-secao">
+                <h3>📊 Status</h3>
+                <div class="detalhe-conteudo">
+                    <span class="status-badge grande" [style.background-color]="getStatusCor(resgateDetalhes.status)">
+                        {{ getStatusLabel(resgateDetalhes.status) }}
+                    </span>
+                </div>
+            </div>
+            <div class="detalhe-secao" *ngIf="resgateDetalhes.observacoes">
+                <h3>📝 Observações</h3>
+                <div class="detalhe-conteudo">
+                    <p>{{ resgateDetalhes.observacoes }}</p>
+                </div>
+            </div>
+            <div class="detalhe-secao">
+                <h3>🕒 Informações do Sistema</h3>
+                <div class="detalhe-conteudo">
+                    <p><strong>Solicitado em:</strong> {{ formatarDataHora(resgateDetalhes.dataSolicitacao) }}</p>
+                    <p><strong>ID:</strong> {{ resgateDetalhes.id }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Atualização de Status -->
+<div class="modal-overlay" *ngIf="mostrarModalStatus" (click)="fecharModalStatus()">
+    <div class="modal-content status" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Atualizar Status</h2>
+            <button class="btn-fechar" (click)="fecharModalStatus()">✕</button>
+        </div>
+        <div class="modal-body" *ngIf="resgateParaAtualizar">
+            <div class="status-atual">
+                <p>Status atual:</p>
+                <span class="status-badge" [style.background-color]="getStatusCor(resgateParaAtualizar.status)">
+                    {{ getStatusLabel(resgateParaAtualizar.status) }}
+                </span>
+            </div>
+
+            <div class="form-grupo">
+                <label for="novo-status">Novo Status:</label>
+                <select id="novo-status" [(ngModel)]="novoStatus" class="select-status">
+                    <option [value]="resgateParaAtualizar.status" selected>
+                        {{ getStatusLabel(resgateParaAtualizar.status) }} (atual)
+                    </option>
+                    <option *ngFor="let opcao of getProximosStatus(resgateParaAtualizar.status)" [value]="opcao.valor">
+                        {{ opcao.label }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-grupo">
+                <label for="observacoes">Observações (opcional):</label>
+                <textarea id="observacoes" [(ngModel)]="observacoes" rows="4"
+                    placeholder="Adicione observações sobre a atualização..." class="textarea-obs"></textarea>
+            </div>
+
+            <div class="alert-info" *ngIf="novoStatus !== resgateParaAtualizar.status">
+                <span class="alert-icon">ℹ️</span>
+                <p>O usuário receberá um email notificando sobre a mudança de status.</p>
+            </div>
+
+            <div *ngIf="erro" class="erro-mensagem">
+                {{ erro }}
+            </div>
+
+            <div class="modal-acoes">
+                <button class="btn-cancelar" (click)="fecharModalStatus()" [disabled]="atualizandoStatus">
+                    Cancelar
+                </button>
+                <button class="btn-confirmar" (click)="atualizarStatus()"
+                    [disabled]="atualizandoStatus || novoStatus === resgateParaAtualizar.status">
+                    <span *ngIf="!atualizandoStatus">Confirmar Atualização</span>
+                    <span *ngIf="atualizandoStatus">Atualizando...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
