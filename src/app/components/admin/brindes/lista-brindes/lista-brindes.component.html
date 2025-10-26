@@ -50,10 +50,7 @@
                     <div class="badges">
                         <span class="badge" [class.badge-success]="brinde.disponivelParaResgate"
                             [class.badge-secondary]="!brinde.disponivelParaResgate">
-                            {{ brinde.disponivelParaResgate ? '⭐ Disponível' : '⏸️ Indisponível' }}
-                        </span>
-                        <span class="badge" [class.badge-success]="brinde.ativo" [class.badge-danger]="!brinde.ativo">
-                            {{ brinde.ativo ? '✓ Ativo' : '✗ Inativo' }}
+                            {{ brinde.disponivelParaResgate ? '⭐ Disponível para Resgate' : '⏸️ Não Disponível' }}
                         </span>
                     </div>
                     <div *ngIf="brinde.ordem != null && brinde.ordem >= 0" class="ordem-badge">

@@ -33,7 +33,7 @@ export class FormBrindeComponent implements OnInit {
             ordem: [0, [Validators.required, Validators.min(0)]],
             descricao: ['', Validators.required],
             quantidadeDisponivel: [null],
-            ativo: [true]
+            disponivelParaResgate: [true]
         });
 
         this.route.params.subscribe(params => {

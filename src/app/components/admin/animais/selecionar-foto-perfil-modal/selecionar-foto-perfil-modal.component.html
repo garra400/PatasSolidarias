@@ -35,19 +35,20 @@
 
             @if (!carregando && fotos.length > 0) {
             <div class="fotos-grid">
-                @for (foto of fotos; track foto.id) {
-                <div class="foto-item" [class.selected]="fotoSelecionadaId === foto.id"
-                    [class.perfil-atual]="fotoPerfilAtualId === foto.id" (click)="selecionarFoto(foto.id)">
+                @for (foto of fotos; track getFotoId(foto)) {
+                <div class="foto-item" [class.selected]="fotoSelecionadaId === getFotoId(foto)"
+                    [class.perfil-atual]="fotoPerfilAtualId === getFotoId(foto)"
+                    (click)="selecionarFoto(getFotoId(foto))">
                     <img [src]="getFullImageUrl(foto.url)" [alt]="foto.descricao || 'Foto do animal'">
 
-                    @if (fotoPerfilAtualId === foto.id) {
+                    @if (fotoPerfilAtualId === getFotoId(foto)) {
                     <div class="badge-perfil-atual">
                         <i class="fas fa-star"></i>
                         Perfil Atual
                     </div>
                     }
 
-                    @if (fotoSelecionadaId === foto.id) {
+                    @if (fotoSelecionadaId === getFotoId(foto)) {
                     <div class="check-overlay">
                         <i class="fas fa-check-circle"></i>
                     </div>

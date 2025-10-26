@@ -10,11 +10,11 @@ const router = express.Router();
 // GET - Listar todos os animais (público)
 router.get('/', async (req, res) => {
   try {
-    const { tipo, status, limit, skip = 0 } = req.query;
+    const { tipo, ativo, limit, skip = 0 } = req.query;
 
     let query = {};
     if (tipo) query.tipo = tipo;
-    if (status) query.status = status;
+    if (ativo !== undefined) query.ativo = ativo === 'true';
 
     let queryBuilder = Animal.find(query)
       .populate('fotoPerfilId')
@@ -41,14 +41,14 @@ router.get('/', async (req, res) => {
 // GET - Buscar meses disponíveis com fotos
 router.get('/meses/disponiveis', async (req, res) => {
   try {
-    const meses = await Animal.distinct('mesDisponivel', { status: 'disponivel' });
+    const meses = await Animal.distinct('mesDisponivel', { ativo: true });
     meses.sort().reverse();
 
     const mesesComContagem = await Promise.all(
       meses.map(async (mes) => {
         const count = await Animal.countDocuments({
           mesDisponivel: mes,
-          status: 'disponivel'
+          ativo: true
         });
         return { mes, quantidade: count };
       })
@@ -66,7 +66,7 @@ router.get('/by-month/:mesReferencia', async (req, res) => {
   try {
     const animais = await Animal.find({
       mesDisponivel: req.params.mesReferencia,
-      status: 'disponivel'
+      ativo: true
     })
       .populate('fotoPerfilId')
       .sort({ nome: 1 });
@@ -85,7 +85,7 @@ router.get('/by-month/:mesReferencia', async (req, res) => {
 // GET - Buscar animais ativos/disponíveis (deve vir ANTES de /:id)
 router.get('/active', async (req, res) => {
   try {
-    const animais = await Animal.find({ status: 'disponivel' })
+    const animais = await Animal.find({ ativo: true })
       .populate('fotoPerfilId')
       .sort({ criadoEm: -1 });
 
@@ -133,12 +133,9 @@ router.post('/',
 
       const animalData = { ...req.body };
 
-      // Converter campo 'ativo' para 'status'
+      // Converter string 'true'/'false' para boolean se necessário
       if (animalData.ativo !== undefined) {
-        animalData.status = animalData.ativo === 'true' || animalData.ativo === true
-          ? 'disponivel'
-          : 'em tratamento';
-        delete animalData.ativo;
+        animalData.ativo = animalData.ativo === 'true' || animalData.ativo === true;
       }
 
       // Criar o animal primeiro
@@ -152,12 +149,17 @@ router.post('/',
         const fotoUrl = `/uploads/animais/${req.file.filename}`;
         console.log('📸 Criando foto na galeria:', fotoUrl);
 
+        // Calcular mês de referência
+        const agora = new Date();
+        const mesReferencia = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}`;
+
         // Criar foto na galeria
         const foto = new Foto({
           url: fotoUrl,
           descricao: `Foto de perfil de ${animal.nome}`,
           animaisIds: [animal._id],
           adicionadaPor: req.user._id,
+          mesReferencia,
           emailEnviado: false
         });
 
@@ -203,12 +205,9 @@ router.put('/:id',
 
       const updateData = { ...req.body };
 
-      // Converter campo 'ativo' para 'status'
+      // Converter string 'true'/'false' para boolean se necessário
       if (updateData.ativo !== undefined) {
-        updateData.status = updateData.ativo === 'true' || updateData.ativo === true
-          ? 'disponivel'
-          : 'em tratamento';
-        delete updateData.ativo;
+        updateData.ativo = updateData.ativo === 'true' || updateData.ativo === true;
       }
 
       // Buscar animal atual
@@ -222,12 +221,17 @@ router.put('/:id',
         const fotoUrl = `/uploads/animais/${req.file.filename}`;
         console.log('📸 Criando nova foto na galeria:', fotoUrl);
 
+        // Calcular mês de referência
+        const agora = new Date();
+        const mesReferencia = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}`;
+
         // Criar foto na galeria
         const foto = new Foto({
           url: fotoUrl,
           descricao: `Foto de ${animalAtual.nome}`,
           animaisIds: [req.params.id],
           adicionadaPor: req.user._id,
+          mesReferencia,
           emailEnviado: false
         });
 

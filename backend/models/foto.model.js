@@ -18,6 +18,12 @@ const fotoSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    mesReferencia: {
+        type: String,
+        required: true,
+        // Formato: "YYYY-MM" (ex: "2025-11")
+        // Indica o mês em que a foto foi adicionada à galeria
+    },
     emailEnviado: {
         type: Boolean,
         default: false
@@ -34,6 +40,7 @@ const fotoSchema = new mongoose.Schema({
 // Índices para performance
 fotoSchema.index({ animaisIds: 1 });
 fotoSchema.index({ criadaEm: -1 });
+fotoSchema.index({ mesReferencia: 1 }); // Novo índice para filtrar por mês
 
 const Foto = mongoose.model('Foto', fotoSchema);
 

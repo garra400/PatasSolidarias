@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FotoService } from '@services/foto.service';
 import { AnimalService } from '@services/animal.service';
@@ -12,7 +12,7 @@ import { ImageUrlHelper } from '../../../../utils/image-url.helper';
     templateUrl: './selecionar-foto-perfil-modal.component.html',
     styleUrls: ['./selecionar-foto-perfil-modal.component.scss']
 })
-export class SelecionarFotoPerfilModalComponent implements OnInit {
+export class SelecionarFotoPerfilModalComponent implements OnInit, OnChanges {
     @Input() mostrar = false;
     @Input() animalId!: string;
     @Input() fotoPerfilAtualId?: string;
@@ -70,6 +70,13 @@ export class SelecionarFotoPerfilModalComponent implements OnInit {
         this.fotoSelecionadaId = fotoId;
     }
 
+    /**
+     * Obtém o ID da foto (trata tanto _id quanto id)
+     */
+    getFotoId(foto: any): string {
+        return foto._id || foto.id;
+    }
+
     salvar(): void {
         if (!this.fotoSelecionadaId) {
             this.erro = 'Por favor, selecione uma foto';
@@ -85,7 +92,7 @@ export class SelecionarFotoPerfilModalComponent implements OnInit {
                 this.sucesso = 'Foto de perfil atualizada com sucesso!';
                 this.salvando = false;
 
-                const fotoSelecionada = this.fotos.find(f => f.id === this.fotoSelecionadaId);
+                const fotoSelecionada = this.fotos.find(f => this.getFotoId(f) === this.fotoSelecionadaId);
                 if (fotoSelecionada) {
                     this.fotoSelecionada.emit(fotoSelecionada);
                 }

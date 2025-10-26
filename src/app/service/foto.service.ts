@@ -83,6 +83,40 @@ export class FotoService {
         return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
     }
 
+    // Galeria pessoal do usuário (baseada em meses de apoio)
+    listarMinhasFotos(params?: { limit?: number; skip?: number }): Observable<{
+        fotos: Foto[];
+        total: number;
+        hasMore: boolean;
+        mesesApoio: string[];
+    }> {
+        let httpParams = new HttpParams();
+        if (params?.limit) httpParams = httpParams.set('limit', params.limit.toString());
+        if (params?.skip) httpParams = httpParams.set('skip', params.skip.toString());
+
+        return this.http.get<{
+            fotos: Foto[];
+            total: number;
+            hasMore: boolean;
+            mesesApoio: string[];
+        }>(`${this.apiUrl}/galeria/minhas-fotos`, { params: httpParams });
+    }
+
+    // Estatísticas da galeria pessoal
+    obterEstatisticasGaleria(): Observable<{
+        totalMesesApoio: number;
+        mesesComAcesso: string[];
+        totalFotosDisponiveis: number;
+        fotosPorMes: { mes: string; quantidade: number }[];
+    }> {
+        return this.http.get<{
+            totalMesesApoio: number;
+            mesesComAcesso: string[];
+            totalFotosDisponiveis: number;
+            fotosPorMes: { mes: string; quantidade: number }[];
+        }>(`${this.apiUrl}/galeria/estatisticas`);
+    }
+
     // Publicar fotos (marcar como publicadas e enviar email)
     publicarFotos(fotosIds: string[]): Observable<{
         message: string;

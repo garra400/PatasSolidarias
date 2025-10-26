@@ -38,10 +38,9 @@ const animalSchema = new mongoose.Schema({
     enum: ['macho', 'femea', 'não informado'],
     default: 'não informado'
   },
-  status: {
-    type: String,
-    enum: ['disponivel', 'adotado', 'em tratamento'],
-    default: 'disponivel'
+  ativo: {
+    type: Boolean,
+    default: true
   },
   historia: {
     type: String,
@@ -76,7 +75,7 @@ animalSchema.pre('save', function (next) {
 
 // Método para verificar se o animal está disponível para visualização no mês atual
 animalSchema.methods.isDisponivelParaMes = function (mesReferencia) {
-  return this.mesDisponivel === mesReferencia && this.status === 'disponivel';
+  return this.mesDisponivel === mesReferencia && this.ativo === true;
 };
 
 const Animal = mongoose.model('Animal', animalSchema);

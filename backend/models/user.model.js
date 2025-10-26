@@ -128,6 +128,24 @@ userSchema.methods.calcularMesesApoio = function () {
   return this.totalMesesApoio;
 };
 
+// Método para obter meses de apoio
+userSchema.methods.getMesesApoio = function () {
+  const mesesUnicos = new Set();
+
+  this.historicoPagamentos
+    .filter(p => p.status === 'aprovado' && p.mesReferencia)
+    .forEach(p => mesesUnicos.add(p.mesReferencia));
+
+  return Array.from(mesesUnicos).sort(); // Retorna em ordem crescente
+};
+
+// Método para verificar se tem acesso a fotos de um mês específico
+userSchema.methods.temAcessoAoMes = function (mesReferencia) {
+  return this.historicoPagamentos.some(
+    p => p.status === 'aprovado' && p.mesReferencia === mesReferencia
+  );
+};
+
 const User = mongoose.model('User', userSchema);
 
 export default User;

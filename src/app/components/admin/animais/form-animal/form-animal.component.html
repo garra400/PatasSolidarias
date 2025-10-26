@@ -73,13 +73,14 @@
 
             <!-- Ativo -->
             <div class="form-group">
-                <label class="form-label">Status</label>
+                <label class="form-label">Exibir na Home</label>
                 <div class="checkbox-wrapper">
                     <input type="checkbox" id="ativo" formControlName="ativo" class="checkbox-input">
                     <label for="ativo" class="checkbox-label">
-                        Animal ativo no sistema
+                        Animal visível na página inicial
                     </label>
                 </div>
+                <p class="hint-small">Marque para exibir este animal na home page</p>
             </div>
 
             <!-- Descrição -->
@@ -108,7 +109,7 @@
     <!-- Modal Selecionar Foto de Perfil -->
     @if (mostrarModalTrocarFoto && animalId) {
     <app-selecionar-foto-perfil-modal [mostrar]="mostrarModalTrocarFoto" [animalId]="animalId"
-        [fotoPerfilAtualId]="animalAtual?.fotoPerfilId" (fechar)="fecharModalTrocarFoto()"
+        [fotoPerfilAtualId]="getFotoPerfilId()" (fechar)="fecharModalTrocarFoto()"
         (fotoSelecionada)="onFotoPerfilAlterada($event)">
     </app-selecionar-foto-perfil-modal>
     }

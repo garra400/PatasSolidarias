@@ -69,14 +69,21 @@ export class FormAnimalComponent implements OnInit {
                     tipo: animal.tipo,
                     idade: animal.idade,
                     descricao: animal.descricao,
-                    ativo: animal.ativo
+                    ativo: animal.ativo !== undefined ? animal.ativo : true
                 });
 
                 // Atualizar preview com foto de perfil
-                if (animal.fotoPerfil?.url) {
+                // O backend pode retornar fotoPerfilId populado como objeto (fotoPerfil)
+                // ou como string ID, ou pode ter fotoUrl diretamente
+                if (animal.fotoUrl) {
+                    // URL direta configurada no backend
+                    this.previewUrl = ImageUrlHelper.getFullImageUrl(animal.fotoUrl);
+                } else if (animal.fotoPerfilId && typeof animal.fotoPerfilId === 'object' && animal.fotoPerfilId.url) {
+                    // fotoPerfilId populado (objeto Foto)
+                    this.previewUrl = ImageUrlHelper.getFullImageUrl(animal.fotoPerfilId.url);
+                } else if (animal.fotoPerfil?.url) {
+                    // Campo fotoPerfil separado
                     this.previewUrl = ImageUrlHelper.getFullImageUrl(animal.fotoPerfil.url);
-                } else if (animal.fotoPerfilId) {
-                    this.previewUrl = `assets/images/animais/${animal.fotoPerfilId}.jpg`;
                 }
 
                 this.carregando = false;
@@ -193,5 +200,30 @@ export class FormAnimalComponent implements OnInit {
         setTimeout(() => {
             this.sucesso = '';
         }, 3000);
+    }
+
+    /**
+     * Obtém o ID da foto de perfil atual do animal
+     * Trata tanto o caso de fotoPerfilId ser uma string quanto um objeto populado
+     */
+    getFotoPerfilId(): string | undefined {
+        if (!this.animalAtual) return undefined;
+
+        // Se fotoPerfilId é um objeto (populado), pega o _id
+        if (this.animalAtual.fotoPerfilId && typeof this.animalAtual.fotoPerfilId === 'object') {
+            return (this.animalAtual.fotoPerfilId as any)._id || (this.animalAtual.fotoPerfilId as any).id;
+        }
+
+        // Se fotoPerfilId é uma string, retorna diretamente
+        if (typeof this.animalAtual.fotoPerfilId === 'string') {
+            return this.animalAtual.fotoPerfilId;
+        }
+
+        // Fallback: tenta fotoPerfil
+        if (this.animalAtual.fotoPerfil) {
+            return this.animalAtual.fotoPerfil.id;
+        }
+
+        return undefined;
     }
 }

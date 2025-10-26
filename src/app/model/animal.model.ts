@@ -23,11 +23,14 @@ export interface AnimalCarousel {
 
 export interface Foto {
   id: string;
+  _id?: string; // Para compatibilidade com MongoDB
   url: string;
   descricao?: string;
   animaisIds: string[]; // Array porque uma foto pode ter múltiplos animais
   animais?: Animal[]; // Objetos completos dos animais
+  mesReferencia: string; // Formato "YYYY-MM" - Mês em que a foto foi adicionada à galeria
   dataCadastro: Date;
+  criadaEm?: Date; // Alias para dataCadastro
   adicionadaPor: string; // ID do admin
   emailEnviado: boolean; // Se já foi incluída em email de notificação
 }

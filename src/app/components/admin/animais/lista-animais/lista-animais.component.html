@@ -29,7 +29,7 @@
             <div class="animal-foto">
                 <img [src]="getFotoUrl(animal)" [alt]="animal.nome">
                 <div class="animal-status" [class.ativo]="animal.ativo" [class.inativo]="!animal.ativo">
-                    {{ animal.ativo ? 'Ativo' : 'Inativo' }}
+                    {{ animal.ativo ? '✅ Visível na Home' : '🔒 Oculto' }}
                 </div>
             </div>
 
