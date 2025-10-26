@@ -1,800 +1,357 @@
-# 🐾 Patas Solidárias - UTFPR Medianeira# 🐾 Patas Solidárias - UTFPR Medianeira
+# 🐾 Patas Solidárias - UTFPR Medianeira
 
+<div align="center">
 
-
-<div align="center">Sistema completo de gerenciamento para o projeto de cuidado aos animais da UTFPR-MD, com área pública, área do usuário e painel administrativo completo.
-
-
-
-![Patas Solidárias](https://img.shields.io/badge/Patas-Solidárias-10b981?style=for-the-badge&logo=paw&logoColor=white)![Angular](https://img.shields.io/badge/Angular-20.3.6-red)
-
-![Angular](https://img.shields.io/badge/Angular-20.3.6-DD0031?style=for-the-badge&logo=angular&logoColor=white)![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)
-
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)![License](https://img.shields.io/badge/license-MIT-green)
-
+![Patas Solidárias](https://img.shields.io/badge/Patas-Solidárias-10b981?style=for-the-badge&logo=paw&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-20.3.6-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)## 📋 Índice
+**Plataforma completa de gerenciamento para projeto de cuidado aos animais**
 
+[Instalação](#-instalação) • [Documentação](#-documentação-adicional) • [Contribuir](#-como-contribuir)
 
+</div>
 
-**Plataforma completa de gerenciamento para projeto de cuidado aos animais**- [Sobre o Projeto](#sobre-o-projeto)
-
-- [Funcionalidades](#funcionalidades)
-
-[Instalação](#-instalação) • [Documentação](#-documentação-adicional) • [Contribuir](#-como-contribuir)- [Tecnologias](#tecnologias)
-
-- [Instalação](#instalação)
-
-</div>- [Estrutura do Projeto](#estrutura-do-projeto)
-
-- [Rotas](#rotas)
-
----- [Documentação Completa](#documentação-completa)
-
-- [Desenvolvimento](#desenvolvimento)
+---
 
 ## 📋 Sumário
 
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Funcionalidades](#-funcionalidades-principais)
+- [Tecnologias](#️-tecnologias-utilizadas)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação](#-instalação)
+- [Configuração](#️-configuração)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Rotas da Aplicação](#️-rotas-da-aplicação)
+- [Desenvolvimento](#-desenvolvimento)
+- [Scripts Disponíveis](#-scripts-disponíveis)
+- [Documentação Adicional](#-documentação-adicional)
+- [Como Contribuir](#-como-contribuir)
+- [Licença](#-licença)
+- [Contato](#-contato)
+
 ---
 
-- [Sobre o Projeto](#-sobre-o-projeto)
+## 🎯 Sobre o Projeto
 
-- [Funcionalidades](#-funcionalidades-principais)## 🎯 Sobre o Projeto
+**Patas Solidárias** é uma plataforma web desenvolvida para auxiliar no gerenciamento completo de campanhas de cuidado e apoio aos animais da UTFPR Medianeira. O sistema oferece três áreas distintas e integradas:
 
-- [Tecnologias](#️-tecnologias-utilizadas)
+### 🌐 **Área Pública**
+Landing page informativa com galeria de animais, informações sobre a campanha e sistema de login/registro.
 
-- [Pré-requisitos](#-pré-requisitos)Patas Solidárias é uma plataforma para gerenciar doações, assinaturas, galeria de fotos e brindes para os animais cuidados pela UTFPR Medianeira. O sistema possui:
-
-- [Instalação](#-instalação)
-
-- [Configuração](#️-configuração)- **Área Pública:** Landing page com informações sobre os animais e campanha
-
-- [Estrutura do Projeto](#-estrutura-do-projeto)- **Área do Usuário:** Gerenciamento de doações, galeria exclusiva e resgate de brindes
-
-- [Rotas da Aplicação](#️-rotas-da-aplicação)- **Painel Admin:** Sistema completo de gestão de conteúdo, usuários e estatísticas
-
-- [Desenvolvimento](#-desenvolvimento)
-
-- [Scripts Disponíveis](#-scripts-disponíveis)---
-
-- [Documentação Adicional](#-documentação-adicional)
-
-- [Como Contribuir](#-como-contribuir)## ✨ Funcionalidades
-
-- [Licença](#-licença)
-
-- [Contato](#-contato)### 🌐 Área Pública
-
-- ✅ Landing page responsiva
-
----- ✅ Galeria de animais cadastrados
-
-- ✅ Informações sobre a campanha
-
-## 🎯 Sobre o Projeto- ✅ Sistema de login/registro
-
-
-
-**Patas Solidárias** é uma plataforma web desenvolvida para auxiliar no gerenciamento completo de campanhas de cuidado e apoio aos animais da UTFPR Medianeira. O sistema oferece três áreas distintas e integradas:### 👤 Área do Usuário (`/conta`)
-
-- ✅ Dashboard personalizado
-
-### 🌐 **Área Pública**- ✅ Sistema de doações (PIX e assinatura recorrente)
-
-Landing page informativa com galeria de animais, informações sobre a campanha e sistema de login/registro.- ✅ Galeria exclusiva de fotos dos pets
-
-- ✅ Resgate de brindes
-
-### 👤 **Área do Usuário**- ✅ Histórico de pagamentos
-
-Portal personalizado onde apoiadores podem:- ✅ Gerenciamento de assinatura
-
-- Fazer doações únicas ou recorrentes- ✅ Configurações de perfil
-
+### 👤 **Área do Usuário**
+Portal personalizado onde apoiadores podem:
+- Fazer doações únicas ou recorrentes
 - Acessar galeria exclusiva de fotos dos pets
+- Resgatar brindes disponíveis
+- Gerenciar suas assinaturas e histórico de pagamentos
 
-- Resgatar brindes disponíveis### 🛡️ Painel Administrativo (`/admin`)
+### 🛡️ **Painel Administrativo**
+Sistema completo de gestão com:
+- Dashboard com estatísticas em tempo real
+- CRUD de animais, fotos e brindes
+- Sistema de notificações por email
+- Gerenciamento de resgates e agendamentos
+- Editor de newsletter
 
-- Gerenciar suas assinaturas e histórico de pagamentos- ✅ **Login Separado:** Autenticação dedicada em `/admin/login`
+---
 
-- ✅ **Dashboard:** Estatísticas gerais e KPIs
+## ✨ Funcionalidades Principais
 
-### 🛡️ **Painel Administrativo**- ✅ **Gestão de Animais:**
+### 🎨 Interface e UX
 
-Sistema completo de gestão com:  - CRUD completo
+- ✅ **Design Responsivo** - Totalmente adaptado para mobile, tablet e desktop
+- ✅ **Tema Dual** - Paleta verde para usuários e roxa para administradores
+- ✅ **Navegação Intuitiva** - Sidebars expansíveis e breadcrumbs
+- ✅ **Animações Suaves** - Transições e efeitos visuais modernos
 
-- Dashboard com estatísticas em tempo real  - Upload de foto de perfil
+### 👥 Sistema de Usuários
 
-- CRUD de animais, fotos e brindes  - Trocar foto de perfil entre fotos existentes
+- ✅ **Autenticação Dual** - Login separado para usuários (`/login`) e admins (`/admin/login`)
+- ✅ **JWT Authentication** - Tokens seguros com refresh automático
+- ✅ **Guards de Rota** - Proteção de páginas por nível de acesso
+- ✅ **Perfis Personalizáveis** - Upload de foto de perfil e edição de dados
+- ✅ **Recuperação de Senha** - Sistema de reset via email
 
-- Sistema de notificações por email  - Ativar/desativar animais
+### 🐾 Gestão de Animais
 
-- Gerenciamento de resgates e agendamentos- ✅ **Gestão de Fotos:**
+- ✅ **CRUD Completo** - Criar, visualizar, editar e desativar animais
+- ✅ **Upload de Fotos** - Suporte a múltiplas imagens por animal
+- ✅ **Galeria Inteligente** - Auto-associação de fotos ao criar/editar
+- ✅ **Troca de Foto de Perfil** - Modal para selecionar entre fotos existentes
+- ✅ **Filtros Avançados** - Por nome, tipo (cão/gato), status (ativo/inativo)
 
-- Editor de newsletter  - Upload múltiplo
+### 📸 Sistema de Fotos
 
-  - Associar fotos a múltiplos animais
-
----  - Adicionar descrições
-
-  - **Disparar emails em lote** notificando usuários sobre novas fotos
-
-## ✨ Funcionalidades Principais- ✅ **Gestão de Brindes:**
-
-  - CRUD completo
-
-### 🎨 Interface e UX  - Selecionar até 4 brindes visíveis na home
-
-  - Definir ordem de exibição
-
-- ✅ **Design Responsivo** - Totalmente adaptado para mobile, tablet e desktop  - **Sistema de troca:** Confirmação + email automático aos apoiadores
-
-- ✅ **Tema Dual** - Paleta verde para usuários e roxa para administradores- ✅ **Sistema de Resgates:**
-
-- ✅ **Navegação Intuitiva** - Sidebars expansíveis e breadcrumbs  - Configurar dias/horários de retirada
-
-- ✅ **Animações Suaves** - Transições e efeitos visuais modernos  - Visualizar solicitações de resgate
-
-  - Email automático aos admins quando usuário solicita resgate
-
-### 👥 Sistema de Usuários- ⏳ **Editor de Posts (Newsletter):**
-
-  - Editor rico de texto
-
-- ✅ **Autenticação Dual** - Login separado para usuários (`/login`) e admins (`/admin/login`)  - Inserir imagens de animais/brindes
-
-- ✅ **JWT Authentication** - Tokens seguros com refresh automático  - Templates customizáveis
-
-- ✅ **Guards de Rota** - Proteção de páginas por nível de acesso  - Disparar para todos cadastrados ou apenas apoiadores
-
-- ✅ **Perfis Personalizáveis** - Upload de foto de perfil e edição de dados- ⏳ **Dashboard de Assinaturas:**
-
-- ✅ **Recuperação de Senha** - Sistema de reset via email  - Estatísticas por mês/ano/dia
-
-  - Lista de assinantes ativos
-
-### 🐾 Gestão de Animais  - Detalhamento individual
-
-  - Gráficos de crescimento
-
-- ✅ **CRUD Completo** - Criar, visualizar, editar e desativar animais- ✅ **Sistema de Convites Admin:**
-
-- ✅ **Upload de Fotos** - Suporte a múltiplas imagens por animal  - Enviar convite por email (apenas para usuários já cadastrados)
-
-- ✅ **Galeria Inteligente** - Auto-associação de fotos ao criar/editar  - Aceitar convite via link
-
-- ✅ **Troca de Foto de Perfil** - Modal para selecionar entre fotos existentes  - Gerenciar permissões
-
-- ✅ **Filtros Avançados** - Por nome, tipo (cão/gato), status (ativo/inativo)  
-
-### 🔐 Autenticação e Segurança
-
-### 📸 Sistema de Fotos- ✅ Sistema dual: Login regular (`/login`) e admin (`/admin/login`)
-
-- ✅ Guards: `authGuard` e `adminGuard`
-
-- ✅ **Upload Múltiplo** - Envio de várias fotos simultâneas- ✅ JWT token-based authentication
-
-- ✅ **Associação Múltipla** - Vincular uma foto a vários animais- ✅ **Acesso Dual:** Admins podem usar área de cliente E administrativa
-
-- ✅ **Descrições** - Texto descritivo para cada imagem- ✅ Botões visuais indicando área admin (apenas para admins)
-
+- ✅ **Upload Múltiplo** - Envio de várias fotos simultâneas
+- ✅ **Associação Múltipla** - Vincular uma foto a vários animais
+- ✅ **Descrições** - Texto descritivo para cada imagem
 - ✅ **Notificações em Lote** - Email automático para apoiadores quando novas fotos são adicionadas
-
-- ✅ **Galeria Exclusiva** - Visualização apenas para usuários autenticados---
-
+- ✅ **Galeria Exclusiva** - Visualização apenas para usuários autenticados
 - ✅ **Thumbnails Clicáveis** - Filtro visual por animal
-
-## 🛠️ Tecnologias
 
 ### 🎁 Sistema de Brindes
 
-### Frontend
+- ✅ **CRUD de Brindes** - Gerenciamento completo de itens
+- ✅ **Seleção Destacada** - Admin escolhe até 4 brindes para exibir na home
+- ✅ **Sistema de Ordem** - Definir ordem de exibição
+- ✅ **Confirmação de Troca** - Modal com resumo antes de publicar
+- ✅ **Notificação Automática** - Email em lote ao alterar brindes visíveis
+- ✅ **Resgate por Usuários** - Solicitação de retirada com agendamento
 
-- ✅ **CRUD de Brindes** - Gerenciamento completo de itens- **Angular 20.3.6** com Standalone Components
+### 📊 Dashboard e Analytics
 
-- ✅ **Seleção Destacada** - Admin escolhe até 4 brindes para exibir na home- **TypeScript 5.7** em modo strict
-
-- ✅ **Sistema de Ordem** - Definir ordem de exibição- **SCSS** para estilização
-
-- ✅ **Confirmação de Troca** - Modal com resumo antes de publicar- **RxJS** para programação reativa
-
-- ✅ **Notificação Automática** - Email em lote ao alterar brindes visíveis- **Angular Router** com lazy loading
-
-- ✅ **Resgate por Usuários** - Solicitação de retirada com agendamento- **Control Flow Syntax** (`@if`, `@for`) do Angular 17+
-
-
-
-### 📊 Dashboard e Analytics### Backend (Integração Preparada)
-
-- Node.js + Express
-
-- ✅ **Estatísticas em Tempo Real** - KPIs de doações, assinantes e resgates- MongoDB + Mongoose
-
-- ✅ **Filtros Dinâmicos** - Por período (semana/mês/ano) e tipo de plano- JWT Authentication
-
-- ✅ **Gráficos Interativos** - Visualização de dados com Chart.js- Multer/Cloudinary (upload de imagens)
-
-- ✅ **Cards de Resumo** - Total de animais, fotos, apoiadores ativos- Nodemailer (sistema de emails)
-
-- Bull (filas de processamento)
+- ✅ **Estatísticas em Tempo Real** - KPIs de doações, assinantes e resgates
+- ✅ **Filtros Dinâmicos** - Por período (semana/mês/ano) e tipo de plano
+- ✅ **Gráficos Interativos** - Visualização de dados com Chart.js
+- ✅ **Cards de Resumo** - Total de animais, fotos, apoiadores ativos
 
 ### 📧 Sistema de Emails
 
-### Arquitetura
-
-- ✅ **Templates Personalizados** - Design responsivo para diferentes tipos de email- **Path Aliases:** `@services/`, `@models/`, `@app/`
-
-- ✅ **Disparos em Lote** - Envio para todos ou apenas apoiadores- **Services:** Camada de dados separada
-
-- ✅ **Fila de Processamento** - Sistema Bull para envios assíncronos- **Models:** Interfaces TypeScript tipadas
-
-- ✅ **Confirmações Automáticas** - Email de boas-vindas, confirmação de doação, etc.- **Guards:** Proteção de rotas
-
-- **Lazy Loading:** Módulos carregados sob demanda
+- ✅ **Templates Personalizados** - Design responsivo para diferentes tipos de email
+- ✅ **Disparos em Lote** - Envio para todos ou apenas apoiadores
+- ✅ **Fila de Processamento** - Sistema Bull para envios assíncronos
+- ✅ **Confirmações Automáticas** - Email de boas-vindas, confirmação de doação, etc.
 
 ### 🔐 Segurança
 
+- ✅ **Autenticação JWT** - Tokens com expiração e refresh
+- ✅ **Variáveis de Ambiente** - Dados sensíveis protegidos em `.env`
+- ✅ **Validação de Formulários** - Client-side e server-side
+- ✅ **Proteção CSRF** - Tokens anti-falsificação
+- ✅ **Rate Limiting** - Prevenção de ataques de força bruta
+
 ---
 
-- ✅ **Autenticação JWT** - Tokens com expiração e refresh
+## 🛠️ Tecnologias Utilizadas
 
-- ✅ **Variáveis de Ambiente** - Dados sensíveis protegidos em `.env`## 📦 Instalação
+### Frontend
 
-- ✅ **Validação de Formulários** - Client-side e server-side
-
-- ✅ **Proteção CSRF** - Tokens anti-falsificação### Pré-requisitos
-
-- ✅ **Rate Limiting** - Prevenção de ataques de força bruta- Node.js >= 18.x
-
-- npm >= 9.x
-
----- Angular CLI (`npm install -g @angular/cli`)
-
-
-
-## 🛠️ Tecnologias Utilizadas### Passos
-
-
-
-### Frontend```bash
-
-# 1. Clone o repositório
-
-| Tecnologia | Versão | Descrição |git clone https://github.com/garra400/PatasSolidarias.git
-
-|------------|--------|-----------|cd PatasSolidarias
-
+| Tecnologia | Versão | Descrição |
+|------------|--------|-----------|
 | **Angular** | 20.3.6 | Framework principal com Standalone Components |
-
-| **TypeScript** | 5.7 | Superset do JavaScript com tipagem estática |# 2. Instale as dependências
-
-| **SCSS** | - | Pré-processador CSS com variáveis e mixins |npm install
-
+| **TypeScript** | 5.7 | Superset do JavaScript com tipagem estática |
+| **SCSS** | - | Pré-processador CSS com variáveis e mixins |
 | **RxJS** | 7.8+ | Programação reativa e gerenciamento de estado |
-
-| **Angular Router** | 20.3.6 | Navegação com lazy loading |# 3. Configure o ambiente
-
-| **Chart.js** | 4.x | Gráficos interativos |cp src/environments/environment.example.ts src/environments/environment.ts
-
-# Edite environment.ts com suas configurações
+| **Angular Router** | 20.3.6 | Navegação com lazy loading |
+| **Chart.js** | 4.x | Gráficos interativos |
 
 ### Backend
 
-# 4. Inicie o servidor de desenvolvimento
-
-| Tecnologia | Versão | Descrição |ng serve
-
+| Tecnologia | Versão | Descrição |
 |------------|--------|-----------|
-
-| **Node.js** | 18+ | Runtime JavaScript server-side |# 5. Acesse no navegador
-
-| **Express** | 4.x | Framework web minimalista |# http://localhost:4200
-
-| **MongoDB** | 6+ | Banco de dados NoSQL |```
-
+| **Node.js** | 18+ | Runtime JavaScript server-side |
+| **Express** | 4.x | Framework web minimalista |
+| **MongoDB** | 6+ | Banco de dados NoSQL |
 | **Mongoose** | 8.x | ODM para MongoDB |
-
-| **JWT** | 9.x | Autenticação baseada em tokens |---
-
+| **JWT** | 9.x | Autenticação baseada em tokens |
 | **Multer** | 1.4.x | Upload de arquivos |
-
-| **Nodemailer** | 6.x | Envio de emails |## 📁 Estrutura do Projeto
-
+| **Nodemailer** | 6.x | Envio de emails |
 | **Bull** | 4.x | Filas de processamento |
 
-```
+### DevOps e Ferramentas
 
-### DevOps e Ferramentassrc/app/
+- **Git** - Controle de versão
+- **GitHub** - Repositório remoto
+- **VSCode** - IDE principal
+- **Postman** - Testes de API
+- **MongoDB Compass** - Interface para banco de dados
 
-├── components/
+---
 
-- **Git** - Controle de versão│   ├── admin/                    # Componentes administrativos
+## 📋 Pré-requisitos
 
-- **GitHub** - Repositório remoto│   │   ├── auth/
-
-- **VSCode** - IDE principal│   │   │   └── admin-login/      # Login admin (/admin/login)
-
-- **Postman** - Testes de API│   │   ├── dashboard/            # Dashboard principal
-
-- **MongoDB Compass** - Interface para banco de dados│   │   ├── animais/              # CRUD de animais
-
-│   │   ├── fotos/                # Gestão de fotos
-
----│   │   ├── brindes/              # CRUD de brindes
-
-│   │   ├── gerenciar-brindes/    # Seleção de visíveis
-
-## 📋 Pré-requisitos│   │   ├── posts/                # Newsletter
-
-│   │   ├── assinantes/           # Estatísticas
-
-Antes de começar, certifique-se de ter instalado:│   │   ├── resgates/             # Gerenciar resgates
-
-│   │   └── admins/               # Convites e permissões
-
-```bash│   ├── user/                     # Área do usuário
-
-# Node.js (versão 18 ou superior)│   │   ├── user-layout/          # Layout com sidebar
-
-node --version  # v18.x.x ou maior│   │   ├── seja-apoiador/        # Página de doação
-
-│   │   ├── fotos/                # Galeria exclusiva
-
-# npm (vem com Node.js)│   │   ├── meus-brindes/         # Brindes do usuário
-
-npm --version   # 9.x.x ou maior│   │   └── ...
-
-│   ├── auth/                     # Login/Registro público
-
-# Angular CLI (global)│   ├── shared/                   # Componentes compartilhados
-
-npm install -g @angular/cli│   │   ├── header/               # Header global
-
-ng version      # 20.3.6 ou maior│   │   └── ...
-
-│   └── home/                     # Landing page
-
-# Git├── service/
-
-git --version   # 2.x.x ou maior│   ├── auth.service.ts           # Autenticação
-
-```│   ├── animal.service.ts         # CRUD animais
-
-│   ├── foto.service.ts           # Upload e gestão fotos
-
----│   ├── brinde.service.ts         # CRUD brindes
-
-│   ├── post.service.ts           # Newsletter
-
-## 📦 Instalação│   ├── resgate.service.ts        # Agendamentos
-
-│   ├── admin.service.ts          # Convites e permissões
-
-### 1. Clone o Repositório│   └── ...
-
-├── model/
-
-```bash│   ├── user.model.ts             # Usuário
-
-git clone https://github.com/garra400/PatasSolidarias.git│   ├── animal.model.ts           # Animal + Foto
-
-cd PatasSolidarias│   ├── brinde.model.ts           # Brinde + Config + Resgate
-
-```│   ├── post.model.ts             # Post + Template
-
-│   └── admin.model.ts            # Convite + Stats
-
-### 2. Instale as Dependências├── guards/
-
-│   ├── auth.guard.ts             # Protege rotas autenticadas
-
-```bash│   └── admin.guard.ts            # Protege rotas admin
-
-# Frontend (raiz do projeto)└── routes/
-
-npm install    ├── app.routes.ts             # Rotas principais
-
-    └── admin.routes.ts           # Rotas administrativas
-
-# Backend (separado)```
-
-cd backend
-
-npm install---
-
-cd ..
-
-```## 🗺️ Rotas
-
-
-
-### 3. Configure as Variáveis de Ambiente### Públicas
-
-```
-
-#### Frontend: `src/environments/environment.ts`/                    # Home
-
-/login               # Login usuários
-
-```typescript/registro            # Registro
-
-export const environment = {/recuperar-senha     # Recuperação de senha
-
-  production: false,/confirmar-email     # Confirmação de email
-
-  apiUrl: 'http://localhost:3000/api',```
-
-  mercadoPagoPublicKey: 'SUA_PUBLIC_KEY_AQUI'
-
-};### Área do Usuário (requer autenticação)
-
-``````
-
-/conta                      # Dashboard
-
-#### Backend: `backend/.env`/conta/seja-apoiador        # Página de doação
-
-/conta/doar-novamente       # Doar novamente
-
-```env/conta/fotos                # Galeria exclusiva
-
-# Servidor/conta/meus-brindes         # Brindes resgatados
-
-PORT=3000/conta/pagamentos           # Histórico de pagamentos
-
-NODE_ENV=development/conta/assinatura           # Gerenciar assinatura
-
-/conta/configuracoes        # Configurações
-
-# MongoDB```
-
-MONGODB_URI=mongodb+srv://usuario:senha@cluster.mongodb.net/patassolidarias
-
-### Área Administrativa (requer admin)
-
-# JWT```
-
-JWT_SECRET=sua_chave_secreta_super_segura_aqui/admin/login                # Login admin (público)
-
-JWT_EXPIRE=7d/admin                      # Dashboard admin
-
-/admin/animais              # Listar animais
-
-# Email (Nodemailer)/admin/animais/novo         # Criar animal
-
-SMTP_HOST=smtp.gmail.com/admin/animais/:id          # Editar animal
-
-SMTP_PORT=587/admin/fotos                # Galeria de fotos
-
-SMTP_USER=seu_email@gmail.com/admin/fotos/upload         # Upload múltiplo
-
-SMTP_PASS=sua_senha_app/admin/brindes              # Listar brindes
-
-/admin/brindes/novo         # Criar brinde
-
-# Mercado Pago/admin/gerenciar-brindes    # Selecionar visíveis
-
-MP_ACCESS_TOKEN=seu_access_token_aqui/admin/posts                # Posts/Newsletter
-
-MP_PUBLIC_KEY=sua_public_key_aqui/admin/posts/novo           # Criar post
-
-/admin/assinantes           # Dashboard assinantes
-
-# URLs/admin/resgates             # Gerenciar resgates
-
-FRONTEND_URL=http://localhost:4200/admin/admins               # Gerenciar admins
-
-``````
-
-
-
-### 4. Inicie os Servidores---
-
-
-
-#### Terminal 1 - Backend## 📚 Documentação Completa
+Antes de começar, certifique-se de ter instalado:
 
 ```bash
+# Node.js (versão 18 ou superior)
+node --version  # v18.x.x ou maior
 
-cd backendPara documentação detalhada do sistema administrativo, incluindo:
+# npm (vem com Node.js)
+npm --version   # 9.x.x ou maior
 
-npm start- Fluxos de trabalho completos
+# Angular CLI (global)
+npm install -g @angular/cli
+ng version      # 20.3.6 ou maior
 
-# ou para desenvolvimento com nodemon:- Especificação de endpoints backend
+# Git
+git --version   # 2.x.x ou maior
+```
 
-npm run dev- Modelos de dados
+---
 
-```- Sistema de emails
+## 📦 Instalação
 
-- Guia de implementação
+### 1. Clone o Repositório
+
+```bash
+git clone https://github.com/garra400/PatasSolidarias.git
+cd PatasSolidarias
+```
+
+### 2. Instale as Dependências
+
+```bash
+# Frontend (raiz do projeto)
+npm install
+
+# Backend (separado)
+cd backend
+npm install
+cd ..
+```
+
+### 3. Configure as Variáveis de Ambiente
+
+#### Frontend: `src/environments/environment.ts`
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/api',
+  mercadoPagoPublicKey: 'SUA_PUBLIC_KEY_AQUI'
+};
+```
+
+#### Backend: `backend/.env`
+
+```env
+# Servidor
+PORT=3000
+NODE_ENV=development
+
+# MongoDB
+MONGODB_URI=mongodb+srv://usuario:senha@cluster.mongodb.net/patassolidarias
+
+# JWT
+JWT_SECRET=sua_chave_secreta_super_segura_aqui
+JWT_EXPIRE=7d
+
+# Email (Nodemailer)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=seu_email@gmail.com
+SMTP_PASS=sua_senha_app
+
+# Mercado Pago
+MP_ACCESS_TOKEN=seu_access_token_aqui
+MP_PUBLIC_KEY=sua_public_key_aqui
+
+# URLs
+FRONTEND_URL=http://localhost:4200
+```
+
+### 4. Inicie os Servidores
+
+#### Terminal 1 - Backend
+
+```bash
+cd backend
+npm start
+# ou para desenvolvimento com nodemon:
+npm run dev
+```
 
 #### Terminal 2 - Frontend
 
-```bashConsulte: **[DOCUMENTACAO_SISTEMA_ADMIN.md](./DOCUMENTACAO_SISTEMA_ADMIN.md)**
-
-ng serve
-
-# ou---
-
-npm start
-
-```## 🚀 Desenvolvimento
-
-
-
-### 5. Acesse a Aplicação### Servidor de Desenvolvimento
-
 ```bash
-
-- **Frontend:** [http://localhost:4200](http://localhost:4200)ng serve
-
-- **Backend API:** [http://localhost:3000/api](http://localhost:3000/api)# ou
-
+ng serve
+# ou
 npm start
+```
 
----```
+### 5. Acesse a Aplicação
 
-Acesse: `http://localhost:4200`
+- **Frontend:** [http://localhost:4200](http://localhost:4200)
+- **Backend API:** [http://localhost:3000/api](http://localhost:3000/api)
+
+---
 
 ## ⚙️ Configuração
 
-### Build de Produção
+### Configuração do MongoDB Atlas
 
-### Configuração do MongoDB Atlas```bash
-
-ng build
-
-1. Crie uma conta em [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)# ou
-
-2. Crie um novo cluster (Free Tier disponível)npm run build
-
-3. Configure um usuário de banco de dados```
-
-4. Whitelist seu IP (ou use `0.0.0.0/0` para desenvolvimento)Artefatos em: `dist/`
-
+1. Crie uma conta em [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Crie um novo cluster (Free Tier disponível)
+3. Configure um usuário de banco de dados
+4. Whitelist seu IP (ou use `0.0.0.0/0` para desenvolvimento)
 5. Copie a connection string para `backend/.env`
 
-### Testes
+### Configuração do Mercado Pago
 
-### Configuração do Mercado Pago```bash
-
-# Testes unitários
-
-1. Crie uma conta em [Mercado Pago Developers](https://www.mercadopago.com.br/developers)ng test
-
+1. Crie uma conta em [Mercado Pago Developers](https://www.mercadopago.com.br/developers)
 2. Acesse "Suas integrações" → "Credenciais de teste"
-
-3. Copie `Public Key` e `Access Token`# Testes e2e
-
-4. Cole em `backend/.env` e `environment.ts`ng e2e
-
-```
+3. Copie `Public Key` e `Access Token`
+4. Cole em `backend/.env` e `environment.ts`
 
 ### Configuração de Email (Nodemailer)
 
-### Linting
-
-Para Gmail:```bash
-
-1. Ative a verificação em 2 etapasng lint
-
-2. Gere uma "Senha de App"```
-
+Para Gmail:
+1. Ative a verificação em 2 etapas
+2. Gere uma "Senha de App"
 3. Use essa senha em `SMTP_PASS`
 
-### Code Scaffolding
-
----```bash
-
-# Gerar componente
-
-## 📁 Estrutura do Projetong generate component nome-do-componente
-
-
-
-```# Gerar serviço
-
-PatasSolidarias/ng generate service nome-do-servico
-
-├── backend/                      # Servidor Node.js
-
-│   ├── models/                   # Modelos Mongoose# Gerar guard
-
-│   ├── routes/                   # Rotas da APIng generate guard nome-do-guard
-
-│   ├── middleware/               # Middlewares (auth, upload, etc)```
-
-│   ├── utils/                    # Funções utilitárias
-
-│   ├── uploads/                  # Arquivos enviados---
-
-│   ├── server.js                 # Arquivo principal
-
-│   ├── .env.example              # Template de variáveis## 🎨 Guia de Estilo
-
-│   └── package.json
-
-│### Cores
-
-├── src/                          # Código-fonte Angular
-
-│   ├── app/**Admin (Roxo):**
-
-│   │   ├── components/```scss
-
-│   │   │   ├── admin/            # Área administrativa$admin-primary: #667eea;
-
-│   │   │   │   ├── auth/$admin-secondary: #764ba2;
-
-│   │   │   │   │   └── admin-login/```
-
-│   │   │   │   ├── dashboard/
-
-│   │   │   │   ├── animais/**Cliente (Verde):**
-
-│   │   │   │   │   ├── lista-animais/```scss
-
-│   │   │   │   │   ├── form-animal/$user-primary: #10b981;
-
-│   │   │   │   │   └── selecionar-foto-perfil-modal/$user-secondary: #059669;
-
-│   │   │   │   ├── fotos/```
-
-│   │   │   │   │   ├── lista-fotos/
-
-│   │   │   │   │   ├── upload-fotos/### Convenções de Código
-
-│   │   │   │   │   └── fotos-pendentes/
-
-│   │   │   │   ├── brindes/- **Standalone Components:** Todos componentes usam `standalone: true`
-
-│   │   │   │   │   ├── lista-brindes/- **Control Flow:** Usar `@if`, `@for`, `@switch` (Angular 17+)
-
-│   │   │   │   │   ├── form-brinde/- **Path Aliases:** Importar com `@services/`, `@models/`
-
-│   │   │   │   │   └── selecionar-brindes/- **RxJS:** Sempre fazer `unsubscribe` ou usar `async` pipe
-
-│   │   │   │   └── admin-layout/
-
-│   │   │   │---
-
-│   │   │   ├── user/             # Área do usuário
-
-│   │   │   │   ├── dashboard/## 🤝 Contribuindo
-
-│   │   │   │   ├── seja-apoiador/
-
-│   │   │   │   ├── fotos/1. Fork o projeto
-
-│   │   │   │   ├── meus-brindes/2. Crie sua feature branch (`git checkout -b feature/NovaFuncionalidade`)
-
-│   │   │   │   ├── pagamentos/3. Commit suas mudanças (`git commit -m 'Adiciona nova funcionalidade'`)
-
-│   │   │   │   └── user-layout/4. Push para a branch (`git push origin feature/NovaFuncionalidade`)
-
-│   │   │   │5. Abra um Pull Request
-
-│   │   │   ├── auth/             # Autenticação pública
-
-│   │   │   │   ├── login/---
-
-│   │   │   │   └── registro/
-
-│   │   │   │## 📝 Roadmap
-
-│   │   │   ├── shared/           # Componentes compartilhados
-
-│   │   │   │   ├── header/### ✅ Concluído
-
-│   │   │   │   ├── footer/- [x] Estrutura base do projeto
-
-│   │   │   │   ├── chart/- [x] Sistema de autenticação
-
-│   │   │   │   └── trocar-foto-perfil-modal/- [x] Área do usuário completa
-
-│   │   │   │- [x] CRUD de animais, fotos e brindes
-
-│   │   │   └── home/             # Landing page- [x] Login admin separado
-
-│   │   │- [x] Guards e proteção de rotas
-
-│   │   ├── service/              # Serviços- [x] Serviços com mock data
-
-│   │   │   ├── auth.service.ts
-
-│   │   │   ├── animal.service.ts### ⏳ Em Desenvolvimento
-
-│   │   │   ├── foto.service.ts- [ ] Editor de posts com newsletter
-
-│   │   │   ├── brinde.service.ts- [ ] Dashboard de estatísticas
-
-│   │   │   ├── user.service.ts- [ ] Sistema de gráficos
-
-│   │   │   └── ...- [ ] Integração completa com backend
-
-│   │   │- [ ] Testes unitários
-
-│   │   ├── model/                # Modelos/Interfaces
-
-│   │   │   ├── user.model.ts### 🔮 Futuro
-
-│   │   │   ├── animal.model.ts- [ ] Notificações em tempo real (WebSocket)
-
-│   │   │   ├── foto.model.ts- [ ] Sistema de chat admin-usuário
-
-│   │   │   ├── brinde.model.ts- [ ] App mobile (Ionic/React Native)
-
-│   │   │   └── ...- [ ] Painel de analytics avançado
-
-│   │   │
-
-│   │   ├── guards/               # Guards de rota---
-
-│   │   │   ├── auth.guard.ts
-
-│   │   │   └── admin.guard.ts## 📄 Licença
-
-│   │   │
-
-│   │   ├── app.ts                # Componente raizEste projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-│   │   ├── app.routes.ts         # Configuração de rotas
-
-│   │   └── app.config.ts         # Configuração global---
-
-│   │
-
-│   ├── assets/                   # Recursos estáticos## 👥 Equipe
-
-│   ├── environments/             # Configurações de ambiente
-
-│   ├── index.htmlDesenvolvido por:
-
-│   ├── main.ts- **João Victor "Garra" dos Santos Gomes** - Frontend Developer
-
-│   └── styles.scss               # Estilos globais- **UTFPR Medianeira** - Projeto Patas Solidárias
-
-│
-
-├── docs/                         # 📚 Documentação adicional---
-
-│   ├── GUIA_DESENVOLVIMENTO.md   # Guia completo para desenvolvedores
-
-│   ├── LISTA_DE_TESTES.md        # 35+ casos de teste## 📞 Contato
-
-│   ├── MERCADOPAGO-IMPLEMENTATION.md  # Integração Mercado Pago
-
-│   ├── RESUMO_FINAL.md           # Resumo das implementações- **Email:** patassolidarias@utfpr.edu.br
-
-│   └── ROADMAP_FEATURES.md       # Roadmap de funcionalidades- **Instagram:** [@patassolidarias_utfpr](https://instagram.com/patassolidarias_utfpr)
-
-│- **LinkedIn:** [Patas Solidárias](https://linkedin.com/company/patassolidarias)
-
-├── .gitignore                    # Arquivos ignorados pelo Git
-
-├── .editorconfig                 # Configuração de editor---
-
-├── angular.json                  # Configuração Angular CLI
-
-├── package.json                  # Dependências e scripts## 🙏 Agradecimentos
-
-├── tsconfig.json                 # Configuração TypeScript
-
-└── README.md                     # Este arquivo- UTFPR Medianeira
-
-```- Comunidade Angular
-
-- Todos os apoiadores do projeto
-
-> 📖 **Nota:** Toda documentação técnica detalhada foi organizada na pasta `/docs` para manter a raiz do projeto limpa. Consulte os arquivos em `/docs` para guias específicos de desenvolvimento, testes e implementação.
+---
+
+## 📁 Estrutura do Projeto
+
+```
+src/app/
+├── components/
+│   ├── admin/                    # Componentes administrativos
+│   │   ├── auth/
+│   │   │   └── admin-login/      # Login admin (/admin/login)
+│   │   ├── dashboard/            # Dashboard principal
+│   │   ├── animais/              # CRUD de animais
+│   │   ├── fotos/                # Gestão de fotos
+│   │   ├── brindes/              # CRUD de brindes
+│   │   ├── gerenciar-brindes/    # Seleção de visíveis
+│   │   ├── posts/                # Newsletter
+│   │   ├── assinantes/           # Estatísticas
+│   │   ├── resgates/             # Gerenciar resgates
+│   │   └── admins/               # Convites e permissões
+│   ├── user/                     # Área do usuário
+│   │   ├── user-layout/          # Layout com sidebar
+│   │   ├── seja-apoiador/        # Página de doação
+│   │   ├── fotos/                # Galeria exclusiva
+│   │   ├── meus-brindes/         # Brindes do usuário
+│   │   └── ...
+│   ├── auth/                     # Login/Registro público
+│   ├── shared/                   # Componentes compartilhados
+│   │   ├── header/               # Header global
+│   │   └── ...
+│   └── home/                     # Landing page
+├── service/
+│   ├── auth.service.ts           # Autenticação
+│   ├── animal.service.ts         # CRUD animais
+│   ├── foto.service.ts           # Upload e gestão fotos
+│   ├── brinde.service.ts         # CRUD brindes
+│   ├── post.service.ts           # Newsletter
+│   ├── resgate.service.ts        # Agendamentos
+│   ├── admin.service.ts          # Convites e permissões
+│   └── ...
+├── model/
+│   ├── user.model.ts             # Usuário
+│   ├── animal.model.ts           # Animal + Foto
+│   ├── brinde.model.ts           # Brinde + Config + Resgate
+│   ├── post.model.ts             # Post + Template
+│   └── admin.model.ts            # Convite + Stats
+├── guards/
+│   ├── auth.guard.ts             # Protege rotas autenticadas
+│   └── admin.guard.ts            # Protege rotas admin
+└── routes/
+    ├── app.routes.ts             # Rotas principais
+    └── admin.routes.ts           # Rotas administrativas
+```
 
 ---
 
----
+## 🗺️ Rotas
 
-**Feito com ❤️ e 🐾 por estudantes da UTFPR-MD**
+---
 
 ## 🗺️ Rotas da Aplicação
 
@@ -832,11 +389,10 @@ PatasSolidarias/ng generate service nome-do-servico
 | `/admin/animais/:id` | `FormAnimalComponent` | Editar animal |
 | `/admin/fotos` | `ListaFotosComponent` | Gerenciar fotos |
 | `/admin/fotos/upload` | `UploadFotosComponent` | Upload múltiplo |
-| `/admin/fotos/pendentes` | `FotosPendentesComponent` | Aprovar fotos |
 | `/admin/brindes` | `ListaBrindesComponent` | Listar brindes |
 | `/admin/brindes/novo` | `FormBrindeComponent` | Criar brinde |
 | `/admin/brindes/:id` | `FormBrindeComponent` | Editar brinde |
-| `/admin/brindes/selecionar` | `SelecionarBrindesComponent` | Escolher visíveis |
+| `/admin/gerenciar-brindes` | `SelecionarBrindesComponent` | Escolher visíveis |
 
 ---
 
@@ -935,6 +491,7 @@ Toda a documentação técnica detalhada está disponível na pasta **`/docs`**:
 | **[MERCADOPAGO-IMPLEMENTATION.md](./docs/MERCADOPAGO-IMPLEMENTATION.md)** | Documentação detalhada da integração com Mercado Pago |
 | **[RESUMO_FINAL.md](./docs/RESUMO_FINAL.md)** | Resumo completo das implementações realizadas no projeto |
 | **[ROADMAP_FEATURES.md](./docs/ROADMAP_FEATURES.md)** | Roadmap com funcionalidades concluídas e planejadas |
+| **[GALERIA_FOTOS.md](./backend/docs/GALERIA_FOTOS.md)** | Sistema de galeria baseado em meses de apoio |
 
 ---
 
@@ -1044,6 +601,7 @@ $user-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
 - [x] Filtros de dashboard
 - [x] Guards e proteção de rotas
 - [x] Organização de documentação
+- [x] Sistema de galeria por mês de apoio
 
 ### ⏳ Fase 2 - Em Desenvolvimento (Q1 2025)
 - [ ] Editor de posts com newsletter
