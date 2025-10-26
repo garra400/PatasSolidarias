@@ -16,13 +16,20 @@ export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot, st
     // Pegar a permissão necessária da configuração da rota
     const requiredPermission = route.data['permission'] as keyof AdminPermissoes;
 
+    console.log('🔐 PermissionGuard - Verificando permissão');
+    console.log('📍 URL solicitada:', state.url);
+    console.log('🔑 Permissão necessária:', requiredPermission);
+
     if (!requiredPermission) {
         console.error('❌ PermissionGuard: permissão não especificada na rota');
         return false;
     }
 
+    console.log('🔄 Chamando adminService.verificarAdmin()...');
     return adminService.verificarAdmin().pipe(
         map(response => {
+            console.log('✅ PermissionGuard - Resposta recebida:', response);
+
             if (!response.isAdmin) {
                 console.warn('🚫 Acesso negado: usuário não é admin');
                 router.navigate(['/login'], {
@@ -32,22 +39,36 @@ export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot, st
             }
 
             const hasPermission = response.permissoes?.[requiredPermission] || false;
+            console.log(`🔍 Tem permissão ${requiredPermission}?`, hasPermission);
 
             if (hasPermission) {
+                console.log('✅ Permissão concedida!');
                 return true;
             } else {
                 console.warn(`🚫 Acesso negado: sem permissão para ${requiredPermission}`);
-                router.navigate(['/adm'], {
+                router.navigate(['/adm/dashboard'], {
                     queryParams: { error: 'permission-denied', required: requiredPermission }
                 });
                 return false;
             }
         }),
         catchError(error => {
-            console.error('❌ Erro ao verificar permissão:', error);
-            router.navigate(['/login'], {
-                queryParams: { returnUrl: state.url, error: 'auth-failed' }
-            });
+            console.error('❌ PermissionGuard - Erro ao verificar permissão:', error);
+            console.error('❌ Erro completo:', JSON.stringify(error, null, 2));
+
+            // Se der erro 401/403, redirecionar para login
+            if (error.status === 401 || error.status === 403) {
+                console.error('❌ Não autenticado ou sem permissão - redirecionando para login');
+                router.navigate(['/login'], {
+                    queryParams: { returnUrl: state.url, error: 'auth-failed' }
+                });
+            } else {
+                // Para outros erros, redirecionar para home com mensagem
+                console.error('❌ Erro inesperado - redirecionando para home');
+                router.navigate(['/'], {
+                    queryParams: { error: 'unexpected-error' }
+                });
+            }
             return of(false);
         })
     );
@@ -78,7 +99,7 @@ export function createPermissionGuard(permission: keyof AdminPermissoes): CanAct
                     return true;
                 } else {
                     console.warn(`🚫 Acesso negado: sem permissão para ${permission}`);
-                    router.navigate(['/adm'], {
+                    router.navigate(['/adm/dashboard'], {
                         queryParams: { error: 'permission-denied', required: permission }
                     });
                     return false;

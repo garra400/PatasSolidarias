@@ -183,7 +183,7 @@ export class EditorPostComponent implements OnInit {
 
                 if (!this.postId && response._id) {
                     this.postId = response._id;
-                    this.router.navigate(['/admin/posts/editar', this.postId], { replaceUrl: true });
+                    this.router.navigate(['/adm/posts/editar', this.postId], { replaceUrl: true });
                 }
 
                 setTimeout(() => {
@@ -234,7 +234,7 @@ export class EditorPostComponent implements OnInit {
                 this.sucesso = `Newsletter enviada com sucesso!`;
 
                 setTimeout(() => {
-                    this.router.navigate(['/admin/posts']);
+                    this.router.navigate(['/adm/posts']);
                 }, 2000);
             },
             error: (erro: any) => {
@@ -261,7 +261,7 @@ export class EditorPostComponent implements OnInit {
 
     cancelar(): void {
         if (confirm('Deseja realmente cancelar? Alterações não salvas serão perdidas.')) {
-            this.router.navigate(['/admin/posts']);
+            this.router.navigate(['/adm/posts']);
         }
     }
 

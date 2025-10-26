@@ -24,7 +24,7 @@
         <div class="fotos-grid">
             <div *ngFor="let foto of fotos" class="foto-card">
                 <div class="foto-imagem">
-                    <img [src]="foto.url" [alt]="foto.descricao">
+                    <img [src]="getFotoUrl(foto)" [alt]="foto.descricao">
                 </div>
                 <div class="foto-info">
                     <p class="foto-descricao">{{ foto.descricao || 'Sem descrição' }}</p>

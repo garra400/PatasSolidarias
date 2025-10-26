@@ -4,10 +4,10 @@ import { RouterLink } from '@angular/router';
 import { AssinanteService } from '@services/assinante.service';
 
 @Component({
-    selector: 'app-lista-assinantes',
-    standalone: true,
-    imports: [CommonModule, RouterLink],
-    template: `
+  selector: 'app-lista-assinantes',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  template: `
     <div class="container">
       <h1>Apoiadores</h1>
       <div *ngIf="carregando">Carregando...</div>
@@ -28,7 +28,7 @@ import { AssinanteService } from '@services/assinante.service';
       </table>
     </div>
   `,
-    styles: [`
+  styles: [`
     .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
     h1 { font-size: 2rem; font-weight: 700; margin-bottom: 2rem; }
     table { width: 100%; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
@@ -40,16 +40,16 @@ import { AssinanteService } from '@services/assinante.service';
   `]
 })
 export class ListaAssinantesComponent implements OnInit {
-    private assinanteService = inject(AssinanteService);
-    assinantes: any[] = [];
-    carregando = true;
+  private assinanteService = inject(AssinanteService);
+  assinantes: any[] = [];
+  carregando = true;
 
-    ngOnInit(): void {
-        this.assinanteService.listarAssinantes().subscribe({
-            next: (data: any) => {
-                this.assinantes = data.assinantes || data;
-                this.carregando = false;
-            }
-        });
-    }
+  ngOnInit(): void {
+    this.assinanteService.listarAssinantes().subscribe({
+      next: (data: any) => {
+        this.assinantes = data.assinantes || data;
+        this.carregando = false;
+      }
+    });
+  }
 }

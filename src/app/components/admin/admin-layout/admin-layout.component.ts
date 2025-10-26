@@ -16,7 +16,7 @@ import { AdminPermissoes } from '../../../model/admin.model';
 })
 export class AdminLayoutComponent implements OnInit, OnDestroy {
     currentUser: any = null;
-    isSidebarOpen = false;
+    isSidebarOpen = true; // Iniciar aberta em desktop
     isFirstRender = true;
     permissoes: AdminPermissoes | null = null;
 
@@ -27,9 +27,22 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
 
     ngOnInit(): void {
+        // Abrir sidebar automaticamente APENAS em desktop (telas grandes)
+        if (window.innerWidth >= 1025) {
+            this.adminSidebarService.open();
+        } else {
+            // Em mobile e tablet, manter fechada
+            this.adminSidebarService.close();
+        }
+
         // Carregar usuário
         const userSub = this.authService.currentUser.subscribe(user => {
             this.currentUser = user;
+
+            // Se for admin e não tem permissões, definir permissões padrão
+            if (user && user.role === 'admin' && !this.permissoes) {
+                this.setPermissoesPadrao();
+            }
         });
         this.subscriptions.push(userSub);
 
@@ -45,8 +58,33 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
         });
         this.subscriptions.push(sidebarSub);
 
-        // Verificar se é admin
-        this.adminService.verificarAdmin().subscribe();
+        // Verificar se é admin (com delay de 200ms para garantir que o token foi salvo)
+        setTimeout(() => {
+            const token = this.authService.getToken();
+
+            if (!token) {
+                console.warn('⚠️ Nenhum token encontrado. Usando permissões padrão de fallback.');
+                const currentUser = this.authService.currentUserValue;
+                if (currentUser?.role === 'admin') {
+                    this.setPermissoesPadrao();
+                }
+                return;
+            }
+
+            this.adminService.verificarAdmin().subscribe({
+                next: (response) => {
+                    // Admin verificado com sucesso
+                },
+                error: (err) => {
+                    console.warn('⚠️ Erro ao verificar admin. Usando permissões padrão.', err);
+                    // Se der erro, mas usuário é admin, usar permissões padrão
+                    const currentUser = this.authService.currentUserValue;
+                    if (currentUser && currentUser.role === 'admin') {
+                        this.setPermissoesPadrao();
+                    }
+                }
+            });
+        }, 200); // Delay de 200ms
 
         // Remover flag de primeira renderização
         setTimeout(() => {
@@ -88,6 +126,18 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
 
     temPermissao(permissao: keyof AdminPermissoes): boolean {
         return this.permissoes ? this.permissoes[permissao] : false;
+    }
+
+    private setPermissoesPadrao(): void {
+        this.permissoes = {
+            gerenciarAnimais: true,
+            gerenciarFotos: true,
+            gerenciarBrindes: true,
+            gerenciarPosts: true,
+            visualizarAssinantes: true,
+            convidarAdmins: true,
+            gerenciarConfiguracoes: true
+        };
     }
 
     getUserInitials(): string {

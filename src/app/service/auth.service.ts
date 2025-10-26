@@ -67,10 +67,6 @@ export class AuthService {
   };
 
   constructor(private http: HttpClient) {
-    console.log('🔧 AuthService inicializado');
-    console.log('📊 useMockData:', environment.useMockData);
-    console.log('🌐 apiUrl:', this.apiUrl);
-
     this.isBrowser = isPlatformBrowser(this.platformId);
     const storedUser = this.isBrowser ? localStorage.getItem('currentUser') : null;
     this.currentUserSubject = new BehaviorSubject<User | null>(
@@ -84,15 +80,12 @@ export class AuthService {
   }
 
   login(credentials: LoginCredentials): Observable<{ success: boolean; token: string; user: User }> {
-    console.log('🚀 Tentando login no backend:', credentials.email);
-
     return this.http.post<{ success: boolean; token: string; user: User }>(`${this.apiUrl}/login`, {
       email: credentials.email,
       senha: credentials.senha
     }).pipe(
       tap(response => {
-        console.log('✅ Login bem-sucedido:', response);
-        if (response.success && response.token && response.user) {
+        if (response.token && response.user) {
           if (this.isBrowser) {
             localStorage.setItem('currentUser', JSON.stringify(response.user));
             localStorage.setItem('token', response.token);
@@ -101,19 +94,13 @@ export class AuthService {
         }
       }),
       catchError((error) => {
-        console.error('❌ Erro no login:', error);
-        // Fallback para mock apenas se backend não estiver disponível
-        if (error.status === 0) {
-          console.log('⚠️ Backend offline - usando mock');
-          return this.loginMock(credentials);
-        }
+        console.error('Erro ao fazer login:', error.error?.message || error.message);
         return throwError(() => error);
       })
     );
   }
 
   private loginMock(credentials: LoginCredentials): Observable<{ success: boolean; token: string; user: User }> {
-    console.log('🔐 Mock login:', credentials.email);
     const response = {
       success: true,
       token: 'mock-jwt-token-12345',
@@ -130,8 +117,6 @@ export class AuthService {
   }
 
   register(userData: UserRegistration): Observable<{ success: boolean; message: string }> {
-    console.log('� Tentando registrar no backend:', userData.email);
-
     return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/register`, {
       nome: userData.nome,
       email: userData.email,
@@ -139,13 +124,8 @@ export class AuthService {
       telefone: userData.telefone,
       cpf: userData.cpf
     }).pipe(
-      tap(response => {
-        console.log('✅ Registro bem-sucedido:', response);
-      }),
       catchError((error) => {
-        console.error('❌ Erro ao registrar:', error);
         if (error.status === 0) {
-          console.log('⚠️ Backend offline - usando mock');
           return of({ success: true, message: 'Usuário registrado com sucesso! Verifique seu email.' }).pipe(delay(1000));
         }
         return throwError(() => error);
@@ -164,11 +144,9 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/confirm-email`, { token })
       .pipe(
         tap((response) => {
-          // Após confirmação bem-sucedida, salvar o usuário e token (login automático)
           if (response.user && response.token && this.isBrowser) {
             localStorage.setItem('currentUser', JSON.stringify(response.user));
             localStorage.setItem('token', response.token);
-            console.log('✅ Email confirmado e login automático realizado');
           }
         })
       );

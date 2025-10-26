@@ -48,7 +48,8 @@
                 <div class="checkbox-overlay">
                     <input type="checkbox" [checked]="estaSelecionado(brinde._id)"
                         [disabled]="!podeSelecionar(brinde._id)" (click)="$event.stopPropagation()"
-                        (change)="toggleSelecao(brinde._id)" class="checkbox-input">
+                        (change)="toggleSelecao(brinde._id)" class="checkbox-input"
+                        [title]="'Selecionar brinde: ' + brinde.nome">
                     <span class="checkmark">✓</span>
                 </div>
 

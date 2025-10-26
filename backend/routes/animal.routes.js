@@ -3,7 +3,7 @@ import Animal from '../models/animal.model.js';
 import Foto from '../models/foto.model.js';
 import { verifyToken } from '../middleware/auth.middleware.js';
 import { isAdmin, checkPermission, PERMISSOES } from '../middleware/admin.middleware.js';
-import { uploadSingle } from '../middleware/upload.middleware.js';
+import { uploadSingle, uploadFotoPerfil } from '../middleware/upload.middleware.js';
 
 const router = express.Router();
 
@@ -82,6 +82,23 @@ router.get('/by-month/:mesReferencia', async (req, res) => {
   }
 });
 
+// GET - Buscar animais ativos/disponíveis (deve vir ANTES de /:id)
+router.get('/active', async (req, res) => {
+  try {
+    const animais = await Animal.find({ status: 'disponivel' })
+      .populate('fotoPerfilId')
+      .sort({ criadoEm: -1 });
+
+    res.json({
+      total: animais.length,
+      animais
+    });
+  } catch (error) {
+    console.error('Erro ao buscar animais ativos:', error);
+    res.status(500).json({ error: 'Erro ao buscar animais ativos' });
+  }
+});
+
 // GET - Buscar animal por ID
 router.get('/:id', async (req, res) => {
   try {
@@ -108,26 +125,43 @@ router.post('/',
   verifyToken,
   isAdmin,
   checkPermission(PERMISSOES.GERENCIAR_ANIMAIS),
-  uploadSingle,
+  uploadFotoPerfil,
   async (req, res) => {
     try {
+      console.log('📝 Criando animal - Body:', req.body);
+      console.log('📸 Arquivo recebido:', req.file);
+
       const animalData = { ...req.body };
+
+      // Converter campo 'ativo' para 'status'
+      if (animalData.ativo !== undefined) {
+        animalData.status = animalData.ativo === 'true' || animalData.ativo === true
+          ? 'disponivel'
+          : 'em tratamento';
+        delete animalData.ativo;
+      }
 
       // Se uma foto foi enviada
       if (req.file) {
         animalData.fotoUrl = `/uploads/animais/${req.file.filename}`;
+        console.log('✅ Foto configurada:', animalData.fotoUrl);
       }
 
       const animal = new Animal(animalData);
       await animal.save();
+
+      console.log('✅ Animal criado com sucesso:', animal._id);
 
       res.status(201).json({
         message: 'Animal cadastrado com sucesso',
         animal
       });
     } catch (error) {
-      console.error('Erro ao cadastrar animal:', error);
-      res.status(500).json({ error: 'Erro ao cadastrar animal' });
+      console.error('❌ Erro ao cadastrar animal:', error);
+      res.status(500).json({
+        error: 'Erro ao cadastrar animal',
+        detalhes: error.message
+      });
     }
   }
 );
@@ -137,14 +171,26 @@ router.put('/:id',
   verifyToken,
   isAdmin,
   checkPermission(PERMISSOES.GERENCIAR_ANIMAIS),
-  uploadSingle,
+  uploadFotoPerfil,
   async (req, res) => {
     try {
+      console.log('📝 Atualizando animal - Body:', req.body);
+      console.log('📸 Arquivo recebido:', req.file);
+
       const updateData = { ...req.body };
+
+      // Converter campo 'ativo' para 'status'
+      if (updateData.ativo !== undefined) {
+        updateData.status = updateData.ativo === 'true' || updateData.ativo === true
+          ? 'disponivel'
+          : 'em tratamento';
+        delete updateData.ativo;
+      }
 
       // Se uma nova foto foi enviada
       if (req.file) {
         updateData.fotoUrl = `/uploads/animais/${req.file.filename}`;
+        console.log('✅ Foto atualizada:', updateData.fotoUrl);
       }
 
       const animal = await Animal.findByIdAndUpdate(
@@ -157,13 +203,18 @@ router.put('/:id',
         return res.status(404).json({ error: 'Animal não encontrado' });
       }
 
+      console.log('✅ Animal atualizado com sucesso:', animal._id);
+
       res.json({
         message: 'Animal atualizado com sucesso',
         animal
       });
     } catch (error) {
-      console.error('Erro ao atualizar animal:', error);
-      res.status(500).json({ error: 'Erro ao atualizar animal' });
+      console.error('❌ Erro ao atualizar animal:', error);
+      res.status(500).json({
+        error: 'Erro ao atualizar animal',
+        detalhes: error.message
+      });
     }
   }
 );

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Foto } from '@models/animal.model';
 import { FotoService } from '@services/foto.service';
 import { AnimalService } from '@services/animal.service';
+import { ImageUrlHelper } from '../../../../utils/image-url.helper';
 
 @Component({
     selector: 'app-trocar-foto-perfil-modal',
@@ -89,6 +90,6 @@ export class TrocarFotoPerfilModalComponent implements OnInit {
     }
 
     getFotoUrl(foto: Foto): string {
-        return foto.url || '/images/foto-placeholder.svg';
+        return ImageUrlHelper.getFullImageUrl(foto.url);
     }
 }

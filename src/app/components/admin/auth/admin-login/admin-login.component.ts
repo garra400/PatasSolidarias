@@ -42,7 +42,7 @@ export class AdminLoginComponent {
             next: (response: any) => {
                 // Verificar se é admin
                 if (response.user?.role === 'admin') {
-                    this.router.navigate(['/admin']);
+                    this.router.navigate(['/adm/dashboard']);
                 } else {
                     this.erro = 'Acesso negado. Esta área é exclusiva para administradores.';
                     this.authService.logout();

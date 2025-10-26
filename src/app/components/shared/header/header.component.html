@@ -53,13 +53,13 @@
     <!-- Navigation Links - Admin Area -->
     @if (currentUser && isInAdminArea) {
     <nav class="nav-links admin-nav">
-      <a routerLink="/admin/dashboard" class="nav-link">
+      <a routerLink="/adm/dashboard" class="nav-link">
         <i class="fas fa-chart-line"></i> Dashboard
       </a>
-      <a routerLink="/admin/animais" class="nav-link">
+      <a routerLink="/adm/animais" class="nav-link">
         <i class="fas fa-paw"></i> Animais
       </a>
-      <a routerLink="/admin/assinantes" class="nav-link">
+      <a routerLink="/adm/assinantes" class="nav-link">
         <i class="fas fa-users"></i> Apoiadores
       </a>
     </nav>
@@ -135,7 +135,7 @@
 
             <!-- Área Admin - apenas para admins -->
             @if (isAdmin) {
-            <a class="dropdown-item admin-item" (click)="navigateTo('/admin')">
+            <a class="dropdown-item admin-item" (click)="navigateTo('/adm/dashboard')">
               <i class="fas fa-shield-alt"></i>
               <span>Painel Administrativo</span>
             </a>

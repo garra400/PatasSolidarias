@@ -5,12 +5,14 @@ export interface Animal {
   tipo: 'cachorro' | 'gato' | 'outro';
   idade?: number; // Idade em anos
   descricao: string;
+  fotoUrl?: string; // URL direta da foto de perfil
   fotoPerfilId?: string; // ID da foto que é o perfil
   fotoPerfil?: Foto; // Objeto completo da foto de perfil
   imagemPrincipal?: string; // Manter por compatibilidade (será substituído por fotoPerfil)
   dataCriacao?: Date;
   dataCadastro?: Date;
   ativo?: boolean;
+  status?: string; // 'disponivel' | 'adotado' | 'em tratamento'
   fotos?: Foto[]; // Todas as fotos associadas ao animal
 }
 

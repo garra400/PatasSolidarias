@@ -75,8 +75,11 @@ export class AnimalService {
       console.log('🐾 Mock: getAllAnimals');
       return of(this.mockAnimals).pipe(delay(500));
     }
-    return this.http.get<Animal[]>(`${this.apiUrl}`)
-      .pipe(catchError(() => of(this.mockAnimals).pipe(delay(500))));
+    return this.http.get<{ animais: Animal[], total: number }>(`${this.apiUrl}`)
+      .pipe(
+        map(response => response.animais),
+        catchError(() => of(this.mockAnimals).pipe(delay(500)))
+      );
   }
 
   getActiveAnimals(): Observable<Animal[]> {
@@ -84,8 +87,11 @@ export class AnimalService {
       console.log('🐾 Mock: getActiveAnimals');
       return of(this.mockAnimals.filter(a => a.ativo)).pipe(delay(500));
     }
-    return this.http.get<Animal[]>(`${this.apiUrl}/active`)
-      .pipe(catchError(() => of(this.mockAnimals.filter(a => a.ativo)).pipe(delay(500))));
+    return this.http.get<{ total: number, animais: Animal[] }>(`${this.apiUrl}/active`)
+      .pipe(
+        map(response => response.animais),
+        catchError(() => of(this.mockAnimals.filter(a => a.ativo)).pipe(delay(500)))
+      );
   }
 
   getAnimalById(id: string): Observable<Animal> {

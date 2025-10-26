@@ -47,7 +47,7 @@
         <div class="carousel-content">
           <div class="animal-image-wrapper">
             <div class="animal-image-border">
-              <img [src]="currentAnimal.imagemPrincipal" [alt]="currentAnimal.nome" [title]="currentAnimal.nome"
+              <img [src]="getAnimalImageUrl(currentAnimal)" [alt]="currentAnimal.nome" [title]="currentAnimal.nome"
                 role="img" class="animal-image" (error)="onImageError($event)" />
             </div>
           </div>

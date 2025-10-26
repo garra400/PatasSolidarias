@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AdminService } from '@services/admin.service';
+import { AuthService } from '@services/auth.service';
 import { AssinanteService } from '@services/assinante.service';
 import { ChartComponent } from './chart/chart.component';
 
@@ -29,28 +30,46 @@ export class DashboardComponent implements OnInit {
 
     constructor(
         private adminService: AdminService,
+        private authService: AuthService,
         private assinanteService: AssinanteService
     ) { }
 
     ngOnInit(): void {
         this.verificarPermissoes();
-        this.carregarEstatisticas();
+        // Carregar estatísticas de forma não-bloqueante
+        setTimeout(() => this.carregarEstatisticas(), 0);
     }
 
     verificarPermissoes(): void {
-        this.adminService.verificarAdmin().subscribe({
-            next: (response) => {
-                this.permissoes = response.permissoes;
-            },
-            error: (err) => {
-                console.error('Erro ao verificar permissões:', err);
-                this.erro = 'Erro ao carregar permissões';
-            }
-        });
+        // Usar permissões do currentUser se for admin (sincronamente)
+        const currentUser = this.authService.currentUserValue;
+
+        if (currentUser && currentUser.role === 'admin') {
+            this.permissoes = {
+                gerenciarAnimais: true,
+                gerenciarFotos: true,
+                gerenciarBrindes: true,
+                gerenciarPosts: true,
+                visualizarAssinantes: true,
+                convidarAdmins: true,
+                gerenciarConfiguracoes: true
+            };
+            this.carregando = false;
+        } else {
+            // Fallback: tentar via backend
+            this.carregando = false; // Não bloquear UI
+            this.adminService.verificarAdmin().subscribe({
+                next: (response) => {
+                    this.permissoes = response.permissoes;
+                },
+                error: () => {
+                    this.erro = 'Erro ao carregar permissões';
+                }
+            });
+        }
     }
 
     carregarEstatisticas(): void {
-        this.carregando = true;
         this.assinanteService.buscarEstatisticasGerais().subscribe({
             next: (stats) => {
                 this.estatisticas = [
@@ -59,14 +78,14 @@ export class DashboardComponent implements OnInit {
                         valor: stats.totalApoiadores,
                         icone: '👥',
                         cor: 'primary',
-                        link: this.permissoes.visualizarAssinantes ? '/adm/assinantes/lista' : undefined
+                        link: this.permissoes.visualizarAssinantes ? '/adm/assinantes' : undefined
                     },
                     {
                         titulo: 'Apoiadores Ativos',
                         valor: stats.apoiadoresAtivos,
                         icone: '✅',
                         cor: 'success',
-                        link: this.permissoes.visualizarAssinantes ? '/adm/assinantes/lista' : undefined
+                        link: this.permissoes.visualizarAssinantes ? '/adm/assinantes' : undefined
                     },
                     {
                         titulo: 'Total Arrecadado',
@@ -81,12 +100,10 @@ export class DashboardComponent implements OnInit {
                         cor: 'info'
                     }
                 ];
-                this.carregando = false;
             },
             error: (err) => {
                 console.error('Erro ao carregar estatísticas:', err);
                 this.erro = 'Erro ao carregar estatísticas';
-                this.carregando = false;
             }
         });
     }
@@ -106,7 +123,7 @@ export class DashboardComponent implements OnInit {
                 titulo: 'Gerenciar Animais',
                 descricao: 'Adicionar, editar e visualizar animais',
                 icone: '🐾',
-                link: '/adm/animais/lista',
+                link: '/adm/animais',
                 cor: 'primary'
             });
         }
@@ -116,7 +133,7 @@ export class DashboardComponent implements OnInit {
                 titulo: 'Galeria de Fotos',
                 descricao: 'Fazer upload e gerenciar fotos',
                 icone: '📸',
-                link: '/adm/fotos/lista',
+                link: '/adm/fotos',
                 cor: 'success'
             });
         }
@@ -126,7 +143,7 @@ export class DashboardComponent implements OnInit {
                 titulo: 'Brindes',
                 descricao: 'Gerenciar brindes e resgates',
                 icone: '🎁',
-                link: '/adm/brindes/lista',
+                link: '/adm/brindes',
                 cor: 'warning'
             });
         }
@@ -136,7 +153,7 @@ export class DashboardComponent implements OnInit {
                 titulo: 'Newsletter',
                 descricao: 'Criar e enviar posts',
                 icone: '📧',
-                link: '/adm/posts/lista',
+                link: '/adm/posts',
                 cor: 'info'
             });
         }
@@ -146,7 +163,7 @@ export class DashboardComponent implements OnInit {
                 titulo: 'Apoiadores',
                 descricao: 'Visualizar lista de apoiadores',
                 icone: '❤️',
-                link: '/adm/assinantes/lista',
+                link: '/adm/assinantes',
                 cor: 'danger'
             });
         }
@@ -156,7 +173,7 @@ export class DashboardComponent implements OnInit {
                 titulo: 'Administradores',
                 descricao: 'Gerenciar admins e convites',
                 icone: '👤',
-                link: '/adm/admins/lista',
+                link: '/adm/admins',
                 cor: 'secondary'
             });
         }

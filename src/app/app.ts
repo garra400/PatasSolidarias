@@ -119,7 +119,7 @@ export class App implements OnInit {
 
   private checkAdminArea(url: string): void {
     // Verificar se está na área admin
-    this.isInAdminArea = url.startsWith('/admin');
+    this.isInAdminArea = url.startsWith('/adm');
   }
 
   isDoador(): boolean {

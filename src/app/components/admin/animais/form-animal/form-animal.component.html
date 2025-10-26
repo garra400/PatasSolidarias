@@ -19,16 +19,24 @@
             <div class="form-group form-group-full">
                 <label class="form-label">Foto de Perfil</label>
                 <div class="foto-upload">
-                    <div class="foto-preview" *ngIf="previewUrl">
-                        <img [src]="previewUrl" alt="Preview">
-                    </div>
-                    <div class="foto-placeholder" *ngIf="!previewUrl">
-                        <span class="icon">📸</span>
-                        <p>Nenhuma foto selecionada</p>
-                    </div>
+                    <input type="file" id="foto" accept="image/*" (change)="onFileSelected($event)" class="file-input"
+                        #fileInput>
+
+                    <label for="foto" class="foto-preview-container">
+                        <div class="foto-preview" *ngIf="previewUrl">
+                            <img [src]="previewUrl" alt="Preview">
+                            <div class="foto-overlay">
+                                <span class="icon">📸</span>
+                                <p>Clique para alterar</p>
+                            </div>
+                        </div>
+                        <div class="foto-placeholder" *ngIf="!previewUrl">
+                            <span class="icon">📸</span>
+                            <p>Clique para selecionar uma foto</p>
+                        </div>
+                    </label>
+
                     <div class="foto-actions">
-                        <input type="file" id="foto" accept="image/*" (change)="onFileSelected($event)"
-                            class="file-input">
                         <label for="foto" class="btn btn-secondary">
                             📤 Upload Nova Foto
                         </label>
@@ -61,15 +69,6 @@
                     <option value="gato">🐈 Gato</option>
                     <option value="outro">🐾 Outro</option>
                 </select>
-            </div>
-
-            <!-- Idade -->
-            <div class="form-group">
-                <label for="idade" class="form-label">Idade (anos) *</label>
-                <input type="number" id="idade" formControlName="idade" class="form-control" min="0" placeholder="0">
-                <div *ngIf="form.get('idade')?.invalid && form.get('idade')?.touched" class="error-message">
-                    Idade deve ser um número positivo
-                </div>
             </div>
 
             <!-- Ativo -->

@@ -71,9 +71,11 @@ const upload = multer({
 
 // Exports específicos
 export const uploadSingle = upload.single('foto');
+export const uploadFotoPerfil = upload.single('fotoPerfil'); // Para formulário de animais
 export const uploadMultiple = upload.array('fotos', 20); // Máximo 20 fotos por vez
 export const uploadFields = upload.fields([
     { name: 'foto', maxCount: 1 },
+    { name: 'fotoPerfil', maxCount: 1 },
     { name: 'fotos', maxCount: 20 }
 ]);
 

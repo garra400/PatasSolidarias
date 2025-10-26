@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 import { SidebarService } from '../../../service/sidebar.service';
+import { AdminSidebarService } from '../../../service/admin-sidebar.service';
 import { User } from '../../../model/user.model';
 import { ViewportScroller } from '@angular/common';
 import { filter } from 'rxjs/operators';
@@ -29,6 +30,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private sidebarService: SidebarService,
+    private adminSidebarService: AdminSidebarService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private viewportScroller: ViewportScroller
@@ -60,13 +62,13 @@ export class HeaderComponent implements OnInit {
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.isInAccountArea = event.url.startsWith('/conta');
-      this.isInAdminArea = event.url.startsWith('/admin');
+      this.isInAdminArea = event.url.startsWith('/adm'); // Corrigido de '/admin' para '/adm'
       this.cdr.markForCheck();
     });
 
     // Verificar rota inicial
     this.isInAccountArea = this.router.url.startsWith('/conta');
-    this.isInAdminArea = this.router.url.startsWith('/admin');
+    this.isInAdminArea = this.router.url.startsWith('/adm'); // Corrigido de '/admin' para '/adm'
   }
 
   scrollToTop() {
@@ -131,7 +133,12 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSidebar() {
-    this.sidebarService.toggle();
+    // Usar o serviço correto baseado na área atual
+    if (this.isInAdminArea) {
+      this.adminSidebarService.toggle();
+    } else {
+      this.sidebarService.toggle();
+    }
   }
 
   openNavigationSidebar() {

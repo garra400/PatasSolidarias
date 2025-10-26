@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BrindeService } from '@services/brinde.service';
+import { ImageUrlHelper } from '../../../../utils/image-url.helper';
 
 @Component({
     selector: 'app-form-brinde',
@@ -48,7 +49,7 @@ export class FormBrindeComponent implements OnInit {
         this.brindeService.buscarBrindePorId(id).subscribe({
             next: (data: any) => {
                 this.form.patchValue(data);
-                this.preview = data.fotoUrl;
+                this.preview = ImageUrlHelper.getFullImageUrl(data.fotoUrl);
             },
             error: () => this.erro = 'Erro ao carregar brinde'
         });
@@ -83,7 +84,7 @@ export class FormBrindeComponent implements OnInit {
         obs.subscribe({
             next: () => {
                 this.sucesso = 'Brinde salvo!';
-                setTimeout(() => this.router.navigate(['/adm/brindes/lista']), 1500);
+                setTimeout(() => this.router.navigate(['/adm/brindes']), 1500);
             },
             error: () => {
                 this.erro = 'Erro ao salvar';
@@ -93,6 +94,6 @@ export class FormBrindeComponent implements OnInit {
     }
 
     cancelar(): void {
-        this.router.navigate(['/adm/brindes/lista']);
+        this.router.navigate(['/adm/brindes']);
     }
 }

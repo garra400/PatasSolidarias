@@ -24,7 +24,7 @@
         <!-- Navegação -->
         <nav class="sidebar-nav">
             <!-- Dashboard -->
-            <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+            <a routerLink="/adm/dashboard" routerLinkActive="active" class="nav-item">
                 <span class="icon">
                     <i class="fas fa-chart-line"></i>
                 </span>
@@ -39,7 +39,7 @@
             </div>
 
             @if (temPermissao('gerenciarAnimais')) {
-            <a routerLink="/admin/animais" routerLinkActive="active" class="nav-item">
+            <a routerLink="/adm/animais" routerLinkActive="active" class="nav-item">
                 <span class="icon">
                     <i class="fas fa-paw"></i>
                 </span>
@@ -48,7 +48,7 @@
             }
 
             @if (temPermissao('gerenciarFotos')) {
-            <a routerLink="/admin/fotos" routerLinkActive="active" class="nav-item">
+            <a routerLink="/adm/fotos" routerLinkActive="active" class="nav-item">
                 <span class="icon">
                     <i class="fas fa-images"></i>
                 </span>
@@ -57,14 +57,14 @@
             }
 
             @if (temPermissao('gerenciarBrindes')) {
-            <a routerLink="/admin/brindes" routerLinkActive="active" class="nav-item">
+            <a routerLink="/adm/brindes" routerLinkActive="active" class="nav-item">
                 <span class="icon">
                     <i class="fas fa-gift"></i>
                 </span>
                 <span class="label">Brindes</span>
             </a>
 
-            <a routerLink="/admin/resgates" routerLinkActive="active" class="nav-item">
+            <a routerLink="/adm/resgates" routerLinkActive="active" class="nav-item">
                 <span class="icon">
                     <i class="fas fa-box"></i>
                 </span>
@@ -73,7 +73,7 @@
             }
 
             @if (temPermissao('gerenciarPosts')) {
-            <a routerLink="/admin/posts" routerLinkActive="active" class="nav-item">
+            <a routerLink="/adm/posts" routerLinkActive="active" class="nav-item">
                 <span class="icon">
                     <i class="fas fa-newspaper"></i>
                 </span>
@@ -89,7 +89,7 @@
             </div>
 
             @if (temPermissao('visualizarAssinantes')) {
-            <a routerLink="/admin/assinantes" routerLinkActive="active" class="nav-item">
+            <a routerLink="/adm/assinantes" routerLinkActive="active" class="nav-item">
                 <span class="icon">
                     <i class="fas fa-users"></i>
                 </span>
@@ -98,7 +98,7 @@
             }
 
             @if (temPermissao('convidarAdmins')) {
-            <a routerLink="/admin/admins" routerLinkActive="active" class="nav-item">
+            <a routerLink="/adm/admins" routerLinkActive="active" class="nav-item">
                 <span class="icon">
                     <i class="fas fa-user-shield"></i>
                 </span>

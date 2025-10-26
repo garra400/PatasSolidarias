@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FotoService } from '@services/foto.service';
 import { Foto } from '@models/animal.model';
+import { ImageUrlHelper } from '../../../../utils/image-url.helper';
 
 @Component({
     selector: 'app-fotos-pendentes',
@@ -126,7 +127,7 @@ export class FotosPendentesComponent implements OnInit {
     }
 
     getFotoUrl(foto: Foto): string {
-        return foto.url || '/images/foto-placeholder.svg';
+        return ImageUrlHelper.getFullImageUrl(foto.url);
     }
 
     getNomesAnimais(foto: Foto): string {

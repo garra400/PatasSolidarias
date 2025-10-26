@@ -88,7 +88,7 @@ export const routes: Routes = [
 
   // Admin Routes (Protected)
   {
-    path: 'admin',
+    path: 'adm',
     children: [
       // Admin Login (Public - sem guard)
       {
@@ -106,8 +106,8 @@ export const routes: Routes = [
 
   // Old Admin Routes Redirect
   {
-    path: 'adm',
-    redirectTo: 'admin',
+    path: 'admin',
+    redirectTo: 'adm',
     pathMatch: 'prefix'
   },
 

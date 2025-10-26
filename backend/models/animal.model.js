@@ -10,9 +10,15 @@ const animalSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  tipo: {
+    type: String,
+    required: true,
+    enum: ['gato', 'cachorro', 'outro'],
+    default: 'gato'
+  },
   fotoUrl: {
     type: String,
-    required: true
+    required: false  // Será definido após upload da foto
   },
   fotoPerfilId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -20,17 +26,12 @@ const animalSchema = new mongoose.Schema({
   },
   mesDisponivel: {
     type: String,
-    required: true,
+    required: false,
     // Formato: "2025-10" (ano-mês)
-  },
-  tipo: {
-    type: String,
-    enum: ['gato', 'cachorro', 'outro'],
-    default: 'gato'
   },
   idade: {
     type: String,
-    default: 'Adulto'
+    required: false
   },
   sexo: {
     type: String,

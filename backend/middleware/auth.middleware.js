@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/user.model.js';
+import { ObjectId } from 'mongodb';
+import { getDB } from '../db.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'seu-secret-super-seguro-aqui';
 
@@ -13,12 +14,25 @@ export const verifyToken = async (req, res, next) => {
 
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Buscar usuário completo com permissões atualizadas
-    const user = await User.findById(decoded.id).select('-senha');
+    console.log('🔍 Token decodificado:', { userId: decoded.userId || decoded.id, email: decoded.email });
+
+    // Buscar usuário completo com permissões atualizadas usando MongoDB nativo
+    // Suporta tanto 'userId' (novo formato) quanto 'id' (formato antigo)
+    const userId = decoded.userId || decoded.id;
+
+    const db = getDB();
+    const user = await db.collection('users').findOne({
+      _id: new ObjectId(userId)
+    }, {
+      projection: { senha: 0 } // Excluir senha
+    });
 
     if (!user) {
+      console.error('❌ Usuário não encontrado no banco:', userId);
       return res.status(401).json({ message: 'Usuário não encontrado' });
     }
+
+    console.log('✅ Usuário autenticado:', user.email, '| isAdmin:', user.isAdmin);
 
     req.user = user; // Objeto User completo com isAdmin e permissoes
     next();

@@ -6,6 +6,7 @@ import { AnimalService } from '@services/animal.service';
 import { FotoService } from '@services/foto.service';
 import { TrocarFotoPerfilModalComponent } from '../trocar-foto-perfil-modal/trocar-foto-perfil-modal.component';
 import { Animal, Foto } from '@models/animal.model';
+import { ImageUrlHelper } from '../../../../utils/image-url.helper';
 
 @Component({
     selector: 'app-form-animal',
@@ -50,7 +51,7 @@ export class FormAnimalComponent implements OnInit {
         this.form = this.fb.group({
             nome: ['', [Validators.required, Validators.minLength(2)]],
             tipo: ['cachorro', Validators.required],
-            idade: [0, [Validators.required, Validators.min(0)]],
+            idade: ['', [Validators.min(0)]], // Removido required
             descricao: ['', [Validators.required, Validators.minLength(10)]],
             ativo: [true]
         });
@@ -71,7 +72,7 @@ export class FormAnimalComponent implements OnInit {
 
                 // Atualizar preview com foto de perfil
                 if (animal.fotoPerfil?.url) {
-                    this.previewUrl = animal.fotoPerfil.url;
+                    this.previewUrl = ImageUrlHelper.getFullImageUrl(animal.fotoPerfil.url);
                 } else if (animal.fotoPerfilId) {
                     this.previewUrl = `assets/images/animais/${animal.fotoPerfilId}.jpg`;
                 }
@@ -145,7 +146,7 @@ export class FormAnimalComponent implements OnInit {
                 next: () => {
                     this.sucesso = 'Animal atualizado com sucesso!';
                     this.carregando = false;
-                    setTimeout(() => this.router.navigate(['/adm/animais/lista']), 1500);
+                    setTimeout(() => this.router.navigate(['/adm/animais']), 1500);
                 },
                 error: (err: any) => {
                     console.error('Erro ao atualizar animal:', err);
@@ -159,7 +160,7 @@ export class FormAnimalComponent implements OnInit {
                 next: (response: any) => {
                     this.sucesso = 'Animal criado com sucesso!';
                     this.carregando = false;
-                    setTimeout(() => this.router.navigate(['/adm/animais/lista']), 1500);
+                    setTimeout(() => this.router.navigate(['/adm/animais']), 1500);
                 },
                 error: (err: any) => {
                     console.error('Erro ao criar animal:', err);
@@ -171,8 +172,8 @@ export class FormAnimalComponent implements OnInit {
     }
 
     cancelar(): void {
-        if (confirm('Deseja cancelar? As alterações não serão salvas.')) {
-            this.router.navigate(['/adm/animais/lista']);
+        if (confirm('Deseja realmente cancelar? As alterações não salvas serão perdidas.')) {
+            this.router.navigate(['/adm/animais']);
         }
     }
 
@@ -185,7 +186,7 @@ export class FormAnimalComponent implements OnInit {
     }
 
     onFotoPerfilAlterada(foto: Foto): void {
-        this.previewUrl = foto.url;
+        this.previewUrl = ImageUrlHelper.getFullImageUrl(foto.url);
         this.sucesso = 'Foto de perfil atualizada com sucesso!';
         setTimeout(() => {
             this.sucesso = '';

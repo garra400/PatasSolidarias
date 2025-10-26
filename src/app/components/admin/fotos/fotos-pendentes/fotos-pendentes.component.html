@@ -34,7 +34,8 @@
         <div class="bulk-actions">
             <div class="bulk-actions-left">
                 <label class="checkbox-label">
-                    <input type="checkbox" [checked]="todasSelecionadas" (change)="selecionarTodas()">
+                    <input type="checkbox" [checked]="todasSelecionadas" (change)="selecionarTodas()"
+                        title="Selecionar todas as fotos">
                     <span>Selecionar todas ({{ fotosSelecionadas.size }} de {{ fotosPendentes.length }})</span>
                 </label>
             </div>
@@ -52,7 +53,8 @@
                 [class.selected]="fotosSelecionadas.has(foto.id!)">
                 <div class="foto-checkbox">
                     <input type="checkbox" [id]="'foto-' + foto.id" [checked]="fotosSelecionadas.has(foto.id!)"
-                        (change)="toggleSelecionarFoto(foto.id!)">
+                        (change)="toggleSelecionarFoto(foto.id!)"
+                        [title]="'Selecionar foto' + (foto.descricao ? ': ' + foto.descricao : '')">
                 </div>
 
                 <div class="foto-image">

@@ -5,6 +5,7 @@ import { AnimalService } from '@services/animal.service';
 import { BrindeService } from '@services/brinde.service';
 import { Animal } from '../../model/animal.model';
 import { Brinde } from '../../model/brinde.model';
+import { ImageUrlHelper } from '../../utils/image-url.helper';
 
 @Component({
   selector: 'app-home',
@@ -181,8 +182,21 @@ export class HomeComponent implements OnInit {
 
   getImageUrl(brinde: Brinde): string {
     if (brinde.foto) {
-      return brinde.foto;
+      return ImageUrlHelper.getFullImageUrl(brinde.foto);
     }
-    return '/assets/images/brinde-placeholder.svg';
+    return ImageUrlHelper.getFullImageUrl(null);
+  }
+
+  getAnimalImageUrl(animal: Animal): string {
+    if (animal.fotoPerfil?.url) {
+      return ImageUrlHelper.getFullImageUrl(animal.fotoPerfil.url);
+    }
+    if (animal.fotoUrl) {
+      return ImageUrlHelper.getFullImageUrl(animal.fotoUrl);
+    }
+    if (animal.imagemPrincipal) {
+      return ImageUrlHelper.getFullImageUrl(animal.imagemPrincipal);
+    }
+    return ImageUrlHelper.getFullImageUrl(null);
   }
 }

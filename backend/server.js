@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 import { connectDB } from './db.js';
 import authRoutes from './routes/auth.routes.js';
 import animalRoutes from './routes/animal.routes.js';
@@ -35,6 +36,15 @@ connectDB()
   })
   .catch(err => {
     console.error('Falha ao conectar ao banco de dados:', err);
+    process.exit(1);
+  });
+
+// Conectar Mongoose ao MongoDB Atlas
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://garra10:garrasenha123@cluster0.1nxz9.mongodb.net/patassolidarias?retryWrites=true&w=majority&appName=Cluster0';
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('✅ Mongoose conectado ao MongoDB Atlas'))
+  .catch(err => {
+    console.error('❌ Erro ao conectar Mongoose:', err);
     process.exit(1);
   });
 

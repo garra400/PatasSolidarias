@@ -18,7 +18,14 @@ export const adminGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  console.log('🔒 AdminGuard - Verificando acesso admin');
+  console.log('📍 URL solicitada:', state.url);
+  console.log('✅ Autenticado?', authService.isAuthenticated());
+  console.log('👤 Usuário atual:', authService.currentUserValue);
+  console.log('🛡️ É admin?', authService.isAdmin());
+
   if (!authService.isAuthenticated()) {
+    console.warn('❌ Usuário não autenticado - redirecionando para login');
     router.navigate(['/login'], {
       queryParams: { returnUrl: state.url }
     });
@@ -26,10 +33,11 @@ export const adminGuard: CanActivateFn = (route, state) => {
   }
 
   if (authService.isAdmin()) {
+    console.log('✅ Acesso admin permitido');
     return true;
   }
 
-  console.warn('🚫 Acesso negado: usuário não é admin');
+  console.warn('❌ Usuário não é admin - redirecionando para home');
   router.navigate(['/'], {
     queryParams: { error: 'admin-required' }
   });

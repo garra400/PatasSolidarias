@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FotoService } from '@services/foto.service';
+import { ImageUrlHelper } from '../../../../utils/image-url.helper';
 
 @Component({
     selector: 'app-lista-fotos',
@@ -68,5 +69,9 @@ export class ListaFotosComponent implements OnInit {
             this.paginaAtual--;
             this.carregarFotos();
         }
+    }
+
+    getFotoUrl(foto: any): string {
+        return ImageUrlHelper.getFullImageUrl(foto.url);
     }
 }

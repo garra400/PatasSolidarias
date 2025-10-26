@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AnimalService } from '@services/animal.service';
 import { Animal } from '@models/animal.model';
+import { ImageUrlHelper } from '../../../../utils/image-url.helper';
 
 @Component({
     selector: 'app-lista-animais',
@@ -23,13 +24,15 @@ export class ListaAnimaisComponent implements OnInit {
 
     carregarAnimais(): void {
         this.carregando = true;
+        console.log('🔍 Carregando animais...');
         this.animalService.getAllAnimals().subscribe({
             next: (animais: Animal[]) => {
+                console.log('✅ Animais carregados:', animais.length, animais);
                 this.animais = animais;
                 this.carregando = false;
             },
             error: (err: any) => {
-                console.error('Erro ao carregar animais:', err);
+                console.error('❌ Erro ao carregar animais:', err);
                 this.erro = 'Erro ao carregar lista de animais';
                 this.carregando = false;
             }
@@ -65,13 +68,17 @@ export class ListaAnimaisComponent implements OnInit {
     getFotoUrl(animal: Animal): string {
         // Usar a URL da foto de perfil se disponível
         if (animal.fotoPerfil?.url) {
-            return animal.fotoPerfil.url;
+            return ImageUrlHelper.getFullImageUrl(animal.fotoPerfil.url);
+        }
+        // Fallback para fotoUrl se disponível
+        if (animal.fotoUrl) {
+            return ImageUrlHelper.getFullImageUrl(animal.fotoUrl);
         }
         // Fallback para imagemPrincipal (compatibilidade)
         if (animal.imagemPrincipal) {
-            return animal.imagemPrincipal;
+            return ImageUrlHelper.getFullImageUrl(animal.imagemPrincipal);
         }
         // Placeholder se não tiver foto
-        return '/images/animal-placeholder.svg';
+        return ImageUrlHelper.getFullImageUrl(null);
     }
 }
