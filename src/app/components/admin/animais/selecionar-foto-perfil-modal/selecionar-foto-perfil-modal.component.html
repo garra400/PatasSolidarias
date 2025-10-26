@@ -1,0 +1,84 @@
+@if (mostrar) {
+<div class="modal-overlay" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>
+                <i class="fas fa-images"></i>
+                Selecionar Foto de Perfil
+            </h2>
+            <button class="btn-close" (click)="fecharModal()" type="button" title="Fechar modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            @if (carregando) {
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Carregando fotos...</p>
+            </div>
+            }
+
+            @if (erro && !carregando) {
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ erro }}
+            </div>
+            }
+
+            @if (sucesso) {
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                {{ sucesso }}
+            </div>
+            }
+
+            @if (!carregando && fotos.length > 0) {
+            <div class="fotos-grid">
+                @for (foto of fotos; track foto.id) {
+                <div class="foto-item" [class.selected]="fotoSelecionadaId === foto.id"
+                    [class.perfil-atual]="fotoPerfilAtualId === foto.id" (click)="selecionarFoto(foto.id)">
+                    <img [src]="getFullImageUrl(foto.url)" [alt]="foto.descricao || 'Foto do animal'">
+
+                    @if (fotoPerfilAtualId === foto.id) {
+                    <div class="badge-perfil-atual">
+                        <i class="fas fa-star"></i>
+                        Perfil Atual
+                    </div>
+                    }
+
+                    @if (fotoSelecionadaId === foto.id) {
+                    <div class="check-overlay">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    }
+
+                    @if (foto.descricao) {
+                    <div class="foto-descricao">
+                        {{ foto.descricao }}
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            }
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="fecharModal()" type="button" [disabled]="salvando">
+                Cancelar
+            </button>
+            <button class="btn btn-primary" (click)="salvar()" type="button"
+                [disabled]="!fotoSelecionadaId || salvando || carregando">
+                @if (salvando) {
+                <i class="fas fa-spinner fa-spin"></i>
+                Salvando...
+                } @else {
+                <i class="fas fa-save"></i>
+                Definir como Perfil
+                }
+            </button>
+        </div>
+    </div>
+</div>
+}

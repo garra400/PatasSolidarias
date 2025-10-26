@@ -105,9 +105,11 @@
         </div>
     </form>
 
-    <!-- Modal Trocar Foto de Perfil -->
-    <app-trocar-foto-perfil-modal *ngIf="mostrarModalTrocarFoto && animalId && animalAtual" [animalId]="animalId"
-        [animalNome]="animalAtual.nome" [fotoPerfilAtualId]="animalAtual.fotoPerfilId"
-        (fechar)="fecharModalTrocarFoto()" (fotoAlterada)="onFotoPerfilAlterada($event)">
-    </app-trocar-foto-perfil-modal>
+    <!-- Modal Selecionar Foto de Perfil -->
+    @if (mostrarModalTrocarFoto && animalId) {
+    <app-selecionar-foto-perfil-modal [mostrar]="mostrarModalTrocarFoto" [animalId]="animalId"
+        [fotoPerfilAtualId]="animalAtual?.fotoPerfilId" (fechar)="fecharModalTrocarFoto()"
+        (fotoSelecionada)="onFotoPerfilAlterada($event)">
+    </app-selecionar-foto-perfil-modal>
+    }
 </div>

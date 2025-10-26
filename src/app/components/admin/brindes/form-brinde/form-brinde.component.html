@@ -16,17 +16,21 @@
             <div class="form-group form-group-full">
                 <label class="form-label">Foto do Brinde *</label>
                 <div class="foto-upload">
-                    <div class="foto-preview" *ngIf="preview">
+                    <div class="foto-preview" *ngIf="preview" (click)="fileInput.click()">
                         <img [src]="preview" alt="Preview">
+                        <div class="foto-overlay">
+                            <span class="icon-change">📷 Trocar Foto</span>
+                        </div>
                     </div>
-                    <div class="foto-placeholder" *ngIf="!preview">
+                    <div class="foto-placeholder" *ngIf="!preview" (click)="fileInput.click()">
                         <span class="icon">🎁</span>
-                        <p>Nenhuma foto selecionada</p>
+                        <p>Clique para selecionar uma foto</p>
                     </div>
-                    <input type="file" id="foto" accept="image/*" (change)="onFile($event)" class="file-input">
-                    <label for="foto" class="btn btn-secondary">
-                        📤 Escolher Foto
-                    </label>
+                    <input #fileInput type="file" id="foto" accept="image/*" (change)="onFile($event)"
+                        class="file-input" aria-label="Selecionar foto do brinde">
+                    <button type="button" (click)="fileInput.click()" class="btn btn-secondary">
+                        📤 {{ preview ? 'Trocar' : 'Escolher' }} Foto
+                    </button>
                     <p class="hint">Imagem do brinde que será exibida na home e no resgate</p>
                 </div>
             </div>

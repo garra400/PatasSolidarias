@@ -4,11 +4,13 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 import { SidebarService } from '../../../service/sidebar.service';
 import { Subscription } from 'rxjs';
+import { TrocarFotoPerfilModalComponent } from '../../shared/trocar-foto-perfil-modal/trocar-foto-perfil-modal.component';
+import { ImageUrlHelper } from '../../../utils/image-url.helper';
 
 @Component({
   selector: 'app-user-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet],
+  imports: [CommonModule, RouterModule, RouterOutlet, TrocarFotoPerfilModalComponent],
   templateUrl: './user-layout.component.html',
   styleUrl: './user-layout.component.scss'
 })
@@ -18,6 +20,8 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
   currentUser: any = null;
   isSidebarOpen = false; // Sidebar fechada por padrão
   isFirstRender = true; // Flag para desabilitar transição na primeira renderização
+  mostrarModalFoto = false;
+  getFullImageUrl = ImageUrlHelper.getFullImageUrl;
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -25,6 +29,11 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
+    // Abrir sidebar automaticamente em desktop (telas grandes)
+    if (window.innerWidth >= 769) {
+      this.sidebarService.open();
+    }
+
     const userSub = this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
     });
@@ -77,62 +86,18 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
     return this.currentUser?.role === 'admin';
   }
 
-  openAvatarUpload(): void {
-    this.avatarInput.nativeElement.click();
+  abrirModalFoto(): void {
+    console.log('🖼️ Abrindo modal de foto no user-layout');
+    this.mostrarModalFoto = true;
   }
 
-  async onAvatarSelected(event: Event): Promise<void> {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || input.files.length === 0) return;
+  fecharModalFoto(): void {
+    console.log('❌ Fechando modal de foto no user-layout');
+    this.mostrarModalFoto = false;
+  }
 
-    const file = input.files[0];
-
-    // Validar tipo de arquivo
-    if (!file.type.startsWith('image/')) {
-      alert('Por favor, selecione apenas arquivos de imagem.');
-      return;
-    }
-
-    // Validar tamanho (máximo 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('A imagem deve ter no máximo 5MB.');
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append('avatar', file);
-
-      const response = await fetch('http://localhost:3000/api/user/upload-avatar', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: formData
-      });
-
-      if (!response.ok) {
-        throw new Error('Erro ao fazer upload da foto');
-      }
-
-      const data = await response.json();
-
-      // Atualizar o usuário atual
-      if (this.currentUser) {
-        this.currentUser.fotoPerfil = data.fotoPerfil;
-        // Atualizar no localStorage também
-        const storedUser = localStorage.getItem('currentUser');
-        if (storedUser) {
-          const user = JSON.parse(storedUser);
-          user.fotoPerfil = data.fotoPerfil;
-          localStorage.setItem('currentUser', JSON.stringify(user));
-        }
-      }
-
-      alert('Foto de perfil atualizada com sucesso!');
-    } catch (error) {
-      console.error('Erro ao fazer upload:', error);
-      alert('Erro ao fazer upload da foto. Tente novamente.');
-    }
+  onFotoAtualizada(novaFotoUrl: string): void {
+    console.log('✅ Foto atualizada:', novaFotoUrl);
+    this.fecharModalFoto();
   }
 }

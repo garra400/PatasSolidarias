@@ -4,14 +4,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalService } from '@services/animal.service';
 import { FotoService } from '@services/foto.service';
-import { TrocarFotoPerfilModalComponent } from '../trocar-foto-perfil-modal/trocar-foto-perfil-modal.component';
+import { SelecionarFotoPerfilModalComponent } from '../selecionar-foto-perfil-modal/selecionar-foto-perfil-modal.component';
 import { Animal, Foto } from '@models/animal.model';
 import { ImageUrlHelper } from '../../../../utils/image-url.helper';
 
 @Component({
     selector: 'app-form-animal',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, TrocarFotoPerfilModalComponent],
+    imports: [CommonModule, ReactiveFormsModule, SelecionarFotoPerfilModalComponent],
     templateUrl: './form-animal.component.html',
     styleUrls: ['./form-animal.component.scss']
 })
@@ -28,6 +28,8 @@ export class FormAnimalComponent implements OnInit {
 
     animalAtual?: Animal;
     mostrarModalTrocarFoto = false;
+
+    protected getFullImageUrl = ImageUrlHelper.getFullImageUrl;
 
     private fb = inject(FormBuilder);
     private animalService = inject(AnimalService);

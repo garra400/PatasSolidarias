@@ -8,9 +8,9 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiUrl}/users`;
+  private apiUrl = `${environment.apiUrl}/user`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getUserProfile(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/profile`);
@@ -25,6 +25,18 @@ export class UserService {
       senhaAtual,
       novaSenha
     });
+  }
+
+  // Atualizar foto de perfil
+  atualizarFotoPerfil(foto: File): Observable<{ message: string; fotoPerfilUrl: string }> {
+    const formData = new FormData();
+    formData.append('foto', foto);
+    return this.http.put<{ message: string; fotoPerfilUrl: string }>(`${this.apiUrl}/foto-perfil`, formData);
+  }
+
+  // Remover foto de perfil
+  removerFotoPerfil(): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/foto-perfil`);
   }
 
   cancelarAssinatura(): Observable<{ message: string }> {

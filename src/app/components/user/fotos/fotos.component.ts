@@ -2,6 +2,9 @@ import { Component, OnInit, inject, ChangeDetectorRef, ChangeDetectionStrategy }
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AnimalPhoto } from '../../../model/animal-photo.model';
+import { AnimalService } from '@services/animal.service';
+import { Animal } from '@models/animal.model';
+import { ImageUrlHelper } from '../../../utils/image-url.helper';
 
 @Component({
   selector: 'app-fotos',
@@ -19,10 +22,13 @@ export class FotosComponent implements OnInit {
   isLoading = false;
 
   mesesDisponiveis: string[] = [];
-  animaisDisponiveis: string[] = [];
+  animaisDisponiveis: Animal[] = []; // Mudado para array de Animal
+
+  protected getFullImageUrl = ImageUrlHelper.getFullImageUrl;
 
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
+  private animalService = inject(AnimalService);
 
   constructor() {
     this.filterForm = this.fb.group({
@@ -33,17 +39,31 @@ export class FotosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadAnimals(); // Carregar animais primeiro
     this.loadPhotos();
-    
+
     // Aplicar filtros quando mudarem
     this.filterForm.valueChanges.subscribe(() => {
       this.applyFilters();
     });
   }
 
+  loadAnimals(): void {
+    this.animalService.getActiveAnimals().subscribe({
+      next: (animais) => {
+        this.animaisDisponiveis = animais;
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar animais:', err);
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
   loadPhotos(): void {
     this.isLoading = true;
-    
+
     // Mock data - substituir por chamada à API
     this.photos = [
       {
@@ -107,24 +127,21 @@ export class FotosComponent implements OnInit {
   extractFilters(): void {
     // Extrair meses únicos
     this.mesesDisponiveis = [...new Set(this.photos.map(p => p.mes))].sort().reverse();
-    
-    // Extrair nomes de animais únicos
-    this.animaisDisponiveis = [...new Set(this.photos.map(p => p.animalNome))].sort();
-    
-    this.cdr.markForCheck();
-  }
 
-  applyFilters(): void {
+    // Animais já foram carregados no loadAnimals()
+
+    this.cdr.markForCheck();
+  } applyFilters(): void {
     const filters = this.filterForm.value;
-    
+
     this.filteredPhotos = this.photos.filter(photo => {
       const matchAnimal = !filters.animal || photo.animalNome === filters.animal;
       const matchEspecie = !filters.especie || photo.animalEspecie === filters.especie;
       const matchMes = !filters.mes || photo.mes === filters.mes;
-      
+
       return matchAnimal && matchEspecie && matchMes;
     });
-    
+
     this.cdr.markForCheck();
   }
 
@@ -148,8 +165,8 @@ export class FotosComponent implements OnInit {
 
   formatMes(mes: string): string {
     const [ano, mesNum] = mes.split('-');
-    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-                   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     return `${meses[parseInt(mesNum) - 1]} ${ano}`;
   }
 }

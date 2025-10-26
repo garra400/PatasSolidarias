@@ -1,0 +1,7 @@
+{
+    "html.validate.scripts": false,
+    "html.validate.styles": false,
+    "html.customData": [".vscode/html-custom-data.json"],
+    "angular.experimental-ivy": true,
+    "angular.log": "off"
+}

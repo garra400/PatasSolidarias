@@ -9,65 +9,83 @@
         </a>
     </header>
 
-    <div *ngIf="erro" class="alert alert-danger">
+    @if (erro) {
+    <div class="alert alert-danger">
         {{ erro }}
     </div>
+    }
 
-    <div *ngIf="sucesso" class="alert alert-success">
+    @if (sucesso) {
+    <div class="alert alert-success">
         {{ sucesso }}
     </div>
+    }
 
-    <div *ngIf="carregando" class="loading">
+    @if (carregando) {
+    <div class="loading">
         <div class="spinner"></div>
         <p>Carregando fotos pendentes...</p>
     </div>
+    }
 
-    <div *ngIf="!carregando && fotosPendentes.length === 0" class="empty-state">
+    @if (!carregando && fotosPendentes.length === 0) {
+    <div class="empty-state">
         <div class="empty-icon">📸</div>
         <h2>Nenhuma foto pendente</h2>
         <p>Todas as fotos foram publicadas ou não há fotos aguardando.</p>
         <a routerLink="/adm/fotos/upload" class="btn btn-primary">Fazer Upload</a>
     </div>
+    }
 
-    <div *ngIf="!carregando && fotosPendentes.length > 0">
+    @if (!carregando && fotosPendentes.length > 0) {
+    <div>
         <!-- Ações em massa -->
         <div class="bulk-actions">
             <div class="bulk-actions-left">
                 <label class="checkbox-label">
                     <input type="checkbox" [checked]="todasSelecionadas" (change)="selecionarTodas()"
-                        title="Selecionar todas as fotos">
+                        title="Selecionar todas as fotos" aria-label="Selecionar todas as fotos">
                     <span>Selecionar todas ({{ fotosSelecionadas.size }} de {{ fotosPendentes.length }})</span>
                 </label>
             </div>
 
             <button class="btn btn-primary btn-publish" [disabled]="!algumaSelecionada || enviandoEmail"
                 (click)="dispararNotificacoes()">
-                <span *ngIf="!enviandoEmail">📧 Disparar Notificações ({{ fotosSelecionadas.size }})</span>
-                <span *ngIf="enviandoEmail">Enviando...</span>
+                @if (!enviandoEmail) {
+                <span>📧 Disparar Notificações ({{ fotosSelecionadas.size }})</span>
+                }
+                @if (enviandoEmail) {
+                <span>Enviando...</span>
+                }
             </button>
         </div>
 
         <!-- Grid de fotos -->
         <div class="fotos-grid">
-            <div *ngFor="let foto of fotosPendentes" class="foto-card"
-                [class.selected]="fotosSelecionadas.has(foto.id!)">
-                <div class="foto-checkbox">
+            @for (foto of fotosPendentes; track foto.id) {
+            <div class="foto-card" [class.selected]="fotosSelecionadas.has(foto.id!)">
+                <label class="foto-checkbox">
                     <input type="checkbox" [id]="'foto-' + foto.id" [checked]="fotosSelecionadas.has(foto.id!)"
                         (change)="toggleSelecionarFoto(foto.id!)"
-                        [title]="'Selecionar foto' + (foto.descricao ? ': ' + foto.descricao : '')">
-                </div>
+                        [title]="'Selecionar foto' + (foto.descricao ? ': ' + foto.descricao : '')"
+                        [attr.aria-label]="'Selecionar foto' + (foto.descricao ? ': ' + foto.descricao : '')">
+                </label>
 
                 <div class="foto-image">
                     <img [src]="getFotoUrl(foto)" [alt]="foto.descricao || 'Foto'">
                 </div>
 
                 <div class="foto-info">
-                    <p class="foto-descricao" *ngIf="foto.descricao">
+                    @if (foto.descricao) {
+                    <p class="foto-descricao">
                         <strong>Descrição:</strong> {{ foto.descricao }}
                     </p>
-                    <p class="foto-descricao" *ngIf="!foto.descricao">
+                    }
+                    @if (!foto.descricao) {
+                    <p class="foto-descricao">
                         <em>Sem descrição</em>
                     </p>
+                    }
 
                     <p class="foto-animais">
                         <strong>Animais:</strong> {{ getNomesAnimais(foto) }}
@@ -84,6 +102,8 @@
                     </button>
                 </div>
             </div>
+            }
         </div>
     </div>
+    }
 </div>

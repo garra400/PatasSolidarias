@@ -247,6 +247,85 @@
     }
 }
 
+// Filtros de Dashboard
+.charts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    h2 {
+        margin: 0;
+    }
+}
+
+.filtros-container {
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filtros-form {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+
+    .filtro-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .filtro-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            min-width: 180px;
+
+            &:hover {
+                border-color: #667eea;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
+        }
+    }
+
+    .btn-limpar-filtros {
+        padding: 0.5rem 1.5rem;
+        background: #f3f4f6;
+        color: #666;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+
+        &:hover {
+            background: #e5e7eb;
+            border-color: #667eea;
+            color: #667eea;
+        }
+    }
+}
+
 // Responsividade
 @media (max-width: 768px) {
     .dashboard-container {
@@ -260,5 +339,23 @@
     .cards-grid,
     .acoes-grid {
         grid-template-columns: 1fr;
+    }
+
+    .charts-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtros-form {
+        flex-direction: column;
+        align-items: stretch;
+
+        .filtro-group .filtro-select {
+            min-width: 100%;
+        }
+
+        .btn-limpar-filtros {
+            width: 100%;
+        }
     }
 }

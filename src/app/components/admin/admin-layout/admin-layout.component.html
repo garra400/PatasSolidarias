@@ -14,8 +14,12 @@
 
         <!-- Header da Sidebar -->
         <div class="sidebar-header">
-            <div class="admin-badge">
+            <div class="admin-badge" (click)="abrirModalFoto()" title="Trocar foto de perfil">
+                @if (currentUser?.fotoPerfil) {
+                <img [src]="getFullImageUrl(currentUser.fotoPerfil)" alt="Foto de perfil" class="foto-perfil">
+                } @else {
                 <i class="fas fa-shield-alt"></i>
+                }
             </div>
             <h3 class="admin-title">Painel Admin</h3>
             <p class="admin-subtitle">{{ currentUser?.nome || 'Administrador' }}</p>
@@ -142,3 +146,7 @@
 @if (isSidebarOpen) {
 <div class="sidebar-overlay" (click)="toggleSidebar()"></div>
 }
+
+<!-- Modal Trocar Foto -->
+<app-trocar-foto-perfil-modal [mostrar]="mostrarModalFoto" (fechar)="fecharModalFoto()"
+    (fotoAtualizada)="onFotoAtualizada($event)"></app-trocar-foto-perfil-modal>

@@ -11,15 +11,22 @@
         </div>
     </div>
 
-    <div *ngIf="erro" class="alert alert-danger">{{ erro }}</div>
-    <div *ngIf="sucesso" class="alert alert-success">{{ sucesso }}</div>
+    @if (erro) {
+    <div class="alert alert-danger">{{ erro }}</div>
+    }
+    @if (sucesso) {
+    <div class="alert alert-success">{{ sucesso }}</div>
+    }
 
-    <div *ngIf="carregando" class="loading-state">
+    @if (carregando) {
+    <div class="loading-state">
         <div class="spinner"></div>
         <p>Carregando brindes...</p>
     </div>
+    }
 
-    <div *ngIf="!carregando && brindes.length === 0" class="empty-state">
+    @if (!carregando && brindes.length === 0) {
+    <div class="empty-state">
         <div class="empty-icon">🎁</div>
         <h2>Nenhum brinde ativo encontrado</h2>
         <p>Crie brindes ativos antes de selecionar quais exibir para resgate.</p>
@@ -27,8 +34,10 @@
             Criar Brinde
         </a>
     </div>
+    }
 
-    <div *ngIf="!carregando && brindes.length > 0">
+    @if (!carregando && brindes.length > 0) {
+    <div>
         <div class="info-box">
             <span class="info-icon">💡</span>
             <div class="info-content">
@@ -42,47 +51,58 @@
         </div>
 
         <div class="brindes-grid">
-            <div *ngFor="let brinde of brindes" class="brinde-card" [class.selecionado]="estaSelecionado(brinde._id)"
+            @for (brinde of brindes; track brinde._id) {
+            <div class="brinde-card" [class.selecionado]="estaSelecionado(brinde._id)"
                 [class.desabilitado]="!podeSelecionar(brinde._id)"
                 (click)="podeSelecionar(brinde._id) && toggleSelecao(brinde._id)">
-                <div class="checkbox-overlay">
+                <label class="checkbox-overlay">
                     <input type="checkbox" [checked]="estaSelecionado(brinde._id)"
                         [disabled]="!podeSelecionar(brinde._id)" (click)="$event.stopPropagation()"
                         (change)="toggleSelecao(brinde._id)" class="checkbox-input"
-                        [title]="'Selecionar brinde: ' + brinde.nome">
+                        [title]="'Selecionar brinde: ' + brinde.nome"
+                        [attr.aria-label]="'Selecionar brinde ' + brinde.nome">
                     <span class="checkmark">✓</span>
-                </div>
+                </label>
 
                 <div class="card-foto">
                     <img [src]="brinde.fotoUrl || 'assets/placeholders/brinde-placeholder.svg'" [alt]="brinde.nome">
-                    <div *ngIf="brinde.ordem != null && brinde.ordem >= 0" class="ordem-badge">
+                    @if (brinde.ordem != null && brinde.ordem >= 0) {
+                    <div class="ordem-badge">
                         #{{ brinde.ordem }}
                     </div>
+                    }
                 </div>
 
                 <div class="card-info">
                     <h3 class="brinde-nome">{{ brinde.nome }}</h3>
                     <p class="brinde-descricao">{{ brinde.descricao }}</p>
 
-                    <div *ngIf="brinde.quantidadeDisponivel != null" class="estoque-info">
+                    @if (brinde.quantidadeDisponivel != null) {
+                    <div class="estoque-info">
                         <span class="estoque-label">Estoque:</span>
                         <span class="estoque-valor">{{ brinde.quantidadeDisponivel }}</span>
                     </div>
+                    }
                 </div>
             </div>
+            }
         </div>
 
-        <div class="preview-section" *ngIf="brindesSelecionados.length > 0">
+        @if (brindesSelecionados.length > 0) {
+        <div class="preview-section">
             <h2>📋 Preview da Seleção</h2>
             <p class="preview-subtitle">Estes brindes aparecerão na página inicial:</p>
 
             <div class="preview-grid">
-                <div *ngFor="let brinde of getBrindesSelecionadosDetalhes()" class="preview-item">
+                @for (brinde of getBrindesSelecionadosDetalhes(); track brinde._id) {
+                <div class="preview-item">
                     <img [src]="brinde.fotoUrl || 'assets/placeholders/brinde-placeholder.svg'" [alt]="brinde.nome">
                     <span class="preview-nome">{{ brinde.nome }}</span>
                 </div>
+                }
             </div>
         </div>
+        }
 
         <div class="form-actions">
             <button type="button" (click)="cancelar()" class="btn btn-secondary" [disabled]="salvando">
@@ -94,14 +114,16 @@
             </button>
         </div>
     </div>
+    }
 </div>
 
 <!-- Modal de Confirmação -->
-<div class="modal-overlay" *ngIf="mostrarModal" (click)="fecharModal()">
+@if (mostrarModal) {
+<div class="modal-overlay" (click)="fecharModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
             <h2>⚠️ Confirmar Alteração</h2>
-            <button class="btn-close" (click)="fecharModal()">✕</button>
+            <button class="btn-close" (click)="fecharModal()" title="Fechar modal">✕</button>
         </div>
 
         <div class="modal-body">
@@ -118,12 +140,12 @@
 
             <div class="selecao-resumo">
                 <h3>Brindes selecionados ({{ brindesSelecionados.length }}):</h3>
-                <ul>
-                    <li *ngFor="let brinde of getBrindesSelecionadosDetalhes()">
+                <!-- htmlhint-disable -->
+                <ul>@for (brinde of getBrindesSelecionadosDetalhes(); track brinde._id) {<li>
                         <strong>{{ brinde.nome }}</strong>
                         <span class="resumo-descricao">{{ brinde.descricao }}</span>
-                    </li>
-                </ul>
+                    </li>}</ul>
+                <!-- htmlhint-enable -->
             </div>
         </div>
 
@@ -137,3 +159,4 @@
         </div>
     </div>
 </div>
+}

@@ -10,12 +10,34 @@
     <form [formGroup]="filterForm" class="filters-form">
       <div class="form-group">
         <label for="animal">Nome do Animal</label>
-        <select id="animal" formControlName="animal">
-          <option value="">Todos</option>
-          <option *ngFor="let animal of animaisDisponiveis" [value]="animal">
-            {{ animal }}
+        <select id="animal" formControlName="animal" class="animal-select">
+          <option value="">Todos os animais</option>
+          @for (animal of animaisDisponiveis; track animal._id) {
+          <option [value]="animal.nome">
+            {{ animal.tipo === 'cachorro' ? '🐕' : animal.tipo === 'gato' ? '🐱' : '🐾' }}
+            {{ animal.nome }}
           </option>
+          }
         </select>
+
+        <!-- Thumbnails dos animais -->
+        @if (animaisDisponiveis.length > 0) {
+        <div class="animal-thumbnails">
+          @for (animal of animaisDisponiveis; track animal._id) {
+          <div class="animal-thumb" [class.selected]="filterForm.get('animal')?.value === animal.nome"
+            (click)="filterForm.patchValue({ animal: animal.nome })" [title]="animal.nome">
+            @if (animal.fotoUrl || animal.fotoPerfil?.url) {
+            <img [src]="getFullImageUrl(animal.fotoUrl || animal.fotoPerfil?.url)" [alt]="animal.nome">
+            } @else {
+            <div class="animal-placeholder">
+              {{ animal.tipo === 'cachorro' ? '🐕' : animal.tipo === 'gato' ? '🐱' : '🐾' }}
+            </div>
+            }
+            <span class="animal-name">{{ animal.nome }}</span>
+          </div>
+          }
+        </div>
+        }
       </div>
 
       <div class="form-group">
@@ -32,9 +54,11 @@
         <label for="mes">Mês</label>
         <select id="mes" formControlName="mes">
           <option value="">Todos</option>
-          <option *ngFor="let mes of mesesDisponiveis" [value]="mes">
+          @for (mes of mesesDisponiveis; track mes) {
+          <option [value]="mes">
             {{ formatMes(mes) }}
           </option>
+          }
         </select>
       </div>
 
@@ -45,14 +69,18 @@
   </div>
 
   <!-- Loading -->
-  <div *ngIf="isLoading" class="loading">
+  @if (isLoading) {
+  <div class="loading">
     <div class="spinner"></div>
     <p>Carregando fotos...</p>
   </div>
+  }
 
   <!-- Grid de Fotos -->
-  <div *ngIf="!isLoading && filteredPhotos.length > 0" class="photos-grid">
-    <div *ngFor="let photo of filteredPhotos" class="photo-card" (click)="openPhoto(photo)">
+  @if (!isLoading && filteredPhotos.length > 0) {
+  <div class="photos-grid">
+    @for (photo of filteredPhotos; track photo._id) {
+    <div class="photo-card" (click)="openPhoto(photo)">
       <div class="photo-image">
         <img [src]="photo.imagemUrl" [alt]="photo.animalNome" [title]="photo.animalNome" role="img">
         <div class="photo-overlay">
@@ -64,19 +92,24 @@
         <p class="photo-date">{{ formatMes(photo.mes) }}</p>
       </div>
     </div>
+    }
   </div>
+  }
 
   <!-- Nenhuma foto -->
-  <div *ngIf="!isLoading && filteredPhotos.length === 0" class="no-photos">
+  @if (!isLoading && filteredPhotos.length === 0) {
+  <div class="no-photos">
     <span class="icon">📷</span>
     <h3>Nenhuma foto encontrada</h3>
     <p>Tente ajustar os filtros</p>
     <button (click)="clearFilters()" class="btn-primary">Limpar Filtros</button>
   </div>
+  }
 </div>
 
 <!-- Modal de Foto -->
-<div *ngIf="selectedPhoto" class="photo-modal" (click)="closePhoto()">
+@if (selectedPhoto) {
+<div class="photo-modal" (click)="closePhoto()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <button class="close-btn" (click)="closePhoto()">✕</button>
 
@@ -101,3 +134,4 @@
     </div>
   </div>
 </div>
+}

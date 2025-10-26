@@ -133,6 +133,7 @@
       margin: 0 auto 15px;
       cursor: pointer;
       transition: all 0.3s ease;
+      z-index: 10;
 
       &:hover {
         transform: scale(1.05);
@@ -155,6 +156,7 @@
         border: 3px solid white;
         background: white;
         transition: filter 0.3s ease;
+        pointer-events: none;
       }
 
       .camera-overlay {
@@ -171,29 +173,19 @@
         opacity: 0;
         transition: all 0.3s ease;
         border: 3px solid white;
+        pointer-events: none;
 
-        i {
+        .camera-icon {
           font-size: 24px;
-          color: white;
           filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
       }
     }
 
     h3 {
-      margin: 0 0 8px 0;
+      margin: 0;
       font-size: 1.3rem;
       font-weight: 600;
-    }
-
-    .user-email {
-      margin: 0;
-      font-size: 0.85rem;
-      opacity: 0.9;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      padding: 0 10px;
     }
   }
 

@@ -7,6 +7,7 @@ import { SidebarService } from './service/sidebar.service';
 import { AdminSidebarService } from './service/admin-sidebar.service';
 import { AuthService } from './service/auth.service';
 import { User } from './model/user.model';
+import { ImageUrlHelper } from './utils/image-url.helper';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,8 @@ export class App implements OnInit {
   protected currentUser: User | null = null;
   protected isNavigationSidebarOpen = false;
   protected isMobileView = false;
+
+  protected getFullImageUrl = ImageUrlHelper.getFullImageUrl;
 
   private router = inject(Router);
   private sidebarService = inject(SidebarService);

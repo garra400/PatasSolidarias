@@ -189,4 +189,12 @@ export class AuthService {
   getToken(): string | null {
     return this.isBrowser ? localStorage.getItem('token') : null;
   }
+
+  // Atualizar dados do usuário atual
+  updateCurrentUser(user: User): void {
+    if (this.isBrowser) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+    }
+    this.currentUserSubject.next(user);
+  }
 }

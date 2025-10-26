@@ -18,11 +18,13 @@
   <aside class="global-account-sidebar" [class.open]="isSidebarOpen">
     <div class="sidebar-header">
       <div class="user-avatar-wrapper">
-        <img [src]="(currentUser && currentUser.fotoPerfil) || '/assets/images/default-avatar.svg'" alt="Foto de perfil"
-          class="user-avatar">
+        @if (currentUser && currentUser.fotoPerfil) {
+        <img [src]="getFullImageUrl(currentUser.fotoPerfil)" alt="Foto de perfil" class="user-avatar">
+        } @else {
+        <img src="/images/default-avatar.svg" alt="Foto de perfil" class="user-avatar">
+        }
       </div>
       <h3>{{ (currentUser && currentUser.nome) || 'Minha Conta' }}</h3>
-      <p class="user-email">{{ currentUser && currentUser.email }}</p>
     </div>
 
     <nav class="sidebar-nav">

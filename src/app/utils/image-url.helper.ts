@@ -30,15 +30,20 @@ export class ImageUrlHelper {
 
         // Se começar com /uploads, adicionar URL base do backend
         if (url.startsWith('/uploads')) {
-            return `${baseUrl}${url}`;
+            const fullUrl = `${baseUrl}${url}`;
+            console.log('🖼️ ImageUrlHelper - Convertendo:', url, '→', fullUrl);
+            return fullUrl;
         }
 
         // Se for caminho relativo (uploads/...), adicionar URL base com barra
         if (url.startsWith('uploads')) {
-            return `${baseUrl}/${url}`;
+            const fullUrl = `${baseUrl}/${url}`;
+            console.log('🖼️ ImageUrlHelper - Convertendo:', url, '→', fullUrl);
+            return fullUrl;
         }
 
         // Qualquer outro caso, retornar como está
+        console.log('⚠️ ImageUrlHelper - URL não reconhecida:', url);
         return url;
     }
 

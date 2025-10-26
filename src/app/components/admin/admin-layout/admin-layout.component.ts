@@ -4,13 +4,15 @@ import { Router, RouterModule, RouterOutlet, NavigationEnd } from '@angular/rout
 import { AuthService } from '../../../service/auth.service';
 import { AdminService } from '../../../service/admin.service';
 import { AdminSidebarService } from '../../../service/admin-sidebar.service';
+import { TrocarFotoPerfilModalComponent } from '../../shared/trocar-foto-perfil-modal/trocar-foto-perfil-modal.component';
+import { ImageUrlHelper } from '../../../utils/image-url.helper';
 import { Subscription, filter } from 'rxjs';
 import { AdminPermissoes } from '../../../model/admin.model';
 
 @Component({
     selector: 'app-admin-layout',
     standalone: true,
-    imports: [CommonModule, RouterModule, RouterOutlet],
+    imports: [CommonModule, RouterModule, RouterOutlet, TrocarFotoPerfilModalComponent],
     templateUrl: './admin-layout.component.html',
     styleUrl: './admin-layout.component.scss'
 })
@@ -19,12 +21,15 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     isSidebarOpen = true; // Iniciar aberta em desktop
     isFirstRender = true;
     permissoes: AdminPermissoes | null = null;
+    mostrarModalFoto = false;
 
     private authService = inject(AuthService);
     private adminService = inject(AdminService);
     private router = inject(Router);
     private adminSidebarService = inject(AdminSidebarService);
     private subscriptions: Subscription[] = [];
+
+    getFullImageUrl = ImageUrlHelper.getFullImageUrl;
 
     ngOnInit(): void {
         // Abrir sidebar automaticamente APENAS em desktop (telas grandes)
@@ -147,5 +152,19 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
             return (names[0][0] + names[names.length - 1][0]).toUpperCase();
         }
         return names[0][0].toUpperCase();
+    }
+
+    abrirModalFoto(): void {
+        this.mostrarModalFoto = true;
+    }
+
+    fecharModalFoto(): void {
+        this.mostrarModalFoto = false;
+    }
+
+    onFotoAtualizada(novaFotoUrl: string): void {
+        // O modal já atualizou o localStorage e o authService
+        // Apenas fechar o modal
+        this.fecharModalFoto();
     }
 }

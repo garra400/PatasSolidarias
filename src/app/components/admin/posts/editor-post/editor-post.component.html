@@ -3,8 +3,8 @@
         <div class="titulo-secao">
             <div class="icone-titulo">📰</div>
             <div>
-                <h1>{{ postId ? 'Editar' : 'Nova' }} Newsletter</h1>
-                <p class="subtitulo">Crie e envie newsletters para {{ totalDestinatarios }}</p>
+                <h1>{{ postId ? 'Editar' : 'Nova' }} Posts</h1>
+                <p class="subtitulo">Crie e envie Posts para {{ totalDestinatarios }}</p>
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
     <div class="form-card">
         <!-- Título -->
         <div class="form-grupo">
-            <label for="titulo">Título da Newsletter *</label>
+            <label for="titulo">Título do Email *</label>
             <input type="text" id="titulo" [(ngModel)]="titulo"
                 placeholder="Digite um título atrativo para a newsletter..." class="input-titulo">
         </div>
@@ -59,7 +59,7 @@
         <!-- Editor de Conteúdo -->
         <div class="form-grupo">
             <div class="editor-header">
-                <label>Conteúdo da Newsletter *</label>
+                <label>Conteúdo do Post *</label>
                 <button class="btn-biblioteca" (click)="abrirBiblioteca()" type="button">
                     <span class="icon">🖼️</span>
                     Inserir Imagem
@@ -81,7 +81,7 @@
                 <span *ngIf="salvando">Salvando...</span>
             </button>
             <button class="btn-enviar" (click)="enviarNewsletter()" [disabled]="salvando || enviando">
-                <span *ngIf="!enviando">📧 Enviar Newsletter</span>
+                <span *ngIf="!enviando">📧 Enviar Post</span>
                 <span *ngIf="enviando">Enviando...</span>
             </button>
         </div>

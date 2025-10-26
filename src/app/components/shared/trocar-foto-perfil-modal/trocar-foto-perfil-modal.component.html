@@ -1,0 +1,75 @@
+@if (mostrar) {
+<div class="modal-overlay" (click)="fecharModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <!-- Header -->
+        <div class="modal-header">
+            <h2>Trocar Foto de Perfil</h2>
+            <button class="btn-close" (click)="fecharModal()" [disabled]="carregando" title="Fechar">
+                ✕
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body">
+            <!-- Alertas -->
+            @if (erro) {
+            <div class="alert alert-danger">{{ erro }}</div>
+            }
+            @if (sucesso) {
+            <div class="alert alert-success">{{ sucesso }}</div>
+            }
+
+            <!-- Preview -->
+            <div class="foto-preview-container">
+                @if (preview) {
+                <div class="foto-preview">
+                    <img [src]="preview" alt="Preview">
+                </div>
+                }
+                @if (!preview) {
+                <div class="foto-placeholder">
+                    <span class="icon">👤</span>
+                    <p>Nenhuma foto selecionada</p>
+                </div>
+                }
+            </div>
+
+            <!-- Instruções -->
+            <div class="instructions">
+                <p>Selecione uma foto quadrada para melhor resultado</p>
+                <p class="small">Tamanho máximo: 5MB | Formatos: JPG, PNG, WEBP</p>
+            </div>
+
+            <!-- Seletor de Arquivo -->
+            <div class="file-selector">
+                <input #fileInput type="file" accept="image/*" (change)="onFileChange($event)" class="file-input"
+                    aria-label="Selecionar foto de perfil">
+                <button type="button" class="btn btn-secondary" (click)="fileInput.click()" [disabled]="carregando">
+                    📁 Escolher Foto
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger-outline" (click)="removerFoto()" [disabled]="carregando">
+                🗑️ Remover Foto
+            </button>
+            <div class="actions-right">
+                <button type="button" class="btn btn-secondary" (click)="fecharModal()" [disabled]="carregando">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" (click)="salvar()"
+                    [disabled]="carregando || !arquivoSelecionado">
+                    @if (!carregando) {
+                    <span>Salvar</span>
+                    }
+                    @if (carregando) {
+                    <span>Salvando...</span>
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+}

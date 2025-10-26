@@ -141,20 +141,44 @@ router.post('/',
         delete animalData.ativo;
       }
 
-      // Se uma foto foi enviada
-      if (req.file) {
-        animalData.fotoUrl = `/uploads/animais/${req.file.filename}`;
-        console.log('✅ Foto configurada:', animalData.fotoUrl);
-      }
-
+      // Criar o animal primeiro
       const animal = new Animal(animalData);
       await animal.save();
 
       console.log('✅ Animal criado com sucesso:', animal._id);
 
+      // Se uma foto foi enviada, criar registro na galeria
+      if (req.file) {
+        const fotoUrl = `/uploads/animais/${req.file.filename}`;
+        console.log('📸 Criando foto na galeria:', fotoUrl);
+
+        // Criar foto na galeria
+        const foto = new Foto({
+          url: fotoUrl,
+          descricao: `Foto de perfil de ${animal.nome}`,
+          animaisIds: [animal._id],
+          adicionadaPor: req.user._id,
+          emailEnviado: false
+        });
+
+        await foto.save();
+        console.log('✅ Foto adicionada à galeria:', foto._id);
+
+        // Atualizar animal com a foto de perfil e URL
+        animal.fotoPerfilId = foto._id;
+        animal.fotoUrl = fotoUrl;
+        await animal.save();
+
+        console.log('✅ Animal atualizado com foto de perfil');
+      }
+
+      // Retornar animal populado
+      const animalPopulado = await Animal.findById(animal._id)
+        .populate('fotoPerfilId');
+
       res.status(201).json({
         message: 'Animal cadastrado com sucesso',
-        animal
+        animal: animalPopulado
       });
     } catch (error) {
       console.error('❌ Erro ao cadastrar animal:', error);
@@ -187,10 +211,32 @@ router.put('/:id',
         delete updateData.ativo;
       }
 
-      // Se uma nova foto foi enviada
+      // Buscar animal atual
+      const animalAtual = await Animal.findById(req.params.id);
+      if (!animalAtual) {
+        return res.status(404).json({ error: 'Animal não encontrado' });
+      }
+
+      // Se uma nova foto foi enviada, adicionar à galeria
       if (req.file) {
-        updateData.fotoUrl = `/uploads/animais/${req.file.filename}`;
-        console.log('✅ Foto atualizada:', updateData.fotoUrl);
+        const fotoUrl = `/uploads/animais/${req.file.filename}`;
+        console.log('📸 Criando nova foto na galeria:', fotoUrl);
+
+        // Criar foto na galeria
+        const foto = new Foto({
+          url: fotoUrl,
+          descricao: `Foto de ${animalAtual.nome}`,
+          animaisIds: [req.params.id],
+          adicionadaPor: req.user._id,
+          emailEnviado: false
+        });
+
+        await foto.save();
+        console.log('✅ Foto adicionada à galeria:', foto._id);
+
+        // Atualizar dados com a nova foto
+        updateData.fotoPerfilId = foto._id;
+        updateData.fotoUrl = fotoUrl;
       }
 
       const animal = await Animal.findByIdAndUpdate(
@@ -198,10 +244,6 @@ router.put('/:id',
         updateData,
         { new: true, runValidators: true }
       ).populate('fotoPerfilId');
-
-      if (!animal) {
-        return res.status(404).json({ error: 'Animal não encontrado' });
-      }
 
       console.log('✅ Animal atualizado com sucesso:', animal._id);
 

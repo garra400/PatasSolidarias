@@ -4,15 +4,15 @@ import { RouterLink } from '@angular/router';
 import { PostService } from '@services/post.service';
 
 @Component({
-    selector: 'app-lista-posts',
-    standalone: true,
-    imports: [CommonModule, RouterLink],
-    template: `
+  selector: 'app-lista-posts',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  template: `
     <div class="container">
       <header>
         <div>
           <h1>Gerenciar Posts</h1>
-          <p>Newsletter e posts para apoiadores</p>
+          <p>Posts para apoiadores</p>
         </div>
         <a routerLink="/adm/posts/novo" class="btn">➕ Novo Post</a>
       </header>
@@ -36,7 +36,7 @@ import { PostService } from '@services/post.service';
       </table>
     </div>
   `,
-    styles: [`
+  styles: [`
     .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
     header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
     h1 { font-size: 2rem; font-weight: 700; }
@@ -52,29 +52,29 @@ import { PostService } from '@services/post.service';
   `]
 })
 export class ListaPostsComponent implements OnInit {
-    private postService = inject(PostService);
-    posts: any[] = [];
-    carregando = true;
+  private postService = inject(PostService);
+  posts: any[] = [];
+  carregando = true;
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    this.carregar();
+  }
+
+  carregar(): void {
+    this.postService.listarPosts().subscribe({
+      next: (data: any) => {
+        this.posts = data;
+        this.carregando = false;
+      }
+    });
+  }
+
+  deletar(id: string): void {
+    if (confirm('Deletar post?')) {
+      this.postService.deletarPost(id).subscribe(() => {
+        alert('Deletado!');
         this.carregar();
+      });
     }
-
-    carregar(): void {
-        this.postService.listarPosts().subscribe({
-            next: (data: any) => {
-                this.posts = data;
-                this.carregando = false;
-            }
-        });
-    }
-
-    deletar(id: string): void {
-        if (confirm('Deletar post?')) {
-            this.postService.deletarPost(id).subscribe(() => {
-                alert('Deletado!');
-                this.carregar();
-            });
-        }
-    }
+  }
 }

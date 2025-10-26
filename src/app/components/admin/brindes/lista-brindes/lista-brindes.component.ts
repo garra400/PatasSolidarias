@@ -28,10 +28,13 @@ export class ListaBrindesComponent implements OnInit {
         this.erro = '';
         this.brindeService.listarBrindes().subscribe({
             next: (data: any) => {
-                this.brindes = data;
+                // O backend retorna { brindes: [], total: number }
+                this.brindes = data.brindes || data || [];
+                console.log('📦 Brindes carregados:', this.brindes);
                 this.carregando = false;
             },
             error: (err: any) => {
+                console.error('❌ Erro ao carregar brindes:', err);
                 this.erro = 'Erro ao carregar brindes';
                 this.carregando = false;
             }

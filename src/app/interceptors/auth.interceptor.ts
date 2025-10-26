@@ -6,12 +6,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.getToken();
 
-  // Debug: log apenas para rotas admin/assinantes
-  if (req.url.includes('/adm') || req.url.includes('/assinantes')) {
+  // Debug: log para rotas protegidas
+  if (req.url.includes('/adm') || req.url.includes('/assinantes') || req.url.includes('/user/foto-perfil')) {
     console.log('🔐 Auth Interceptor:', {
       url: req.url,
       hasToken: !!token,
-      tokenPreview: token ? `${token.substring(0, 20)}...` : 'NO TOKEN'
+      tokenPreview: token ? `${token.substring(0, 20)}...` : 'NO TOKEN',
+      headers: req.headers.keys()
     });
   }
 
