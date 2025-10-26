@@ -21,7 +21,7 @@ async function setAdmin() {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('✅ Conectado!\n');
 
-        const email = 'joaovicgomes.10@gmail.com';
+        const email = process.argv[2] || 'seu_email@example.com'; // Passe o email como argumento
 
         // Buscar usuário
         let user = await User.findOne({ email });

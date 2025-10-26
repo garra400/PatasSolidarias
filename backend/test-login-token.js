@@ -8,8 +8,8 @@ const testLogin = async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: 'joaovicgomes.10@gmail.com',
-        senha: 'admin123'
+        email: 'seu_email@example.com', // Substitua pelo seu email
+        senha: 'sua_senha_aqui' // Substitua pela sua senha
       })
     });
 

@@ -11,7 +11,7 @@ async function fixAndUpdateAdmin() {
         await mongoose.connect(MONGODB_URI);
         console.log('✅ Conectado ao MongoDB');
 
-        const email = process.argv[2] || 'joaovicgomes.10@gmail.com';
+        const email = process.argv[2] || 'seu_email@example.com'; // Passe o email como argumento
 
         const user = await User.findOne({ email: email.toLowerCase() });
 

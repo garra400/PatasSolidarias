@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -20,7 +21,7 @@
             justify-content: center;
             padding: 20px;
         }
-        
+
         .container {
             background: white;
             border-radius: 20px;
@@ -29,28 +30,28 @@
             width: 100%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
-        
+
         h1 {
             color: #333;
             margin-bottom: 10px;
         }
-        
+
         .subtitle {
             color: #666;
             margin-bottom: 30px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
             color: #333;
             font-weight: 600;
         }
-        
+
         input {
             width: 100%;
             padding: 12px;
@@ -58,12 +59,12 @@
             border-radius: 8px;
             font-size: 14px;
         }
-        
+
         input:focus {
             outline: none;
             border-color: #667eea;
         }
-        
+
         button {
             width: 100%;
             padding: 14px;
@@ -76,48 +77,48 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        
+
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
-        
+
         button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
-        
+
         .result {
             margin-top: 30px;
             padding: 20px;
             border-radius: 12px;
             display: none;
         }
-        
+
         .result.success {
             background: #f0fdf4;
             border: 2px solid #16a34a;
             display: block;
         }
-        
+
         .result.error {
             background: #fff5f5;
             border: 2px solid #dc3545;
             display: block;
         }
-        
+
         .result h3 {
             margin-bottom: 15px;
         }
-        
+
         .result.success h3 {
             color: #16a34a;
         }
-        
+
         .result.error h3 {
             color: #dc3545;
         }
-        
+
         .result pre {
             background: #f8f9fa;
             padding: 15px;
@@ -126,7 +127,7 @@
             font-size: 12px;
             line-height: 1.5;
         }
-        
+
         .check-item {
             padding: 10px;
             margin: 5px 0;
@@ -135,56 +136,57 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .check-item.ok {
             background: #f0fdf4;
             color: #16a34a;
         }
-        
+
         .check-item.fail {
             background: #fff5f5;
             color: #dc3545;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>🧪 Teste de Login</h1>
         <p class="subtitle">Teste se o backend está retornando os dados corretos</p>
-        
+
         <form id="loginForm">
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" value="joaovicgomes.10@gmail.com" required>
+                <input type="email" id="email" placeholder="seu_email@example.com" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="senha">Senha:</label>
                 <input type="password" id="senha" placeholder="Digite sua senha" required>
             </div>
-            
+
             <button type="submit" id="submitBtn">Testar Login</button>
         </form>
-        
+
         <div id="result" class="result"></div>
     </div>
 
     <script>
         const API_URL = 'http://localhost:3000/api';
-        
+
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
             const resultDiv = document.getElementById('result');
             const submitBtn = document.getElementById('submitBtn');
-            
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'Testando...';
             resultDiv.innerHTML = '';
             resultDiv.className = 'result';
-            
+
             try {
                 const response = await fetch(`${API_URL}/auth/login`, {
                     method: 'POST',
@@ -193,47 +195,47 @@
                     },
                     body: JSON.stringify({ email, senha })
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (response.ok) {
                     // Sucesso!
                     const user = data.user;
-                    
+
                     let html = '<h3>✅ Login Bem-Sucedido!</h3>';
                     html += '<div style="margin-top: 20px;">';
-                    
+
                     // Verificações
                     html += `<div class="check-item ${user.isDoador ? 'ok' : 'fail'}">`;
                     html += `<strong>${user.isDoador ? '✅' : '❌'} isDoador:</strong> ${user.isDoador}`;
                     html += '</div>';
-                    
+
                     html += `<div class="check-item ${user.totalMesesApoio > 0 ? 'ok' : 'fail'}">`;
                     html += `<strong>${user.totalMesesApoio > 0 ? '✅' : '❌'} totalMesesApoio:</strong> ${user.totalMesesApoio}`;
                     html += '</div>';
-                    
+
                     html += `<div class="check-item ${user.brindesDisponiveis >= 0 ? 'ok' : 'fail'}">`;
                     html += `<strong>${user.brindesDisponiveis >= 0 ? '✅' : '❌'} brindesDisponiveis:</strong> ${user.brindesDisponiveis}`;
                     html += '</div>';
-                    
+
                     html += `<div class="check-item ${user.assinaturaAtiva ? 'ok' : 'fail'}">`;
                     html += `<strong>${user.assinaturaAtiva ? '✅' : '❌'} assinaturaAtiva:</strong> ${user.assinaturaAtiva ? user.assinaturaAtiva.status : 'null'}`;
                     html += '</div>';
-                    
+
                     html += '</div>';
-                    
+
                     html += '<h4 style="margin-top: 20px; margin-bottom: 10px;">📦 Objeto Completo:</h4>';
                     html += `<pre>${JSON.stringify(user, null, 2)}</pre>`;
-                    
+
                     resultDiv.className = 'result success';
                     resultDiv.innerHTML = html;
-                    
+
                     // Salvar no localStorage para teste
                     console.log('💾 Salvando no localStorage...');
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('token', data.token);
                     console.log('✅ Salvo! Agora você pode ir para http://localhost:4200/conta');
-                    
+
                 } else {
                     // Erro
                     resultDiv.className = 'result error';
@@ -243,7 +245,7 @@
                         <p><strong>Mensagem:</strong> ${data.message}</p>
                     `;
                 }
-                
+
             } catch (error) {
                 resultDiv.className = 'result error';
                 resultDiv.innerHTML = `
@@ -258,4 +260,5 @@
         });
     </script>
 </body>
+
 </html>

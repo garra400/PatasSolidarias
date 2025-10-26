@@ -31,7 +31,7 @@ async function testarBackend() {
 
   console.log('\n2️⃣ Testando Login...');
   const loginData = {
-    email: 'joaovicgomes.10@gmail.com',
+    email: 'seu_email@example.com', // Substitua pelo seu email
     senha: 'sua_senha_aqui' // Substitua pela senha real para testar
   };
 
@@ -53,14 +53,14 @@ async function testarBackend() {
       console.log('   role:', data.user.role);
       console.log('   totalMesesApoio:', data.user.totalMesesApoio);
       console.log('   brindesDisponiveis:', data.user.brindesDisponiveis);
-      
+
       if (data.user.assinaturaAtiva) {
         console.log('   assinaturaAtiva.status:', data.user.assinaturaAtiva.status);
         console.log('   assinaturaAtiva.valorMensal:', data.user.assinaturaAtiva.valorMensal);
       } else {
         console.log('   assinaturaAtiva: null');
       }
-      
+
       console.log('\n   🔑 Token:', data.token ? '✅ Gerado' : '❌ Não gerado');
     } else {
       const error = await loginResponse.json();
