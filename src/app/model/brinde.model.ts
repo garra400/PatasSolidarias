@@ -1,13 +1,18 @@
 export interface Brinde {
-    id: string;
+    id?: string;
+    _id?: string;
     nome: string;
     descricao: string;
-    foto: string;
+    fotoUrl: string; // URL da foto do brinde
     disponivelParaResgate: boolean; // Se está visível/disponível para usuários
     ordem: number; // Ordem de exibição (máximo 4 na home)
-    dataCadastro: Date;
+    criadoEm?: Date;
+    atualizadoEm?: Date;
+    // Campos legados (manter por compatibilidade)
+    foto?: string;
+    dataCadastro?: Date;
     dataUltimaAtualizacao?: Date;
-    ativo: boolean;
+    ativo?: boolean;
     quantidadeDisponivel?: number; // Quantidade em estoque (opcional)
 }
 

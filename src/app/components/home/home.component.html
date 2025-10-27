@@ -118,12 +118,9 @@
         <!-- Brindes da API -->
         @if (!isLoadingBrindes && brindesDestaque.length > 0) {
         <div class="stickers-grid">
-          @for (brinde of brindesDestaque; track brinde.id) {
+          @for (brinde of brindesDestaque; track brinde._id) {
           <div class="sticker-item">
             <img [src]="getImageUrl(brinde)" [alt]="brinde.nome" [title]="brinde.nome" (error)="onImageError($event)" />
-            <div class="brinde-info">
-              <span class="brinde-nome">{{ brinde.nome }}</span>
-            </div>
           </div>
           }
         </div>

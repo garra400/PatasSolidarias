@@ -63,8 +63,23 @@ export class HomeComponent implements OnInit {
     // Buscar até 4 brindes disponíveis para resgate
     this.brindeService.listarBrindes({ disponiveis: true, limit: 4 }).subscribe({
       next: (response) => {
+        console.log('🔍 Resposta completa da API:', response);
         this.brindesDestaque = response.brindes || [];
         console.log('✅ Brindes destaque carregados:', this.brindesDestaque.length);
+        console.log('📋 Dados dos brindes (RAW):', JSON.stringify(this.brindesDestaque, null, 2));
+
+        // Log detalhado de cada brinde
+        this.brindesDestaque.forEach((brinde, index) => {
+          console.log(`🎁 Brinde ${index + 1}:`, {
+            _id: brinde._id,
+            nome: brinde.nome,
+            fotoUrl: brinde.fotoUrl,
+            foto: brinde.foto,
+            disponivelParaResgate: brinde.disponivelParaResgate,
+            urlCompleta: this.getImageUrl(brinde)
+          });
+        });
+
         this.isLoadingBrindes = false;
       },
       error: (err) => {
@@ -181,9 +196,15 @@ export class HomeComponent implements OnInit {
   }
 
   getImageUrl(brinde: Brinde): string {
+    // Priorizar fotoUrl (campo atual do backend)
+    if (brinde.fotoUrl) {
+      return ImageUrlHelper.getFullImageUrl(brinde.fotoUrl);
+    }
+    // Fallback para campo legado 'foto'
     if (brinde.foto) {
       return ImageUrlHelper.getFullImageUrl(brinde.foto);
     }
+    // Imagem padrão se nenhuma foto disponível
     return ImageUrlHelper.getFullImageUrl(null);
   }
 

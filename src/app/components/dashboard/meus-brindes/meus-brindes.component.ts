@@ -204,11 +204,20 @@ export class MeusBrindesComponent implements OnInit {
       return;
     }
 
+    // Verificar se o brinde tem ID
+    const brindeId = this.brindeSelecionado._id || this.brindeSelecionado.id;
+    if (!brindeId) {
+      this.errorMessage = 'Erro: ID do brinde não encontrado.';
+      setTimeout(() => this.errorMessage = '', 5000);
+      this.cdr.markForCheck();
+      return;
+    }
+
     this.isSubmitting = true;
     this.errorMessage = '';
 
     this.resgateService.criarSolicitacao({
-      brindeId: this.brindeSelecionado.id,
+      brindeId: brindeId,
       dataHorarioEscolhido: this.horarioSelecionado,
       observacoes: this.observacoes
     }).subscribe({

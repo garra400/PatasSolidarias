@@ -47,33 +47,43 @@ router.get('/galeria/minhas-fotos', verifyToken, async (req, res) => {
         const userId = req.user._id;
 
         // Buscar usuário com seus pagamentos
-        const user = await User.findById(userId).select('historicoPagamentos');
+        const user = await User.findById(userId).select('historicoPagamentos isAdmin');
 
         if (!user) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
-        // Obter meses únicos em que o usuário apoiou (com pagamento aprovado)
-        const mesesApoio = new Set();
-        user.historicoPagamentos
-            .filter(p => p.status === 'aprovado' && p.mesReferencia)
-            .forEach(p => mesesApoio.add(p.mesReferencia));
+        let query = {};
+        let mesesApoio = new Set();
 
-        console.log(`📅 Usuário ${userId} apoiou nos meses:`, Array.from(mesesApoio));
+        // Se for admin, mostrar TODAS as fotos
+        if (user.isAdmin) {
+            console.log(`👑 Admin ${userId} - Mostrando todas as fotos`);
 
-        if (mesesApoio.size === 0) {
-            return res.json({
-                fotos: [],
-                total: 0,
-                hasMore: false,
-                message: 'Você ainda não possui meses de apoio. Faça uma contribuição para ter acesso à galeria!'
-            });
+            // Buscar todos os meses únicos de fotos
+            const todasFotos = await Foto.distinct('mesReferencia');
+            todasFotos.forEach(mes => mesesApoio.add(mes));
+        } else {
+            // Para usuários normais, filtrar por meses de apoio
+            user.historicoPagamentos
+                .filter(p => p.status === 'aprovado' && p.mesReferencia)
+                .forEach(p => mesesApoio.add(p.mesReferencia));
+
+            console.log(`📅 Usuário ${userId} apoiou nos meses:`, Array.from(mesesApoio));
+
+            if (mesesApoio.size === 0) {
+                return res.json({
+                    fotos: [],
+                    total: 0,
+                    hasMore: false,
+                    message: 'Você ainda não possui meses de apoio. Faça uma contribuição para ter acesso à galeria!'
+                });
+            }
+
+            query = {
+                mesReferencia: { $in: Array.from(mesesApoio) }
+            };
         }
-
-        // Buscar fotos dos meses em que o usuário apoiou
-        const query = {
-            mesReferencia: { $in: Array.from(mesesApoio) }
-        };
 
         const fotos = await Foto.find(query)
             .populate('animaisIds', 'nome tipo')
